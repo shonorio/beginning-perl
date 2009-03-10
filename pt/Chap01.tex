@@ -2,7 +2,7 @@
 
 \documentclass[a4paper,11pt]{book}
 \usepackage[utf8]{inputenc}
-\usepackage[portuguese]{babel}
+%%\usepackage[portuges]{babel}
 
 \usepackage{amssymb}
 \usepackage{amsmath}
@@ -26,123 +26,51 @@
 
  \item Como os computadores v\^e as letras e os n\'umeros?
 
- \item Como podemos encontrar e eliminar error nos nossos programas? 
+ \item Como podemos encontrar e eliminar erros nos nossos programas? 
 
 \end{itemize}
 
-\noindent Claro que veremos isto da perspectiva do Perl, e vamos analisar alguns programas b\'asico em Perl, ver como eles foram constru\'idos e o que fazem. Ao final deste cap\'itulo você ser\'a convidado a escrever o teu pr\'oprio programa.
+\noindent Claro que veremos isto da perspectiva do Perl, e vamos analisar alguns programas b\'asico em Perl, ver como eles foram constru\'idos e o que fazem. Ao final deste cap\'itulo voc\^e ser\'a convidado a escrever o teu pr\'oprio programa.
 
-\section{Programming Languages}
+\section{Linguagens de programa\c{c}\~ao}
 
-\noindent 
+\noindent A primeira pergunta que eu suponho que realmente devemos fazer quando iniciamos o aprendizado sobre programa\c{c}\~ao \'e: "O que \'e programa\c{c}\~ao?". Isso pode soar particularmente filos\'ofico, mas a resposta \'e f\'acil. Programa\c{c}\~ao \'e dizer a um computador o que voc\^e quer que ele fa\c{c}a. O \'unico truque, ent\~ao, \'e ter certeza de que o programa \'e escrito de uma forma que o computador possa entender, e para isso, temos de escrever numa l\'{\i}ngua que podemos compreender - uma linguagem de programa\c{c}\~ao, como Perl.
 
-\noindent The first question I suppose we really should ask ourselves when we're learning programming is, 'What is programming?' That may sound particularly philosophical, but the answer is easy. Programming is telling a computer what you want it to do. The only trick, then, is to make sure that the program is written in a way the computer can understand. and to do this, we need to write it in a language that it can comprehend -- a programming language, such as Perl.
-
-\noindent 
-
-\noindent Writing a program does not require special skills, but it does call for a particular way of thinking. When giving instructions to humans, you take certain things for granted.
+\noindent Escrever um programa n\~ao requer habilidades especiais, mas \'e necess\'ario um modo particular de pensar. Quando damos instru\c{c}\~oes para seres humanos, assumimos algumas como certo.
 
 \begin{itemize}
 
- \item Humans can ask questions if we don't understand instructions.
+ \item Humanos questionam quando n\~ao compreendem as instru\c{c}\~oes.
 
- \item We can break up complex tasks into manageable ones.
+ \item Quebramos tarefas complexas em sub-tarefas.
 
- \item We can draw parallels between the current task and ones we have completed in the past.
+ \item Podemos tra\c{c}ar paralelos entre a tarefa atual e aqueles que conclu\'{\i}mos no passado.
 
- \item Perhaps most importantly, we can learn from demonstrations and from our own mistakes.
+ \item Talvez mais importante ainda, n\'os podemos aprender a partir de manifesta\c{c}\~oes e de nossos pr\'oprios erros.
 
 \end{itemize} 
 
-\noindent  
+\noindent Os computadores ainda n\~ao podem fazer qualquer uma dessas coisas muito bem – e ainda \'e muito mais f\'acil de explicar a algu\'em como amarrar seus sapatos do que corrigir o rel\'ogio no v\'{\i}deo cassete.
 
-\noindent  
+\noindent The most important thing you need to keep in mind, though, is that you're never going to be able to express a task to a computer if you can't express it to yourself. Computer programming leaves little room for vague specifications and hand waving. If you want to write a program to, say, remove useless files from your computer, you need to be able to explain how to determine whether a file is useless or not. You need to examine and break down your own mental processes when carrying out the task for yourself: Should you delete a file that hasn't been accessed for a long time? How long, precisely? Do you delete it immediately, or do you examine it? If you examine it, how much of it? And what are you examining it for?
 
-\noindent  
+\noindent The first step in programming is to stop thinking in terms of 'I want a program that removes useless files,' but instead thinking 'I want a program that looks at each file on the computer in turn and deletes the file if it is over six months old and if the first five lines do not contain any of the words 'Simon', 'Perl' or 'important'. In other words, you have to specify your task precisely.
 
-\noindent 
+\noindent When you're able to restructure your question, you need to translate that into the programming language you're using. Unfortunately, the programming language may not have a direct equivalent for what you're trying to say. So, you have to get your meaning across using what parts of the language are available to you, and this may well mean breaking down your task yet further. For instance, there's no way of saying 'if the first five lines do not contain any of the following words' in Perl. However, there is a way of saying 'if a line contains this word', a way of saying 'get another line', and 'do this five times'. Programming is the art of putting those elements together to get them to do what you want.
 
-\noindent 
+\noindent So much for what you have to do -- what does the computer have to do? Once we have specified the task in our programming language, the computer takes our instructions and performs them. We call this \textbf{running }or \textbf{executing }the program. Usually, we'll specify the instructions in a file, which we edit with an ordinary text editor; sometimes, if we have a small program, we can get away with typing the whole thing in at the command line. Either way, the instructions that we give to the computer -- in our case, written in Perl -- are collectively called the \textbf{source code }(or sometimes just \textbf{code}) to our program.
 
-\noindent Computers can't yet do any of these things very well -- it's still much easier to explain to someone how
-
-\noindent to tie their shoelaces than it is to set the clock on the video machine.
-
-\noindent 
-
-\noindent The most important thing you need to keep in mind, though, is that you're never going to be able to express a task to a computer if you can't express it to yourself. Computer programming leaves little
-
-\noindent room for vague specifications and hand waving. If you want to write a program to, say, remove useless files from your computer, you need to be able to explain how to determine whether a file is useless or not. You need to examine and break down your own mental processes when carrying out the task for yourself: Should you delete a file that hasn't been accessed for a long time? How long, precisely? Do
-
-\noindent you delete it immediately, or do you examine it? If you examine it, how much of it? And what are you examining it for?
-
-\noindent 
-
-\noindent The first step in programming is to stop thinking in terms of 'I want a program that removes useless
-
-\noindent files,' but instead thinking 'I want a program that looks at each file on the computer in turn and deletes the file if it is over six months old and if the first five lines do not contain any of the words 'Simon',
-
-\noindent 'Perl' or 'important'. In other words, you have to specify your task precisely.
-
-\noindent 
-
-\noindent When you're able to restructure your question, you need to translate that into the programming
-
-\noindent language you're using. Unfortunately, the programming language may not have a direct equivalent for what you're trying to say. So, you have to get your meaning across using what parts of the language are available to you, and this may well mean breaking down your task yet further. For instance, there's no way of saying 'if the first five lines do not contain any of the following words' in Perl. However, there is
-
-\noindent a way of saying 'if a line contains this word', a way of saying 'get another line', and 'do this five times'. Programming is the art of putting those elements together to get them to do what you want.
-
-\noindent 
-
-\noindent So much for what you have to do -- what does the computer have to do? Once we have specified the
-
-\noindent task in our programming language, the computer takes our instructions and performs them. We call this \textbf{running }or \textbf{executing }the program. Usually, we'll specify the instructions in a file, which we edit with an ordinary text editor; sometimes, if we have a small program, we can get away with typing the whole
-
-\noindent thing in at the command line. Either way, the instructions that we give to the computer -- in our case, written in Perl -- are collectively called the \textbf{source code }(or sometimes just \textbf{code}) to our program.
-
-\noindent 
-
-\noindent Interpreted vs. Compiled Source Code
-
-\noindent 
+\section{Interpreted vs. Compiled Source Code}
 
 \noindent What exactly does the computer do with our source code, then? Traditionally, there were two ways to describe what computer languages did with their code: You could say they were \textbf{compiled}, or that they were \textbf{interpreted}.
 
 \noindent 
 
-\noindent An interpreted language, such as Basic, needs another program called an \textbf{interpreter }to process the source code every time you want to run the program. This translates the source code down to a lower level for the computer's consumption as it goes along. We call the lower-level language \textbf{machine code},
+\noindent An interpreted language, such as Basic, needs another program called an \textbf{interpreter }to process the source code every time you want to run the program. This translates the source code down to a lower level for the computer's consumption as it goes along. We call the lower-level language \textbf{machine code}, because it's for machines to read, whereas \textbf{source code }is for humans. While the latter can look relatively like English, for example,  ("do\_this() if \$that"), machine code looks a lot more like what you'd expect computers to be happier with, for example, "4576616E67656C6961", and that's the easy-to-read version! The exact machine code produced depends on the processor of the computer and the operating system it runs, the translation would be very different for an x86 computer running Windows NT compared to a Sun or Digital computer running Unix.
 
-\noindent because it's for machines to read, whereas \textbf{source code }is for humans. While the latter can look relatively
+\noindent A compiled language, on the other hand, such as C, uses a compiler to do all this processing one time only before the code is ever run. After that, you can run the machine code directly, without needing the compiler any more. Because you don't need to process the source code every time you run it, compiled code will usually run faster than an interpreted equivalent. You can also give the compiled code to people who don't have a compiler themselves. This will prevent other people from reading your source code -- handy if you're using a proprietary algorithm or if your code is particularly embarrassing. However, because you're distributing machine code that not all types of computers can understand, this isn't necessarily portable.
 
-\noindent like English, for example,  ("do\_this() if \$that"), machine code looks a lot more like what you'd expect computers to be happier with, for example, "4576616E67656C6961", and that's the easy-to-
-
-\noindent read version! The exact machine code produced depends on the processor of the computer and the operating system it runs, the translation would be very different for an x86 computer running Windows NT compared to a Sun or Digital computer running Unix.
-
-\noindent 
-
-\noindent A compiled language, on the other hand, such as C, uses a compiler to do all this processing one time
-
-\noindent only before the code is ever run. After that, you can run the machine code directly, without needing the
-
-\noindent 
-
-\noindent 
-
-\noindent compiler any more. Because you don't need to process the source code every time you run it, compiled
-
-\noindent code will usually run faster than an interpreted equivalent. You can also give the compiled code to
-
-\noindent people who don't have a compiler themselves. This will prevent other people from reading your source code -- handy if you're using a proprietary algorithm or if your code is particularly embarrassing. However, because you're distributing machine code that not all types of computers can understand, this isn't necessarily portable.
-
-\noindent 
-
-\noindent Recent languages  have blurred  the  compiled/interpreted  distinction.  Java  and  Perl  both  class  as  'byte- compiled'  languages so they have  been  particularly  blurry.  In  the case  of  Perl,  where  the interpreter (which we'll always call \textbf{perl  }with  a  small  'p')  reads  your  source  code,  it  actually  compiles  the  whole program at once.  However,  instead  of compiling  into  the  machine  code  spoken  by  the computer  you happen  to  be on,  it compiles into  a  special  \textbf{virtual machine  }code  for  a  fictitious  computer.  Java's
-
-\noindent 'virtual machine'  is quite  like  a  normal  computer's  processor  in  terms  of  what it  can do,  and  people
-
-\noindent have tried building  processors  that  can  speak  the  Java  virtual  machine  code  'natively'.  In  comparison,
-
-\noindent Perl's virtual  machine  doesn't  much  resemble  any  existing  computer  processor  and is  far less  likely  to be built.
+\noindent Recent languages  have blurred  the  compiled/interpreted  distinction.  Java  and  Perl  both  class  as  'byte- compiled'  languages so they have  been  particularly  blurry.  In  the case  of  Perl,  where  the interpreter (which we'll always call \textbf{perl  }with  a  small  'p')  reads  your  source  code,  it  actually  compiles  the  whole program at once.  However,  instead  of compiling  into  the  machine  code  spoken  by  the computer  you happen  to  be on,  it compiles into  a  special  \textbf{virtual machine  }code  for  a  fictitious  computer.  Java's 'virtual machine'  is quite  like  a  normal  computer's  processor  in  terms  of  what it  can do,  and  people have tried building  processors  that  can  speak  the  Java  virtual  machine  code  'natively'.  In  comparison, Perl's virtual  machine  doesn't  much  resemble  any  existing  computer  processor  and is  far less  likely  to be built.
 
 \noindent 
 
@@ -1236,6 +1164,4 @@
 
 
 \end{document}
-
-% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
 
