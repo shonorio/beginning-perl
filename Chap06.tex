@@ -1,0 +1,3525 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Files and Data
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent We're starting to write real programs now, and real programs need to be able to read and write files to and from your hard drive. At the moment, all we can do is ask the user for input using $<$STDIN$>$ and
+
+\noindent print data on the screen using print. Pretty simple stuff, yes, but these two ideas actually form the basis
+
+\noindent of a great deal of the file handling you'll be doing in Perl.
+
+\noindent 
+
+\noindent What we want to do in this chapter is extend these techniques into reading from and writing to files, and we'll also look at the other techniques we have for handling files, directories, and data.
+
+\noindent 
+
+\noindent 
+
+\noindent Filehandles
+
+\noindent 
+
+\noindent First though, let's do some groundwork. When we're dealing with files, we need something that tells Perl which file we're talking about, which allows us to refer to and access a certain file on the disk. We need
+
+\noindent a label, something that will give us a 'handle' on the file we want to work on. For this reason, the
+
+\noindent 'something' we want is known as a \textbf{filehandle}.
+
+\noindent 
+
+\noindent We've actually already seen a filehandle: the \textbf{STDIN }of $<$STDIN$>$. This is a filehandle for the special file
+
+\noindent 'standard input', and whenever we've used the idiom $<$STDIN$>$ to read a line, we've been reading from the standard input file. Standard input is the input provided by a user either directly as we've seen, by typing on the keyboard, or indirectly, through the use of a 'pipe' that (as we'll see) pumps input into the program.
+
+\noindent 
+
+\noindent As a counterpart to standard input, there's also standard output: \textbf{STDOUT}. Conversely, it's the output we provide to a user, which at the moment we're doing by writing to the screen. Every time we've used the function print so far, we've been implicitly using   STDOUT:
+
+\noindent 
+
+\noindent print STDOUT "Hello, world.\textbackslash n";
+
+\noindent 
+
+\noindent is just the same as our original example in Chapter 1. There's one more 'standard' filehandle: standard error, or \textbf{STDERR}, which is where we write the error messages when we die.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent Every program has these three filehandles available, at least at the beginning of the program. To read
+
+\noindent and write from other files, though, you'll want to open a filehandle of your own. Filehandles are usually one-way: You can't write to the user's keyboard, for instance, or read from his or her screen. Instead, filehandles are open either for reading or for writing, for input or for output. So, here's how you'd open
+
+\noindent a filehandle for reading:
+
+\noindent 
+
+\noindent 
+
+\noindent open FH, \$filename or die \$!;
+
+\noindent 
+
+\noindent The operator for opening a filehandle is open, and it takes two arguments, the first being the name of the filehandle we want to open. Filehandles are slightly different from ordinary variables, and they do not need to be declared with my, even if you're using strict as you should. It's traditional to use all- capitals for a filehandle to distinguish them from keywords.
+
+\noindent 
+
+\noindent The second argument is the file's name -- either as a variable, as shown above, or as a string literal, like this:
+
+\noindent 
+
+\noindent 
+
+\noindent open FH, 'output.log' or die \$!;
+
+\noindent 
+
+\noindent You may specify a full path to a file, but don't forget that if you're on Windows, a backslash in a double- quoted string introduces an escape character. So, for instance, you should say this:
+
+\noindent 
+
+\noindent open FH, 'c:/test/news.txt' or die \$!;
+
+\noindent 
+
+\noindent rather than:
+
+\noindent 
+
+\noindent open FH, "c:\textbackslash test\textbackslash news.txt" or die \$!;
+
+\noindent 
+
+\noindent as \textbackslash t in a double-quoted string is a tab, and \textbackslash n is a new line. You could also say "c:\textbackslash \textbackslash test\textbackslash \textbackslash news.txt" but that's a little unwieldy. My advice is to make use of the fact that Windows allows forward slashes internally, and forward slashes do not need to be escaped: "c:/test/news.txt" should work perfectly fine.
+
+\noindent 
+
+\noindent So now we have our filehandle open -- or have we? As I mentioned in Chapter 4, the X or Y style of conditional is often used for ensuring that operations were successful. Here is the first real example of this.
+
+\noindent 
+
+\noindent When you're dealing with something like the file system, it's dangerous to blindly assume that
+
+\noindent everything you are going to do will succeed. A file may not be present when you expect it to be, a file name you are given may turn out to be a directory, something else may be using the file at the time, and
+
+\noindent so on. For this reason, you need to check that the open did actually succeed. If it didn't, we die, and our message is whatever is held in \$!.
+
+\noindent 
+
+\noindent What's \$!? This is one of Perl's \textbf{special variables}, designed to give you a way of getting at various things that Perl wants to tell you. In this case, Perl is passing on an error message from the system, and this
+
+\noindent error message should tell you why the open failed: It's usually something like 'No such file or directory'
+
+\noindent or 'permission denied'.
+
+\noindent 
+
+\noindent There  are special  variables to  tell  you  what  version  of Perl  you  are running,  what  user  you  are logged  in as on a multi-user system,  and  so  on.  Appendix  B  contains  a  complete  description  of
+
+\noindent Perl's special variables.
+
+\noindent 
+
+\noindent 
+
+\noindent So,  for instance, if we try and open a file that is actually a directory, this happens:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# badopen.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent open BAD, "/temp" or die "We have a problem: \$!";
+
+\noindent 
+
+\noindent $>$\textbf{perl badopen.plx}
+
+\noindent Name "main::BAD" used only once: possible typo at badopen.plx line 5
+
+\noindent We have a problem: Permission denied at badopen.plx line 5.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{The first line we see is a warning. If we were to finish the program, adding further operations on}
+
+\noindent \textit{BAD (or get rid of use warnings), it wouldn't show up.}
+
+\noindent 
+
+\noindent You should also note that if the argument you give to die does not end with a new line, Perl
+
+\noindent automatically adds the name of the program and the location that had the problem. If you want to avoid this, always remember to put new lines on the end of everything you die with.
+
+\noindent 
+
+\noindent Reading Lines
+
+\noindent 
+
+\noindent Now that we can open a file, we can then move on to reading the file one line at a time. We do this by replacing the STDIN filehandle in $<$STDIN$>$ with our new filehandle, to get $<$FH$>$. Just as $<$STDIN$>$
+
+\noindent reads a single line from the keyboard, $<$FH$>$ reads one line from a filehandle. This $<$\dots $>$ construction is
+
+\noindent called the \textbf{diamond operator}, or \textbf{readline operator}:
+
+\noindent 
+
+\noindent Try It Out : Numbering Lines
+
+\noindent 
+
+\noindent We'll use the $<$FH$>$ construct in conjunction with a while loop to go through each line in a file. So
+
+\noindent then, to print a file with line numbers added, you can say something like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# nl.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent open FILE, "nlexample.txt" or die \$!;
+
+\noindent my \$lineno = 1;
+
+\noindent 
+
+\noindent while ($<$FILE$>$) \{
+
+\noindent print \$lineno++;
+
+\noindent print ": \$\_";
+
+\noindent \}
+
+\noindent 
+
+\noindent Now, create the file nlexample.txt with the following contents:
+
+\noindent 
+
+\noindent One day you're going to have to face
+
+\noindent A deep dark truthful mirror,
+
+\noindent And it's gonna tell you things that I still
+
+\noindent Love you too much to say.
+
+\noindent \#\#\#\#\#\#\# Elvis Costello, Spike, 1988 \#\#\#\#\#\#\#
+
+\noindent 
+
+\noindent 
+
+\noindent This is what you should see when you run the program:
+
+\noindent 
+
+\noindent $>$ \textbf{perl nl.plx}
+
+\noindent 1: One day you're going to have to face
+
+\noindent 2: A deep dark truthful mirror,
+
+\noindent 3: And it's gonna tell you things that I still
+
+\noindent 4: Love you too much to say.
+
+\noindent 5. \#\#\#\#\#\#\# Elvis Costello, Spike, 1988 \#\#\#\#\#\#\#
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent We begin by opening our file and making sure it was opened correctly:
+
+\noindent 
+
+\noindent 
+
+\noindent open FILE, "nlexample.txt" or die \$!;
+
+\noindent 
+
+\noindent Since we're expecting our line numbers to start at one, we'll initialize our counter:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$lineno = 1;
+
+\noindent 
+
+\noindent Now we read each line from the file in turn, which we do with a little magic:
+
+\noindent 
+
+\noindent 
+
+\noindent while ($<$FILE$>$) \{
+
+\noindent 
+
+\noindent This syntax is actually equivalent to:
+
+\noindent 
+
+\noindent while (defined (\$\_   = $<$FILE$>$)) \{
+
+\noindent 
+
+\noindent That is, we read a line from a file and assign it to \$\_, and we see whether it is defined. If it is, we do whatever's in the loop. If not, we are probably at the end of the file so we need to come out of the loop. This gives us a nice, easy way of setting \$\_ to each line in turn.
+
+\noindent 
+
+\noindent As we have a new line, we print out its line number and advance the counter:
+
+\noindent 
+
+\noindent print \$lineno++;
+
+\noindent 
+
+\noindent Finally, we print out the line in question:
+
+\noindent 
+
+\noindent print ": \$\_";
+
+\noindent 
+
+\noindent There's no need to add a newline since we didn't bother chomping the incoming line. Of course, using a statement modifier, we can make this even more concise:
+
+\noindent 
+
+\noindent open FILE, "nlexample.txt" or die \$!;
+
+\noindent my \$lineno = 1;
+
+\noindent 
+
+\noindent print \$lineno++, ": \$\_" while $<$FILE$>$
+
+\noindent 
+
+\noindent But since we're going to want to expand the capabilities of our program -adding more operations to the body of the loop -- we're probably better off with the original format.
+
+\noindent 
+
+\noindent 
+
+\noindent Creating Filters
+
+\noindent As well as the three standard filehandles, Perl provides a special filehandle called \textbf{ARGV}. This reads the names of files from the command line and opens them all, or if there is nothing specified on the command line, it reads from standard input. Actually, the @ARGV array holds any text after the
+
+\noindent program's name on the command line, and $<$ARGV$>$ takes each file in turn. This is often used to create
+
+\noindent filters, which read in data from one or more files, process it, and produce output on STDOUT.
+
+\noindent 
+
+\noindent Because it is used so commonly, Perl provides an abbreviation for $<$ARGV$>$: an empty diamond, or $<$$>$. We can make our line counter a little more flexible by using this filehandle:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# nl2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$lineno = 1;
+
+\noindent 
+
+\noindent while ($<$$>$) \{
+
+\noindent print \$lineno++;
+
+\noindent print ": \$\_";
+
+\noindent \}
+
+\noindent 
+
+\noindent Now Perl expects us to give the name of the file on the command line:
+
+\noindent 
+
+\noindent $>$ \textbf{perl nl2.plx nlexample.txt}
+
+\noindent 1: One day you're going to have to face
+
+\noindent 2: A deep dark truthful mirror,
+
+\noindent 3: And it's gonna tell you things that I still
+
+\noindent 4: Love you too much to say.
+
+\noindent 5. \#\#\#\#\#\#\# Elvis Costello, Spike, 1988 \#\#\#\#\#\#\#
+
+\noindent $>$
+
+\noindent 
+
+\noindent We can actually place a fair number of files on the command line, and they'll all be processed together. For example:
+
+\noindent 
+
+\noindent $>$ \textbf{perl nl2.plx nlexample.txt nl2.plx}
+
+\noindent 1: One day you're going to have to face
+
+\noindent 2: A deep dark truthful mirror,
+
+\noindent 3: And it's gonna tell you things that I still
+
+\noindent 4: Love you too much to say.
+
+\noindent 5. \#\#\#\#\#\#\# Elvis Costello, Spike, 1988 \#\#\#\#\#\#\#
+
+\noindent 6: \#!/usr/bin/perl
+
+\noindent 7: \# nl2.plx
+
+\noindent 8: use warnings;
+
+\noindent 9: use strict;
+
+\[10:\] 
+11: my \$lineno = 1;
+
+\[12:\] 
+13: while ($<$$>$) \{
+
+\noindent 14: print \$lineno++;
+
+\noindent 15: print ": \$\_";
+
+\[16: \}\] 
+
+
+\noindent If we need to find out the name of the file we're currently reading, it's stored in the special variable
+
+\noindent \$ARGV. We can use this to reset the counter when the file changes.
+
+\noindent 
+
+\noindent 
+
+\noindent Try it out : Numbering Lines in Multiple Files
+
+\noindent 
+
+\noindent By detecting when \$ARGV changes, we can reset the counter and display the name of the new file:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# nl3.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$lineno;
+
+\noindent my \$current = "";
+
+\noindent 
+
+\noindent while ($<$$>$) \{
+
+\noindent if (\$current ne \$ARGV) \{
+
+\noindent \$current = \$ARGV;
+
+\noindent print "\textbackslash n\textbackslash t\textbackslash tFile: \$ARGV\textbackslash n\textbackslash n";
+
+\noindent \$lineno=1;
+
+\noindent \}
+
+\noindent 
+
+\noindent print \$lineno++;
+
+\noindent print ": \$\_";
+
+\noindent \}
+
+\noindent 
+
+\noindent And now we can run this on our example file and itself:
+
+\noindent 
+
+\noindent $>$ \textbf{perl nl3.plx nlexample.txt nl3.plx}
+
+\noindent 
+
+\noindent File: nlexample.txt
+
+\noindent 
+
+\noindent 1: One day you're going to have to face
+
+\noindent 2: A deep dark truthful mirror,
+
+\noindent 3: And it's gonna tell you things that I still
+
+\noindent 4: Love you too much to say.
+
+\noindent 5. \#\#\#\#\#\#\# Elvis Costello, Spike, 1988 \#\#\#\#\#\#\# File: nl3.plx
+
+\noindent 1: \#!/usr/bin/perl
+
+\noindent 2: \# nl3.plx
+
+\noindent 3: use warnings;
+
+\noindent 4: use strict;
+
+\[5:\] 
+6: my \$lineno;
+
+\noindent 7: my \$current = "";
+
+\[8:\] 
+9: while ($<$$>$) \{
+
+\noindent 10: if (\$current ne \$ARGV) \{
+
+\noindent 11: \$current = \$ARGV;
+
+\noindent 12: print "\textbackslash n\textbackslash t\textbackslash tFile: \$ARGV\textbackslash n\textbackslash n";
+
+\noindent 13: \$lineno=1;
+
+\[14: \}\] 
+
+\[15:\] 
+16: print \$lineno++;
+
+\noindent 17: print ": \$\_";
+
+\[18: \}\] 
+$>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent This is a technique you'll often see in programming to detect when a variable has changed. \$current
+
+\noindent is meant to contain the current value of \$ARGV. But if it doesn't, \$ARGV has changed:
+
+\noindent 
+
+\noindent if (\$current ne \$ARGV) \{
+
+\noindent 
+
+\noindent so we set \$current to what it should be -- the new value -- so we can catch it again next time:
+
+\noindent 
+
+\noindent \$current = \$ARGV;
+
+\noindent 
+
+\noindent We then print out the name of the new file, offset by new lines and tabs:
+
+\noindent 
+
+\noindent print "\textbackslash n\textbackslash t\textbackslash tFile: \$ARGV\textbackslash n\textbackslash n";
+
+\noindent 
+
+\noindent and reset the counter so we start counting the new file from line one again.
+
+\noindent 
+
+\noindent \$lineno=1;
+
+\noindent \}
+
+\noindent 
+
+\noindent As with most tricks like these, it's actually really simple to code it once you've seen how it's coded. The
+
+\noindent catch is having to solve problems like these for the first time by yourself.
+
+\noindent 
+
+\noindent Reading More than One Line
+
+\noindent Sometimes we'll want to read more than one line at once. When you use the diamond operator in a
+
+\noindent scalar context, as we've been doing so far, it'll provide you with the next line. However, in a list context,
+
+\noindent it will return all of the remaining lines. For instance, you can read in an entire file like this:
+
+\noindent 
+
+\noindent open INPUT, "somefile.dat" or die \$!;
+
+\noindent my @data;
+
+\noindent @data = $<$INPUT$>$;
+
+\noindent 
+
+\noindent This is, however, quite memory-intensive. Perl has to store every single line of the file into the array, whereas you may only want to be dealing with one or two of them. Usually, you'll want to step over a file with a while loop as before. However, for some things, an array is the easiest way of doing things.
+
+\noindent For example, how do you print the last five lines in a file?
+
+\noindent 
+
+\noindent The problem with reading a line at a time is that you don't know how much text left you've got to read. You can only tell when you run out of data, so you'd have to keep an array of the last five lines read and drop an old line when a new one comes in. You'd do it something like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# tail.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent open FILE, "gettysburg.txt" or die \$!;
+
+\noindent my @last5;
+
+\noindent 
+
+\noindent while ($<$FILE$>$) \{
+
+\noindent push @last5, \$\_; \# Add to the end
+
+\noindent shift @last5 if @last5 $>$ 5; \# Take from the beginning
+
+\noindent \}
+
+\noindent 
+
+\noindent print "Last five lines:\textbackslash n", @last5;
+
+\noindent 
+
+\noindent 
+
+\noindent And that's exactly how you'd do it if you were concerned about memory use on big files. Given a
+
+\noindent suitably primed gettysburg.txt, this is what you'd get:
+
+\noindent 
+
+\noindent $>$\textbf{perl tail.plx}
+
+\noindent Last five lines:
+
+\noindent - that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion - that we here highly resolve that these dead shall not have died in vain, that this nation under God shall
+
+\noindent have a new birth of freedom, and that government of the people, by the people, for the people shall not perish from the earth.
+
+\noindent $>$
+
+\noindent 
+
+\noindent However, if memory wasn't a problem, or you knew you were going to be primarily dealing with small files, this would be perfectly sufficient:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# tail2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent open FILE, "gettysburg.txt" or die \$!;
+
+\noindent my @speech = $<$FILE$>$;
+
+\noindent 
+
+\noindent print "Last five lines:\textbackslash n", @speech[-5 ... -1];
+
+\noindent 
+
+\noindent 
+
+\noindent What's My Line (Separator)?
+
+\noindent 
+
+\noindent So far we've been reading in single lines -- a series of characters ending in a new line. One of the other things we can do is to alter Perl's definition of what separates a line.
+
+\noindent 
+
+\noindent The special variable \$/ is called the 'input record separator'. Usually, it's set to be the newline character, \textbackslash n, and each 'record' is a line. We might say more correctly that $<$FILE$>$ reads a single
+
+\noindent \textbf{record }from the file. Furthermore, chomp doesn't just remove a trailing new line -- it removes a trailing
+
+\noindent record separator. However, we can set this separator to whatever we want, and this will change the way
+
+\noindent Perl sees lines. So if, for instance, our data was defined in terms of paragraphs, rather than lines, we could read one paragraph at a time by changing \$/.
+
+\noindent 
+
+\noindent Try It Out : Fortune Cookie Dispenser
+
+\noindent The fortune cookies file for the UNIX fortune program -- as well as some 'tagline' generators for e-
+
+\noindent mail and news articles -- consist of paragraphs separated by a percent sign on a line of its own, like this:
+
+\noindent 
+
+\noindent We all agree on the necessity of compromise.  We just can't agree on when it's necessary to compromise.
+
+\noindent -- Larry Wall
+
+\noindent \%
+
+\noindent All language designers are arrogant.  Goes with the territory...
+
+\noindent -- Larry Wall
+
+\noindent \%
+
+\noindent Oh, get a hold of yourself. Nobody's proposing that we parse English.
+
+\noindent -- Larry Wall
+
+\noindent \%
+
+\noindent Now I'm being shot at from both sides. That means I *must* be right.
+
+\noindent -- Larry Wall
+
+\noindent \%
+
+\noindent 
+
+\noindent 
+
+\noindent Save this as quotes.dat and then write a program to pick a random quote from the file:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# fortune.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$/ = "\textbackslash n\%\textbackslash n";
+
+\noindent 
+
+\noindent open QUOTES, "quotes.dat" or die \$!;
+
+\noindent my @file = $<$QUOTES$>$;
+
+\noindent 
+
+\noindent my \$random = rand(@file);
+
+\noindent my \$fortune = \$file[\$random];
+
+\noindent chomp \$fortune;
+
+\noindent 
+
+\noindent print \$fortune, "\textbackslash n";
+
+\noindent 
+
+\noindent This is what you get (or might get -- it is random, after all):
+
+\noindent 
+
+\noindent $>$ \textbf{perl fortune.plx}
+
+\noindent Now I'm being shot at from both sides. That means I *must* be right.
+
+\noindent -- Larry Wall
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Once we've set our record separator appropriately, most of the work is already done for us. This is how we change it:
+
+\noindent 
+
+\noindent \$/ = "\textbackslash n\%\textbackslash n";
+
+\noindent 
+
+\noindent Now a 'line' is everything up to a newline character and then a percent sign on its own and then another new line, and when we read the file into an array, it ends up looking something like this:
+
+\noindent 
+
+\noindent my @file = (
+
+"We all agree on the necessity of compromise.  We just can't agree on when it's necessary to compromise.\textbackslash n -- Larry Wall\textbackslash n\%\textbackslash n",
+
+\noindent "All language designers are arrogant.  Goes with the territory...\textbackslash n -- Larry
+
+\noindent Wall\textbackslash n\%\textbackslash n",
+
+\noindent ...
+
+\noindent );
+
+\noindent 
+
+\noindent We want a random line from the file. The operator for this is rand:
+
+\noindent 
+
+\noindent my \$random = rand(@file);
+
+\noindent my \$fortune = \$file[\$random];
+
+\noindent 
+
+\noindent rand produces a random number between zero and the number given as an argument. What's the argument we give it? As you know, an array in a scalar context gives you the number of elements in the array. rand actually generates a fractional number, but when we look it up in the array, as we've seen
+
+\noindent in Chapter 3, Perl ignores the fractional part. Actually, it's more likely that in existing code you'll see
+
+\noindent those two statements combined into one, like this:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$fortune = \$file[rand @file];
+
+\noindent 
+
+\noindent 
+
+\noindent Now we have our fortune, but it still has the record separator on the end, so we need to chomp to
+
+\noindent remove it:
+
+\noindent 
+
+\noindent chomp \$fortune ;
+
+\noindent 
+
+\noindent Finally, we can print it back out, remembering that we need to put a new line on the end:
+
+\noindent 
+
+\noindent print \$fortune, "\textbackslash n";
+
+\noindent 
+
+\noindent \textit{Reading Paragraphs at a Time}
+
+\noindent If you set the input record separator, \$/, to the empty string, "", Perl reads in a paragraph at a time. Paragraphs must be separated by a completely blank line, with no spaces on it at all. Of course, you can
+
+\noindent use split or similar to extract individual lines from each paragraph. This program creates a 'paragraph summary' by printing out the first line of each paragraph in a file:
+
+\noindent 
+
+\noindent Try It Out : Paragraph Summariser
+
+\noindent 
+
+\noindent We'll use split to get at the first line in each paragraph, and we'll number the paragraphs:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# summary.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$/ = "";
+
+\noindent my \$counter = 1;
+
+\noindent 
+
+\noindent while ($<$$>$) \{
+
+\noindent print \$counter++, ":";
+
+\noindent print ((split /\textbackslash n/, \$\_)[0]);
+
+\noindent print "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent When run on the beginning of this chapter, it gives the following output:
+
+\noindent 
+
+\noindent $>$ \textbf{perl summary.plx chapter6}
+
+\noindent 1:We're starting to write real programs now, and real programs
+
+\noindent 2:What we want to do in this chapter is extend these techniques
+
+\noindent 3:First though, let's do some groundwork. When we're dealing
+
+\noindent 4:We've actually already seen a filehandle: the STDIN of $<$STDIN$>$.
+
+\noindent 5:As a counterpart to standard input, there's also standard
+
+\noindent 6:Every program has these three filehandles available, at least
+
+\noindent $>$
+
+\noindent 
+
+\noindent We're assuming here that each line in the paragraph ends with a newline character rather than wrapping around to the next line. In the latter case, our program would return each of the paragraphs in their entirety, because split is being based on \textbackslash n.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent This time we're reading from files specified on the command line, so we use the diamond operator. We start by putting the input record separator into paragraph mode:
+
+\noindent 
+
+\noindent 
+
+\noindent \$/ = "";
+
+\noindent 
+
+\noindent For every paragraph we read in, we print a new number, then get the first line of the paragraph:
+
+\noindent 
+
+\noindent print ((split /\textbackslash n/, \$\_)[0]);
+
+\noindent 
+
+\noindent First we split the paragraph into lines, by splitting around a newline character. Since split just produces a list, we can take the first element of this list in the same way as any other.
+
+\noindent 
+
+\noindent \textit{Reading Entire Files}
+
+\noindent Finally, you may want to read a whole file into a single string. You could do this easily enough using join, but Perl provides another special value of \$/ for this. If we want to say that there is no record separator, we set \$/ to the undefined value. So, for instance, to read the whole of the above quotes file into a variable, we do this:
+
+\noindent 
+
+\noindent 
+
+\noindent \$/ = undef;
+
+\noindent open QUOTES, "quotes.dat" or die \$!;
+
+\noindent my \$file = $<$QUOTES$>$;
+
+\noindent 
+
+\noindent You may also see the form undef \$/ doing the same job: the undef operator gives a variable the undefined value.
+
+\noindent 
+
+\noindent 
+
+\noindent Writing to Files
+
+\noindent 
+
+\noindent We've been using the print operator to print a list to standard output. We'll also use a different form
+
+\noindent of the print operator to print to a file. However, as we mentioned above, files are usually open either for reading \textit{or }for writing -- not both. We've been opening files and reading from them, but how do we open them for writing?
+
+\noindent 
+
+\noindent Opening a File for Writing
+
+\noindent 
+
+\noindent We actually use a syntax that's used by the shell for writing to files. In Windows and UNIX, if we want
+
+\noindent to put standard output into a file, we add the operator \textbf{$>$ }and the file name to the end of the command. For example, saying something like this:
+
+\noindent 
+
+\noindent $>$ \textbf{perl summary.plx chapter6 $>$ summary6}
+
+\noindent 
+
+\noindent will create a file called summary6, which contains the following text:
+
+\noindent 
+
+\noindent 1:We're starting to write real programs now, and real programs
+
+\noindent 2:What we want to do in this chapter is extend these techniques
+
+\noindent 3:First though, let's do some groundwork. When we're dealing
+
+\noindent 4:We've actually already seen a filehandle: the STDIN of $<$STDIN$>$.
+
+\noindent 5:As a counterpart to standard input, there's also standard
+
+\noindent 6:Every program has these three filehandles available, at least
+
+\noindent 
+
+\noindent 
+
+\noindent Now, to open a file for writing, we do this:
+
+\noindent 
+
+\noindent open FH, "$>$ \$filename" or die \$!;
+
+\noindent 
+
+\noindent This will either create a new file or completely wipe out the contents of an already existing file and let
+
+\noindent us start writing from the beginning. Don't use this on files you want to keep! If we want to add things to the end of an existing file, use two arrows, like this:
+
+\noindent 
+
+\noindent open FH, "$>$$>$ \$filename" or die \$!;
+
+\noindent 
+
+\noindent There's no easy way of adding or changing text at the beginning or middle of a file. The typical way to
+
+\noindent do this is to read in the original and write the changed data to another file. We'll see shortly how this is done.
+
+\noindent 
+
+\noindent Similarly, you can redirect data to a program's standard \textit{input }by using the left arrow, like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl summary.plx $<$ chapter6.txt}
+
+\noindent 
+
+\noindent As you've probably guessed, this means you can open files for input by saying:
+
+\noindent 
+
+\noindent open FH, "$<$ \$filename";
+
+\noindent 
+
+\noindent This is exactly the same as open FH, \$filename; as we've used previously; it's just a little more explicit.
+
+\noindent 
+
+\noindent Writing on a Filehandle
+
+\noindent 
+
+\noindent We're now ready to write the file, which we'll do by using a special form of the print operator. Normally, to print things out from the screen, we say this:
+
+\noindent 
+
+\noindent print \textit{list};
+
+\noindent 
+
+\noindent When we want to write to a file, we'll use this instead:
+
+\noindent 
+
+\noindent print FH \textit{list};
+
+\noindent 
+
+\noindent So, for instance, here's one way of copying a file:
+
+\noindent 
+
+\noindent Try It Out : File Copying
+
+\noindent 
+
+\noindent We'll read in a file one line at a time, writing each line onto the new file:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# copy.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$source = shift @ARGV;
+
+\noindent my \$destination = shift @ARGV;
+
+\noindent 
+
+\noindent 
+
+\noindent open IN, \$source or die "Can't read source file \$source: \$!\textbackslash n";
+
+\noindent open OUT, "$>$\$destination" or die "Can't write on file \$destination: \$!\textbackslash n";
+
+\noindent 
+
+\noindent print "Copying \$source to \$destination\textbackslash n";
+
+\noindent 
+
+\noindent while ($<$IN$>$) \{
+
+\noindent print OUT \$\_;
+
+\noindent \}
+
+\noindent 
+
+\noindent Now there isn't much to see in this program, but let's run it anyway:
+
+\noindent 
+
+\noindent $>$ \textbf{perl copy.plx gettysburg.txt speech.txt}
+
+\noindent Copying gettysburg.txt to speech.txt
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent We get the name of the file to copy from the command line:
+
+\noindent 
+
+\noindent my \$source = shift @ARGV;
+
+\noindent my \$destination = shift @ARGV;
+
+\noindent 
+
+\noindent The command line arguments to our program are in the @ARGV array, as we saw in Chapter 4, and we use shift (which pops the top element of an array into a variable) to get an element out. We could
+
+\noindent quite easily have said this:
+
+\noindent 
+
+\noindent my \$source = \$ARGV[0];
+
+\noindent my \$destination = \$ARGV[1];
+
+\noindent 
+
+\noindent However, shift is slightly more common. Next, open our two files:
+
+\noindent 
+
+\noindent open IN, \$source or die "Can't read source file \$source: \$!\textbackslash n";
+
+\noindent open OUT, "$>$ \$destination" or die "Can't write on file \$destination: \$!\textbackslash n";
+
+\noindent 
+
+\noindent The first of those lines should be familiar. The second, meanwhile, adds the arrow to show we want to write on that file. It's a double-quoted string so, as always, the destination file name is interpolated.
+
+\noindent Notice that we're taking care to check if the files can be opened for reading and writing; it is essential to
+
+\noindent let the user know if, for example, they do not have permission to access a certain file, or the file does not exist. There's never really good reason not to do this.
+
+\noindent 
+
+\noindent The  copying  procedure  is  simple  enough:  read  a  line  from  the  source  file,  and  then  write  it  to the destination:
+
+\noindent 
+
+\noindent while ($<$IN$>$) \{
+
+\noindent print OUT \$\_;
+
+\noindent \}
+
+\noindent 
+
+\noindent $<$IN$>$ returns a list of as many lines as it can in list context. So the while loop steps through this list, copies each line to memory and printing to the destination file OUT, one at a time for each cycle. So why don't we just say:
+
+\noindent 
+
+\noindent print OUT $<$IN$>$;
+
+\noindent 
+
+\noindent 
+
+\noindent The trouble is, that's not very memory conscious. Perl would have to read in the \textit{whole }file at once in
+
+\noindent order to construct the list and only then pass it out to print. For small files, this is fine. On the other hand, if we thought we could get away with reading the whole file into memory at one go, we also could
+
+\noindent do it this way:
+
+\noindent 
+
+\noindent 
+
+\noindent \$/ = undef;
+
+\noindent print OUT $<$IN$>$;
+
+\noindent 
+
+\noindent This will read the whole file as a single entry, which is faster for sure, since Perl won't have to think about separating each line and building up a list, but still only suited to small files. Since we want to allow for large files, too, we'll stick with our original technique.
+
+\noindent 
+
+\noindent Let's see another example. This time, instead of writing the file straight out, we'll sort the lines in it first.
+
+\noindent In this case, we can't avoid reading in every line into memory. We need to have all the lines in an array
+
+\noindent or something similar. Let's see how we'd go about doing this.
+
+\noindent 
+
+\noindent Try It Out : File Sorter
+
+\noindent 
+
+\noindent 
+
+\noindent If you've ever needed to sort the lines in a file, this is for you. The program works in three stages:
+
+\noindent 
+
+\noindent ? First, open the files that the user specifies.
+
+\noindent 
+
+\noindent ? Next, read in the file and sort it.
+
+\noindent 
+
+\noindent ? Finally, write the sorted lines out.
+
+\noindent 
+
+\noindent Here's the full listing:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sort.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$input = shift;
+
+\noindent my \$output = shift;
+
+\noindent open INPUT, \$input or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent open OUTPUT, "$>$\$output" or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent 
+
+\noindent my @file = $<$INPUT$>$;
+
+\noindent @file = sort @file;
+
+\noindent 
+
+\noindent print OUTPUT @file;
+
+\noindent 
+
+\noindent Now if we have the following file, sortme.txt:
+
+\noindent 
+
+\noindent 
+
+\noindent Well, I finally found someone to turn me upside-down
+
+\noindent And nail my feet up where my head should be
+
+\noindent If they had a king of fools then I could wear that crown
+
+\noindent And you can all die laughing, because I'd wear it proudly
+
+\noindent 
+
+\noindent 
+
+\noindent We can run our program like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl sort.plx sortme.txt sorted.txt}
+
+\noindent $>$
+
+\noindent 
+
+\noindent And we'll end up with a file, sorted.txt:
+
+\noindent 
+
+\noindent And nail my feet up where my head should be
+
+\noindent And you can all die laughing, because I'd wear it proudly If they had a king of fools then I could wear that crown Well, I finally found someone to turn me upside-down
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The first stage, that of opening the files, is very similar to what we did before, with one small change:
+
+\noindent 
+
+\noindent my \$input = shift;
+
+\noindent my \$output = shift;
+
+\noindent open INPUT, \$input or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent open OUTPUT, "$>$\$output" or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent 
+
+\noindent We don't tell Perl which array to shift, so it assumes we want @ARGV, which is just as well, because in this case, we do!
+
+\noindent 
+
+\noindent Getting the file sorted is a simple matter of reading it into an array and calling sort on the array:
+
+\noindent 
+
+\noindent my @file = $<$INPUT$>$;
+
+\noindent @file = sort @file;
+
+\noindent 
+
+\noindent In fact, we could just say my @file = sort $<$INPUT$>$; and that would be slightly more efficient. Perl would only have to throw the list around once.
+
+\noindent 
+
+\noindent Finally, we write the sorted array out:
+
+\noindent 
+
+\noindent print OUTPUT @file;
+
+\noindent 
+
+\noindent We could even do all this in one line, without using an array:
+
+\noindent 
+
+\noindent 
+
+\noindent print OUTPUT sort $<$INPUT$>$;
+
+\noindent 
+
+\noindent This is arguably the most efficient solution, and you might think it's relatively easy to understand. What are we doing after all? We're printing the sorted input file on the output file. But it's the least extensible way of writing it. We can't change any of the stages when it's written like that.
+
+\noindent 
+
+\noindent What could we change? Well, remember that there are at least two ways to sort things: sort usually does an ASCII-order sort, but this doesn't help us when we're sorting columns of numbers. To do that,
+
+\noindent we need to use the numeric comparison operator, $<$=$>$, when we're sorting. As we saw in Chapter 3, the syntax would be something like this:
+
+\noindent 
+
+\noindent 
+
+\noindent @sorted = sort \{ \$a $<$=$>$ \$b \} @unsorted;
+
+\noindent 
+
+\noindent 
+
+\noindent Let's now extend our sort program to optionally sort numerically. Add the following lines:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sort2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$numeric = 0;
+
+\noindent my \$input = shift;
+
+\noindent if (\$input eq "-n") \{
+
+\noindent \$numeric = 1;
+
+\noindent \$input = shift;
+
+\noindent \}
+
+\noindent my \$output = shift;
+
+\noindent 
+
+\noindent open INPUT, \$input or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent open OUTPUT, "$>$\$output" or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent 
+
+\noindent my @file = $<$INPUT$>$;
+
+\noindent if (\$numeric) \{
+
+\noindent @file = sort \{ \$a $<$=$>$ \$b \} @file;
+
+\noindent \} else \{
+
+\noindent @file = sort @file;
+
+\noindent \}
+
+\noindent 
+
+\noindent print OUTPUT @file;
+
+\noindent 
+
+\noindent What have we done? We've declared a flag, \$numeric, which will tell us whether or not we're to do a numeric sort. If the first thing we see on the command line after our program's name is the string -n,
+
+\noindent then we're doing a numeric sort, and so we set our flag. Now that we've dealt with the -n, the input and output are the next two things on the command line. So we have to shift again.
+
+\noindent 
+
+\noindent Now that we've read the file in, we can choose which way we want to sort it: either normally, if -n was not given, or numerically if it was. If we have a file containing a list of numbers, called sortnum.txt, we can see the difference between the two methods:
+
+\noindent 
+
+\noindent $>$\textbf{perl sort2.plx sortnum.txt sorted.txt}
+
+\noindent 
+
+\noindent will write
+
+\noindent 
+
+\[121\] 
+
+\[1324515\] 
+
+\[13461\] 
+
+\[7446\] 
+
+\[576124\] 
+
+
+\noindent to the file sorted.txt, while:
+
+\noindent 
+
+\noindent $>$\textbf{perl sort2.plx --n sortnum.txt sorted.txt}
+
+\noindent 
+
+\noindent gives us:
+
+\noindent 
+
+\[121\] 
+
+\[7446\] 
+
+\[13461\] 
+
+\[576124\] 
+
+\[1324515\] 
+
+
+\noindent Try expanding the one-line version of sort.plx to match that.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Accessing Filehandles}
+
+\noindent Before we leave this program, there's one more thing we should do. One piece of programming design UNIX encourages is that it's better to string together lots of little things than deal with a huge program. Houses are built from individual bricks, not single lumps of rock. This is a design principle that's useful everywhere, not just on UNIX, and so let's try and make use of it here.
+
+\noindent 
+
+\noindent UNIX invented the use of \textbf{pipes }to connect programs. Perl supports these, and we'll see how they work later on. To make use of them, though, our program must be able to read lines from the standard input and put out sorted lines to the standard output in the event that no parameters were specified. Let's modify our program to do this:
+
+\noindent 
+
+\noindent Try It Out : Sort As A Filter
+
+\noindent 
+
+\noindent 
+
+\noindent To see how many parameters have been passed, we'll test to see if \$input and \$output are defined
+
+\noindent after we shift them:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sort3.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my \$numeric = 0;
+
+\noindent my \$input = shift;
+
+\noindent if (defined \$input and \$input eq "-n") \{
+
+\noindent \$numeric = 1;
+
+\noindent \$input = shift;
+
+\noindent \}
+
+\noindent my \$output = shift;
+
+\noindent 
+
+\noindent if (defined \$input) \{
+
+\noindent open INPUT, \$input or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent \} else \{
+
+\noindent *INPUT = *STDIN;
+
+\noindent \}
+
+\noindent 
+
+\noindent if (defined \$output) \{
+
+\noindent open OUTPUT, "$>$\$output" or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent \} else \{
+
+\noindent *OUTPUT = *STDOUT;
+
+\noindent \}
+
+\noindent 
+
+\noindent my @file = $<$INPUT$>$;
+
+\noindent if (\$numeric) \{
+
+\noindent @file = sort \{ \$a $<$=$>$ \$b \} @file;
+
+\noindent \} else \{
+
+\noindent @file = sort @file;
+
+\noindent \}
+
+\noindent 
+
+\noindent print OUTPUT @file;
+
+\noindent 
+
+\noindent 
+
+\noindent This time, we'll give no parameters but instead pass data on the command-line using the left arrow:
+
+\noindent 
+
+\noindent $>$ \textbf{perl sort.plx $<$ sortme.txt}
+
+\noindent And nail my feet up where my head should be
+
+\noindent And you can all die laughing, because I'd wear it proudly
+
+\noindent If they had a king of fools then I could wear that crown
+
+\noindent Well, I finally found someone to turn me upside-down
+
+\noindent $>$
+
+\noindent 
+
+\noindent As you can see, the data ends up on standard output. But how?
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The key magic occurs in the following lines:
+
+\noindent 
+
+\noindent if (defined \$input) \{
+
+\noindent open INPUT, \$input or die "Couldn't open file \$input: \$!\textbackslash n";
+
+\noindent \} else \{
+
+\noindent *INPUT = *STDIN;
+
+\noindent \}
+
+\noindent 
+
+\noindent If there's an  input file name defined,  we  use  that.  Otherwise,  we  do  this strange  thing  with  the  stars.
+
+\noindent What we're  doing is telling Perl  that  INPUT should  be  the  same  filehandle  as  standard  input.  If  we wanted to  set array @a to  be the  same  as  array  @b,  we'd  say  @a = @b; With  filehandles,  we  can't
+
+\noindent just say INPUT = STDIN; we  have  to  put  a  star  before  their  names.  From  now  on,  everything  that
+
+\noindent is  read from INPUT will actually  be  taken  from  STDIN.  Similarly,  everything  that  is  written  to
+
+\noindent OUTPUT goes to STDOUT:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{What the star -- or, to give it its proper name, the glob -- does is actually very subtle:}
+
+\noindent \textbf{*a = *b makes everything called a --  that is \$a, }@a\textbf{, \%a, and the filehandle called a --}
+
+\noindent \textbf{into an alias for everything called b. This is more than just setting them to the same}
+
+\noindent \textbf{value -- it makes them the same thing. Now everything that alters \$a also alters \$b}
+
+\noindent \textbf{and vice versa. That's why it's a good convention to keep filehandles purely upper-}
+
+\noindent \textbf{case. That keeps them distinct from other variables, meaning you won't inadvertently}
+
+\noindent \textbf{alias two variables.}
+
+\noindent 
+
+\noindent 
+
+\noindent The reason we have to do this to manipulate filehandles is because there isn't a 'type symbol' for them
+
+\noindent as there is for scalars, arrays, and hashes. This is now seen as a mistake, but there's little we can do about it at this stage.
+
+\noindent 
+
+\noindent \textit{Writing Binary Data}
+
+\noindent So far, we've been dealing primarily with text files: speeches, Perl programs, and so on. When we get to data that's designed for computers to read -- binary files -- things change somewhat. The first problem is the newline character, \textbackslash n. This is actually nothing more than a convenient fiction, allowing you to denote a new line using ASCII symbols on whatever operating system you're working with. In truth, different operating systems have differing ideas about what a newline really is when written to a file.
+
+\noindent 
+
+\noindent On UNIX, it really is \textbackslash n -- character number 10 in the ASCII sequence. When a Macintosh reads a file, the lines are separated by character 13 in the ASCII sequence, which you can generate by saying \textbackslash r. A Macintosh version of Perl, then, will convert \textbackslash r on the disk to \textbackslash n in the program when reading in from
+
+\noindent a file, then write \textbackslash r to the disk in place of \textbackslash n when writing out to a file.
+
+\noindent 
+
+\noindent 
+
+\noindent Windows, on the other hand, is different again. The DOS family of operating systems use \textbackslash r\textbackslash n on the
+
+\noindent disk to represent a new line. Therefore Perl has to silently drop or insert \textbackslash r in the relevant places to make it look as if you're dealing with \textbackslash n all the time.
+
+\noindent 
+
+\noindent When you're dealing with text, this is exactly what you want to happen. Perl's idea of a newline needs to correspond with the native operating system's idea of a newline -- whatever that may be. However, with binary files, where every byte is important, you don't want Perl fiddling with the data just because it
+
+\noindent looks like the end of a line of text. You want those \textbackslash rs to stay where they are!
+
+\noindent 
+
+\noindent Worse still, on DOS, Windows, and friends, character 26 is seen as the end of a file. Perl will stop reading once it sees this character, regardless of whether there's any data to follow.
+
+\noindent 
+
+\noindent To get a round both these problems, you need to tell Perl when you're reading from and writing to binary files, so that it can compensate. You can do this by using the binmode operator:
+
+\noindent 
+
+\noindent binmode FILEHANDLE;
+
+\noindent 
+
+\noindent To  ensure  your files are read  and  written  correctly,  \textbf{always  }use binmode on  binary  files,  \textbf{never }on text files.
+
+\noindent 
+
+\noindent \textit{Selecting a Filehandle}
+
+\noindent Normally, when you print, the data goes to the STDOUT filehandle. To send it somewhere else, you say print FILEHANDLE ...; However, if you're sending a lot of data to a file, you might not want
+
+\noindent to have to give the filehandle every time, it would be useful if it were possible to change the default filehandle. You can do this very simply by selecting the filehandle:
+
+\noindent 
+
+\noindent select FILEHANDLE;
+
+\noindent 
+
+\noindent This will  change the default  location  for  print to  FILEHANDLE.  Remember  to  set STDOUT back
+
+\noindent when you're done.  A  good use  of this  is  to  optionally  send  your  program's  output to  a  log file instead
+
+\noindent of the screen:
+
+\noindent 
+
+\noindent Try It Out : Selecting A Log File
+
+\noindent 
+
+\noindent This program does very little of interest; however, it does it using a log file. We'll use select to control
+
+\noindent where its output should go.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#logfile.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$logging = "screen"; \# Change this to "file" to send the log to a file!
+
+\noindent 
+
+\noindent if (\$logging eq "file") \{
+
+\noindent open LOG, "$>$ output.log" or die \$!;
+
+\noindent select LOG;
+
+\noindent \}
+
+\noindent 
+
+\noindent print "Program started: ", scalar localtime, "\textbackslash n";
+
+\noindent sleep 30;
+
+\noindent print "Program finished: ", scalar localtime, "\textbackslash n";
+
+\noindent 
+
+\noindent select STDOUT;
+
+\noindent 
+
+\noindent 
+
+\noindent As it is, the program will print something like this:
+
+\noindent 
+
+\noindent $>$ \textbf{perl logfile.plx}
+
+\noindent Program started: Sun Apr 22 14:17:07 2000
+
+\noindent Program finished: Sun Apr 22 14:17:37 2000
+
+\noindent $>$
+
+\noindent 
+
+\noindent However, if we change line 6 to this:
+
+\noindent 
+
+\noindent my \$logging = "file";
+
+\noindent 
+
+\noindent we apparently get no output at all:
+
+\noindent 
+
+\noindent $>$ \textbf{perl logfile.plx}
+
+\noindent $>$
+
+\noindent 
+
+\noindent However, we'll find the same style output in the file output.log. How?
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Since the value of \$logging has changed, it's reasonable to assume that the difference is due to something acting on \$logging -- Perl is nice and deterministic like that. So, sure enough, on line 8,
+
+\noindent \$logging gets examined:
+
+\noindent 
+
+\noindent if (\$logging eq "file") \{
+
+\noindent 
+
+\noindent If \$logging has the value file, which it does now:
+
+\noindent 
+
+\noindent 
+
+\noindent open LOG, "$>$ output.log" or die \$!;
+
+\noindent 
+
+\noindent We open a filehandle for writing, on the file output.log:
+
+\noindent 
+
+\noindent 
+
+\noindent select LOG;
+
+\noindent 
+
+\noindent Then we select that filehandle. Now any print statements that don't specify which filehandle to print to go out on LOG. If we wanted to write on standard output from now on, we'd have to write:
+
+\noindent 
+
+\noindent print STDOUT "This goes to the screen.\textbackslash n";
+
+\noindent 
+
+\noindent Or, alternatively, we could select standard output again:
+
+\noindent 
+
+\noindent 
+
+\noindent select STDOUT;
+
+\noindent 
+
+\noindent How did we get Perl to print out the time? The key is in this line:
+
+\noindent 
+
+\noindent 
+
+\noindent print "Program started: ", scalar localtime, "\textbackslash n";
+
+\noindent 
+
+\noindent localtime is a function that returns the current time in the local time zone. Ordinarily, it returns a list like this:
+
+\noindent 
+
+\noindent 
+
+\noindent (\$sec, \$min, \$hour,
+
+\noindent \$day\_of\_month,
+
+\noindent \$month\_minus\_one,
+
+\noindent \$year\_minus\_nineteen\_hundred,
+
+\noindent \$day\_of\_week,
+
+\noindent \$day\_of\_year,
+
+\noindent \$is\_this\_daylight\_savings\_time)
+
+\noindent 
+
+\noindent Right now it would return:
+
+\noindent 
+
+\noindent 53, 47, 14, (It's 14:47:53.)
+
+\noindent 22, (It's the 22nd)
+
+\noindent 3, (April is the third month of the year, counting from the zeroth)
+
+\noindent 100, (It's the year 2000.)
+
+\noindent 6, (It's a Saturday. Sunday is the first day of the week, day zero.)
+
+\noindent 112, (It's the 112th   day of the year, counting from the zeroth. January the first is day zero.)
+
+\noindent 0 (It's not daylight savings time right now.)
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Always be careful when dealing with localtime. Hopefully by now you see the merit}
+
+\noindent \textbf{in counting from zero when you're dealing with computers, but it can sometimes catch}
+
+\noindent \textbf{you out -- the month of the year, day of the week and day of the year start from zero,}
+
+\noindent \textbf{but the day of the month starts from one.}
+
+\noindent 
+
+\noindent 
+
+\noindent Thankfully, it's now a lot harder to imagine that the fifth element returned is the year. Last year
+
+\noindent (localtime)[5] returned 99, which some foolhardy programmers assumed was the last two digits of the year. Fortunately, Perl turned out to be perfectly Y2K compliant, unfortunately, those programmers weren't. (localtime)[5] is (and has always been) the year minus 1900. If you find this weird and inconsistent, you can blame it all on the fact that Perl bases its idea on how to represent time from C,
+
+\noindent which first perpetrated this insanity.
+
+\noindent 
+
+\noindent In scalar context however, localtime provides a much easier value to deal with: It's a string representing the current time in a form designed for human consumption. This allows us to easily produce timestamps to mark when operations happened. However, we must remember that since print takes a list, we need to explicitly tell localtime to be in scalar context in order to force it to return this string.
+
+\noindent 
+
+\noindent \textit{Buffering}
+
+\noindent Try this little program:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#time.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent for (1...20) \{
+
+\noindent print ".";
+
+\noindent sleep 1;
+
+\noindent \}
+
+\noindent print "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent You'd probably expect it to print twenty dots, leaving a second's gap between each one -- on Windows
+
+\noindent with ActiveState Perl, that's exactly what it does. However, this is something of an exception. On most other operating systems, you'll have to wait for twenty seconds first, before it prints all twenty at once.
+
+\noindent 
+
+\noindent So what's going on? Operating systems often won't actually write something to (or read something from)
+
+\noindent a filehandle until the end of the line. This is to save doing a lot of short, repetitious read/write
+
+\noindent operations. Instead, they keep everything you've written queued up in a buffer and access the filehandle
+
+\noindent once only.
+
+\noindent 
+
+\noindent However, you can tell Perl to stop the OS doing this, by modifying the special variable \$\textbar . If this is set
+
+\noindent to zero, which it usually is, Perl will tell the operating system to use output buffering if possible. If it's set
+
+\noindent to one, Perl turns off buffering for the currently selected filehandle.
+
+\noindent 
+
+\noindent So, to make our program steadily print out dots -- as you might do to show progress on a long operation
+
+\noindent -- we just need to set \$\textbar  to 1 before we do our printing:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#time2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\textbar = 1;
+
+\noindent for (1...20) \{
+
+\noindent print ".";
+
+\noindent sleep 1;
+
+\noindent \}
+
+\noindent print "\textbackslash n";
+
+\noindent 
+
+\noindent If you need to turn off buffering when writing to a file, be sure to select the appropriate filehandle before changing \$\textbar , possibly selecting STDOUT again when you've done so.
+
+\noindent 
+
+\noindent 
+
+\noindent Permissions
+
+\noindent 
+
+\noindent Before going on, let's look briefly at the issue of file permissions. If you use UNIX or other multi-user systems, you'll almost certainly be familiar with the very specific access controls that can be imposed, determining who's allowed to do what with any given file or directory. It's most likely that a file or directory on such a system will have at least three sets of permissions for each of three sets of users:
+
+\noindent 
+
+\noindent ? The file owner,
+
+\noindent 
+
+\noindent ? The group with which the owner is associated, and
+
+\noindent 
+
+\noindent ? Everyone else on the system.
+
+\noindent 
+
+\noindent Each of these can have 'read', 'write' and 'execute' permissions assigned. You may have seen these displayed along with other file information as a sequence like:
+
+\noindent 
+
+\noindent drwxrwxrwx
+
+\noindent 
+
+\noindent which denotes full access on a directory (denoted by the prefix 'd') for all users or:
+
+\noindent 
+
+\noindent -rwx--x---
+
+\noindent 
+
+\noindent 
+
+\noindent which denotes a file (prefix '-') to which the owner has full access, members of their group can execute
+
+\noindent (but not read or modify), and everyone else has no access at all.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{In fact, the subtleties of permission hierarchies mean that it's not always quite this clear cut. For example, a UNIX file without public 'write' permissions can actually be deleted by any user at all if the file's parent directory has granted them the relevant permission. Take care.}
+
+\noindent 
+
+\noindent Perl gives us the function umask(\textit{expr}), which we can use to set the permission bits to be used when we create a file. The expression it will expect is a three digit octal number, representing the state of the
+
+\noindent nine flags we've seen. If we consider these as bits in a binary number, we can interpret our second example above as:
+
+\noindent 
+
+\[111001000\] 
+
+
+\noindent which breaks down groupwise as:
+
+\noindent 
+
+\noindent 
+
+\begin{equation} \label{GrindEQ__000_} 
+(111) (001)  
+\end{equation} 
+
+
+\noindent and in octal as:
+
+\noindent 
+
+\noindent 
+
+\[710\] 
+
+
+\noindent We can therefore specify umask(0710); and subsequent files will be created with any permissions it has been specifically given ANDed with the umask value. In a nutshell, by setting the umask value, we have set the default permissions for all files or directories on top of which other permissions can be set.
+
+\noindent 
+
+\noindent In general, it's a good idea to set the umask to 0666 for creating regular files. If you work backwards
+
+\noindent from the file, you realize that this equates to giving everyone read and write access to the file but no-one execute permissions. Likewise, it's a fairly safe bet to set umask to 0777 -- full control for everyone --
+
+\noindent for the creation of directories and, of course, executable files.
+
+\noindent 
+
+\noindent 
+
+\noindent Opening Pipes
+
+\noindent 
+
+\noindent open can be used for more than just plain old files. You can read data from and send data to programs
+
+\noindent as well. Anything that can read from or write to standard output can talk directly to Perl via a \textbf{pipe}.
+
+\noindent 
+
+\noindent Pipes were invented by a man called Doug MacIlroy for the UNIX operating system and were soon carried over to other operating systems. They're one of those things that sound amazingly obvious once someone else has thought of it:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{A pipe is something that connects two filehandles together.}
+
+\noindent 
+
+\noindent 
+
+\noindent That's it.  Usually,  you'll be connecting  the  standard  output  of  one program  to  the standard  input
+
+\noindent of another.
+
+\noindent 
+
+\noindent 
+
+\noindent For instance, we've written two filters in this chapter: one to number lines in a file and one to sort files.
+
+\noindent Let's see what happens when we connect them together:
+
+\noindent 
+
+\noindent $>$ \textbf{perl sort3.plx $<$ sortme.txt \textbar  perl nl3.plx}
+
+\noindent 
+
+\noindent File: -
+
+\noindent 
+
+\noindent 1: And nail my feet up where my head should be
+
+\noindent 2: And you can all die laughing, because I'd wear it proudly
+
+\noindent 3: If they had a king of fools then I could wear that crown
+
+\noindent 4: Well, I finally found someone to turn me upside-down
+
+\noindent $>$
+
+\noindent 
+
+\noindent That bar in the middle is the pipe. Here's a diagram of what's going on:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent sortme.txt
+
+\noindent STDIN
+
+\noindent sort3.plx
+
+\noindent STDOUT
+
+\noindent STDIN
+
+\noindent nl3.plx
+
+\noindent STDOUT
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent The pipe turns the standard output of sort3.plx into input for nl3.plx.
+
+\noindent 
+
+\noindent While pipes are usually used for gluing programs together on the shell command line, exactly as we've just done above, we can use them in Perl to read from and write to programs.
+
+\noindent 
+
+\noindent \textit{Piping In}
+
+\noindent To read the output of a program, simply use open and the name of the program (with any command
+
+\noindent line you want to give it), and put a pipe at the end. For instance, the program lynx is a command-line web browser, available via http://lynx.browser.org/. If I say lynx -source http://www.perl.com/, lynx gets the HTML source to the page and sends it to standard output. I can pick this up from Perl using a pipe.
+
+\noindent 
+
+\noindent If you're using Windows, you may need to modify your global path settings -- the list of directory paths
+
+\noindent in which Windows will look for perl, or lynx, or any other executable that you want to call without specifying it's location. It's only because PATH contains C:\textbackslash Perl\textbackslash bin\textbackslash  that we can say:
+
+\noindent 
+
+\noindent $>$\textbf{perl $<$\textit{filename}$>$}
+
+\noindent 
+
+\noindent without saying anything about where perl.exe lives. On Windows 9x you can edit the default value of PATH inside the file autoexec.bat, which you'll find in the root directory. On Windows 2000, you'll find this under Start Menu\textbar Program Files\textbar Administrative Tools\textbar Computer Management -- call up Properties for the local machine, and it's on the Advanced tab, in Environment Variables.
+
+\noindent 
+
+\noindent Simply add the full  path of the  directory  into  which  you've  installed  lynx.exe,  separated  from previous entries (you  should see  C:\textbackslash Perl\textbackslash bin\textbackslash  there  already)  by  a  semicolon.  Mine  now  looks like this:
+
+\noindent 
+
+\noindent 
+
+\noindent C:\textbackslash PERL\textbackslash BIN\textbackslash ;C:\textbackslash PERL\textbackslash BIN;C:\textbackslash WINDOWS;C:\textbackslash WINDOWS\textbackslash COMMAND;C:\textbackslash LYNX\textbackslash DIST\textbackslash 
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{One simpler alternative is to enter this at the DOS command line:}
+
+\noindent 
+
+\noindent set PATH=\%PATH\%;\textit{$<$add directory path to lynx.exe here$>$}
+
+\noindent 
+
+\noindent \textit{This has the benefit of being quicker. It's also safer, as any modification you make like this is local}
+
+\noindent \textit{to the current DOS shell, but that means you'll have to do it again next shell around\dots }
+
+\noindent 
+
+\noindent 
+
+\noindent You may still find that lynx still won't run from outside it's own directory and gives you a message like:
+
+\noindent 
+
+\noindent Configuration file ./lynx.cfg is not available.
+
+\noindent 
+
+\noindent You can get round this problem by copying the relevant file from the lynx directory into your current one. It's a bit of a fudge, but it does the trick:
+
+\noindent 
+
+\noindent 
+
+\noindent Try it out : Perl headline
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# headline.plx
+
+\noindent \# Display the www.perl.com top story.
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent open LYNX, "lynx --source http://www.perl.com/ \textbar " or die "Can't open lynx: \$!";
+
+\noindent 
+
+\noindent \# Define \$\_  and skip through LYNX until a line containing "standard.def"
+
+\noindent \$\_  = "";
+
+\noindent \$\_  = $<$LYNX$>$ until /standard\textbackslash .def/;
+
+\noindent 
+
+\noindent \# The headline is in the following line:
+
+\noindent my \$head = $<$LYNX$>$;
+
+\noindent 
+
+\noindent \# Extract "Headline" from "$<$A HREF=something$>$Headline$<$/a$>$..."
+
+\noindent \$head =\~{} m\textbar \^{}$<$A HREF=[\^{}$>$]+$>$(.*?)$<$/a$>$\textbar i;
+
+\noindent 
+
+\noindent print "Today's www.perl.com headline: \$1\textbackslash n";
+
+\noindent 
+
+\noindent Run today, this tells me:
+
+\noindent 
+
+\noindent $>$\textbf{perl headline.plx}
+
+\noindent Today's www.perl.com headline: What's New in 5.6.0.
+
+\noindent $>$
+
+\noindent \textit{Note that this program will work with the layout of }www.perl.com\textit{ at the time of writing. If the site's layout changes, it might not work in the future.}
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The important thing, for our purposes, is the pipe:
+
+\noindent 
+
+\noindent 
+
+\noindent open LYNX, "lynx --source http://www.perl.com/ \textbar " or die "Can't open lynx: \$!";
+
+\noindent 
+
+\noindent 
+
+\noindent What it's saying is that, instead of a file on the disk, the filehandle LYNX should read from the standard
+
+\noindent output of the command lynx -source http://www.perl.com. The pipe symbol \textbar  at the end of
+
+\noindent the string tells Perl to run the command and collect the output. The effect is just the same as if we'd had
+
+\noindent lynx write the output to a file and then had Perl read in that file. Each line we read from LYNX is the next line of source in the output.
+
+\noindent 
+
+\noindent Let's now have a look at how we extracted the headline from the source.
+
+\noindent 
+
+\noindent The site is laid out in a standard format, and the headline is on the line following the text "standard.def". So we can happily keep getting new lines until we come across one matching that text:
+
+\noindent 
+
+\noindent \$\_  = $<$LYNX$>$ until /standard\textbackslash .def/;
+
+\noindent 
+
+\noindent \textit{Note that we have to assign the new line to \$\_ ourselves. The assignment to \$\_ is only done automatically when you say something like while($<$FILEHANDLE$>$).}
+
+\noindent 
+
+\noindent The headline is in the next line, so we get that:
+
+\noindent 
+
+\noindent my \$head = $<$LYNX$>$;
+
+\noindent 
+
+\noindent The line containing the headline will look something like this:
+
+\noindent 
+
+\noindent $<$A HREF="http://www.perl.com/pub/2000/05/..."$>$Perl used in wombat sexing$<$/A$>$
+
+\noindent 
+
+\noindent To retrieve the headline from the middle, we use a regular expression. Generally speaking, reading HTML with a regular expression is a really bad idea, as perlfaq9 explains. HTML tags are far more complex than just "start at an open bracket and end with a close bracket". That definition would fail spectacularly with tags in comments, tags split over multiple lines, or tags containing a close bracket symbol as part of a quoted string. It's a much harder problem than it first appears, due to the scope of
+
+\noindent the HTML language.
+
+\noindent 
+
+\noindent To read HTML to any degree of accuracy, you need to use an extension module like HTML::Parser. However, when the scope of the problem is as limited as the one we're faced with, we can get away with taking a few liberties.
+
+\noindent 
+
+\noindent We know that the piece of HTML in question is a single line. We know that the tag we're looking for starts at the beginning of the line and that there are no close brackets within it. So, our regular expression finds "$<$A HREF=" at the beginning of the line. After that, we read anything that's not a closing bracket, followed by a closing bracket.
+
+\noindent 
+
+\noindent Next, we want our headline: This is the smallest amount of text that will be directly followed by $<$/A$>$. Since there's a forward slash in what we're trying to match, we use alternate delimiters to make the expression more understandable. As we're using alternate delimiters, we need to put an m on the front to make it clear that this is a match:
+
+\noindent 
+
+\noindent \$head =\~{} m\textbar \^{}$<$A HREF=[\^{}$>$]+$>$(.*?)$<$/A$>$\textbar ;
+
+\noindent 
+
+\noindent \textit{We could have said: \$head =\~{} /\^{}$<$A HREF=[\^{}$>$]+$>$(.*?)$<$\textbackslash /A$>$/; backslashing the forward slash to avoid it being treated as the end of the regular expression, but that would have been unnecessarily confusing. This is exactly the sort of situation that alternate delimiters were}
+
+\noindent \textit{provided for, so we're right to make the most of them.}
+
+\noindent 
+
+\noindent 
+
+\noindent Why do we use [\^{}$>$]+ instead of .* or similar? Consider what would happen if there were two stories
+
+\noindent on the line:
+
+\noindent 
+
+\noindent 
+
+\noindent $<$A HREF="http://www.perl.com/..."$>$Perl is really cool$<$/A$>$$<$A HREF="..."$>$Story 2$<$/A$>$
+
+\noindent 
+
+\noindent $<$A HREF=.*$>$ matches as  much  as  possible  before  a  close  bracket.  In  this case,  the  most it  can
+
+\noindent get  before a close bracket would  be  to  match  everything  up until  just before  Story  2,  and we'd  miss the main headline altogether.  This  is  because  . means  everything,  and everything  includes  a  closing
+
+\noindent bracket. By saying  [\^{}$>$]+ we're  making  it  clear  that  there  can  be  no  closing  brackets  in  the  text
+
+\noindent we're matching.
+
+\noindent 
+
+\noindent \textit{Piping Out}
+
+\noindent As well as reading data in from external programs, we can write out to the standard input of another program. For instance, we could send mail out by writing to a program like sendmail, or we could be generating output that we'd like to have sorted before it gets to the user. We'll deal with the second example because, while it's easy enough to collect the data into an array and sort it ourselves before writing it out, we know we have a sorting program handy. After all, we wrote one a few pages ago!
+
+\noindent 
+
+\noindent Try It Out  : Taking Inventory
+
+\noindent 
+
+\noindent 
+
+\noindent Things hide in the kitchen cabinet. Tins of tomatoes can lurk unseen for weeks and months, springing to
+
+\noindent vision only after I've bought another can. Every so often, then, I need to investigate the cabinets and
+
+\noindent take inventory to enumerate my baked beans and root out reticent ravioli. The following program can help me do that:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# inventory.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \%inventory;
+
+\noindent print "Enter individual items, followed by a new line.\textbackslash n";
+
+\noindent print "Enter a blank line to finish.\textbackslash n";
+
+\noindent while \{
+
+\noindent my \$item = $<$STDIN$>$;
+
+\noindent chomp \$item;
+
+\noindent last unless \$item;
+
+\noindent \$inventory\{lc \$item\}++;
+
+\noindent \}
+
+\noindent 
+
+\noindent open(SORT, "\textbar  perl sort.plx") or *SORT = *STDOUT;
+
+\noindent select *SORT;
+
+\noindent while (my (\$item, \$quantity) = each \%inventory) \{
+
+\noindent if (\$quantity $>$ 1) \{
+
+\noindent \$item =\~{} s/\^{}(\textbackslash w+)\textbackslash b/\$1s/ unless \$item =\~{} /\^{}\textbackslash w+s\textbackslash b/;
+
+\noindent \}
+
+\noindent print "\$item: \$quantity\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Now let's take stock:
+
+\noindent 
+
+\noindent $>$\textbf{perl inventory.plx}
+
+\noindent Enter individual items, followed by a new line. Enter a blank line to finish.
+
+\noindent \textbf{jar of jam loaf of bread tin of tuna}
+
+\noindent \textbf{packet of pancake mix}
+
+\noindent \textbf{tin of tomatos tin of tuna packet of pasta clove of garlic packet of pasta}
+
+\noindent 
+
+\noindent clove of garlic: 1
+
+\noindent jar of jam: 1
+
+\noindent loaf of bread: 1
+
+\noindent packet of pancake mix: 1
+
+\noindent packets of pasta: 2 tin of tomatos: 1 tins of tuna: 2
+
+\noindent 
+
+\noindent As you can see, we get back a sorted list of totals.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Whenever you're counting how many of each items you have in a list, you should immediately think about hashes. Here we use a hash to key each item to the quantity; each time we see another one of those items, we add to the quantity in the hash:
+
+\noindent 
+
+\noindent while \{
+
+\noindent my \$item = $<$STDIN$>$;
+
+\noindent chomp \$item;
+
+\noindent last unless \$item;
+
+\noindent \$inventory\{lc \$item\}++;
+
+\noindent \}
+
+\noindent 
+
+\noindent The only way this infinite loop will end is if \$item contains nothing after being chomped -- it was nothing more than a new line.
+
+\noindent 
+
+\noindent To ensure that the capitalization of our item isn't significant, we use the operator lc to return a lower- case version of the item. Otherwise, "Tin of beans", "TIN OF BEANS" and "tin of beans" would be
+
+\noindent treated as three totally separate items, instead of three examples of the same thing. By forcing them into lower case, we remove the difference.
+
+\noindent 
+
+\noindent \textit{The lc operator returns the string it was given, but with upper-case characters turned into lower case. So print lc("FuNnY StRiNg"); should give you the output 'funny string'}. \textit{There's also a uc operator that returns an upper-cased version of the string, so print uc("FuNnY StRiNg"); will output   'FUNNY STRING'.}
+
+\noindent 
+
+\noindent 
+
+\noindent Next, we open our pipe. We're going to pass data from our program to another, external program. If
+
+\noindent you look up at the pipe diagrams above, you'll see that the data flows from left to right. Therefore, we want to put the command to run that external program on the right-hand side of the pipe:
+
+\noindent 
+
+\noindent 
+
+\noindent open(SORT, "\textbar  perl sort.plx") or *SORT = *STDOUT;
+
+\noindent 
+
+\noindent If we can't successfully open the pipe -- the program wasn't found or we couldn't execute Perl -- we alias
+
+\noindent SORT to STDOUT to get an unsorted version. Now we can print the data out:
+
+\noindent while (my (\$item, \$quantity) = each \%inventory) \{
+
+\noindent 
+
+\noindent We use each to get each key/value pair from the hash, as explained in chapter 3.
+
+\noindent 
+
+\noindent 
+
+\noindent if (\$quantity $>$ 1) \{
+
+\noindent \$item =\~{} s/(\textbackslash w+)/\$1s/ unless \$item =\~{} /\textbackslash w+s\textbackslash b/;
+
+\noindent \}
+
+\noindent 
+
+\noindent This will make the output a little more presentable.  If there is more than one of the current item, the name should be pluralized, unless it already ends in an 's'. \textbackslash w+ will get the first word in the string, and we add an 's' after it.
+
+\noindent 
+
+\noindent This is a relatively crude method for pluralizing English words, If you want to do it properly, there's a module on CPAN called Lingua::EN::Inflect that will do the trick.
+
+\noindent 
+
+\noindent print "\$item: \$quantity\textbackslash n";
+
+\noindent 
+
+\noindent Last of all, we print this out. It's actually going to the SORT filehandle, because that's the one that's currently selected -- that filehandle is, in turn, connected to the sort program.
+
+\noindent 
+
+\noindent 
+
+\noindent File Tests
+
+\noindent 
+
+\noindent So far, we've just been reading and writing files, and dieing if anything bad happens. For small programs, this is usually adequate, but if we want to use files in the context of a larger application, we should really check their status before we try and open them and, if necessary, take preventative
+
+\noindent measures. For instance, we may want to warn the user if a file we wish to overwrite already exists, giving them a chance to specify a different file. We'll also want to ensure that, for instance, we're not trying to
+
+\noindent read a directory as if it was a file.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{This  sort of programming  -- anticipating  the  consequences  of  future  actions  --  is  called  defensive}
+
+\noindent \textit{programming.  Just like  defensive  driving,  you  assume  that  everything  is  out to  get you.  Files will  not exist or  not be  writeable  when  you  need  them,  users  will  specify  things  inaccurately,}
+
+\noindent \textit{and  so on.  Properly  anticipating,  diagnosing,  and  working  around  these  areas  is  the  mark  of  a top class programmer.}
+
+\noindent 
+
+\noindent 
+
+\noindent Perl provides us with \textbf{file tests}, which allow us to check various characteristics of files. These act as
+
+\noindent logical operators, and return a true or false value. For instance, to check if a file exists, we write this:
+
+\noindent 
+
+\noindent if (-e "somefile.dat") \{...\}
+
+\noindent 
+
+\noindent The test is -e, and it takes a file name as its argument. Just like open, this file name can also be specified from a variable. You can just as validly say:
+
+\noindent 
+
+\noindent if (-e \$filename) \{...\}
+
+\noindent 
+
+\noindent where \$filename contains the name of the file you want to check.
+
+\noindent 
+
+\noindent For a complete list of file tests, see Appendix C. The table below shows the most common ones:
+
+\noindent 
+
+\noindent \textbf{Test Meaning}
+
+\noindent 
+
+\noindent -e True if the file exists.
+
+\noindent 
+
+\noindent -f True if the file is a plain file -- not a directory.
+
+\noindent 
+
+\noindent -d True if the file is a directory.
+
+\noindent 
+
+\noindent -z True if the file has zero size.
+
+\noindent 
+
+\noindent -s True if the file has nonzero size -- returns size of file in bytes.
+
+\noindent 
+
+\noindent -r True if the file is readable by you.
+
+\noindent 
+
+\noindent -w True if the file is writable by you.
+
+\noindent 
+
+\noindent -x True if the file is executable by you.
+
+\noindent 
+
+\noindent -o True if the file is owned by you.
+
+\noindent 
+
+\noindent 
+
+\noindent The last four tests will only make complete sense on operating systems for which files have meaningful
+
+\noindent permissions, such as UNIX and Windows NT. If this isn't the case, they'll frequently \textit{all }return true
+
+\noindent (assuming the file or directory exists). So, for instance, if we're going to write to a file, we should check
+
+\noindent to see whether the file already exists, and if so, what we should do about it.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Note that on systems that don't use permissions comprehensively, -w is the most likely of the last}
+
+\noindent \textit{four tests to have any significance, testing for Read-only status. On Windows 9x, this can be found}
+
+\noindent \textit{(and modified) on the General tab of the file's Properties window:}
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Paranoid File Writing
+
+\noindent 
+
+\noindent 
+
+\noindent This program does all it can to find a safe place to write a file:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# filetest1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent 
+
+\noindent my \$target;
+
+\noindent while \{
+
+\noindent print "What file should I write on? ";
+
+\noindent \$target = $<$STDIN$>$;
+
+\noindent chomp \$target;
+
+\noindent if (-d \$target) \{
+
+\noindent print "No, \$target is a directory.\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent if (-e \$target) \{
+
+\noindent print "File already exists. What should I do?\textbackslash n";
+
+\noindent print "(Enter 'r' to write to a different name, ";
+
+\noindent print "'o' to overwrite or\textbackslash n";
+
+\noindent print "'b' to back up to \$target.old)\textbackslash n";
+
+\noindent my \$choice = $<$STDIN$>$;
+
+\noindent chomp \$choice;
+
+\noindent if (\$choice eq "r") \{
+
+\noindent next;
+
+\noindent \} elsif (\$choice eq "o") \{
+
+\noindent unless (-o \$target) \{
+
+\noindent print "Can't overwrite \$target, it's not yours.\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent unless (-w \$target) \{
+
+\noindent print "Can't overwrite \$target: \$!\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent \} elsif (\$choice eq "b") \{
+
+\noindent if ( rename(\$target,\$target.".old") ) \{
+
+\noindent print "OK, moved \$target to \$target.old\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Couldn't rename file: \$!\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent \} else \{
+
+\noindent print "I didn't understand that answer.\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent \}
+
+\noindent last if open OUTPUT, "$>$ \$target";
+
+\noindent print "I couldn't write on \$target: \$!\textbackslash n";
+
+\noindent \# and round we go again.
+
+\noindent \}
+
+\noindent print OUTPUT "Congratulations.\textbackslash n";
+
+\noindent print "Wrote to file \$target\textbackslash n";
+
+\noindent 
+
+\noindent So, after all that, let's see how it copes, first of all with a text file that doesn't exist:
+
+\noindent 
+
+\noindent $>$ \textbf{perl filetest1.plx}
+
+\noindent What file should I write on? \textbf{test.txt}
+
+\noindent Wrote to file test.txt
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Seems OK. What about if I 'accidentally' give it the name of a directory? Or give it a file that already
+
+\noindent exists? Or give it a response it's not prepared for?
+
+\noindent 
+
+\noindent $>$ \textbf{perl filetest1.plx}
+
+\noindent What file should I write on? \textbf{work}
+
+\noindent No, work is a directory.
+
+\noindent What file should I write on? \textbf{filetest1.plx}
+
+\noindent File already exists. What should I do?
+
+\noindent (Enter 'r' to write to a different name, 'o' to overwrite or
+
+\noindent 'b' to back up to filetest1.plx.old)
+
+\noindent \textbf{r}
+
+\noindent What file should I write on? \textbf{test.txt}
+
+\noindent File already exists. What should I do?
+
+\noindent (Enter 'r' to write to a different name, 'o' to overwrite or
+
+\noindent 'b' to back up to test.txt.old)
+
+\noindent \textbf{g}
+
+\noindent I didn't understand that answer.
+
+\noindent What file should I write on? \textbf{test.txt}
+
+\noindent File already exists. What should I do?
+
+\noindent (Enter 'r' to write to a different name, 'o' to overwrite or
+
+\noindent 'b' to back up to test.txt.old)
+
+\noindent \textbf{b}
+
+\noindent OK, moved test.txt to test.txt.old
+
+\noindent Wrote to file test.txt
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The main program takes place inside an infinite loop. The only way we can exit the loop is via the
+
+\noindent last statement at the bottom:
+
+\noindent 
+
+\noindent 
+
+\noindent last if open OUTPUT, "$>$ \$target";
+
+\noindent 
+
+\noindent That last will only happen if we're happy with the file name and the computer can successfully open the file. In order to be happy with the file name, though, we have a gauntlet of tests to run:
+
+\noindent 
+
+\noindent 
+
+\noindent if (-d \$target) \{
+
+\noindent 
+
+\noindent We need to first see whether or not what has been specified is actually a directory. If it is, we don't want
+
+\noindent to go any further, so we go back and get another file name from the user:
+
+\noindent 
+
+\noindent 
+
+\noindent print "No, \$target is a directory.\textbackslash n";
+
+\noindent next;
+
+\noindent 
+
+\noindent We print a message and then use next to take us back to the top of the loop.
+
+\noindent 
+
+\noindent Next, we check to see whether or not the file already exists. If so, we ask the user what we should do about this.
+
+\noindent 
+
+\noindent 
+
+\noindent if (-e \$target) \{
+
+\noindent print "File already exists. What should I do?\textbackslash n"; print "(Enter 'r' to write to a different name, "; print "'o' to overwrite or\textbackslash n";
+
+\noindent print "'b' to back up to \$target.old\textbackslash n";
+
+\noindent my \$choice = $<$STDIN$>$;
+
+\noindent chomp \$choice;
+
+\noindent 
+
+\noindent If they want a different file, we merely go back to the top of the loop:
+
+\noindent 
+
+\noindent 
+
+\noindent if (\$choice eq "r") \{
+
+\noindent next;
+
+\noindent 
+
+\noindent If they want us to overwrite the file, we see if this is likely to be possible:
+
+\noindent 
+
+\noindent 
+
+\noindent \} elsif (\$choice eq "o") \{
+
+\noindent 
+
+\noindent First, we see if they actually own the file; it's unlikely they'll be allowed to overwrite a file that they do not own.
+
+\noindent 
+
+\noindent 
+
+\noindent unless (-o \$target) \{
+
+\noindent print "Can't overwrite \$target, it's not yours.\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent 
+
+\noindent Next we check to see if there are any other reasons why we can't write on the file, and if there are, we report them and go around for another file name:
+
+\noindent 
+
+\noindent unless (-w \$target) \{
+
+\noindent print "Can't overwrite \$target: \$!\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent 
+
+\noindent If they want  to  back up the file,  that  is,  rename  the  existing  file  to  a  new name,  we  see if  this
+
+\noindent is possible:
+
+\noindent 
+
+\noindent \} elsif (\$choice eq "b") \{
+
+\noindent 
+
+\noindent The rename operator renames a file; it takes two arguments: the current file name and the new name.
+
+\noindent 
+
+\noindent if ( rename(\$target,\$target.".old") ) \{
+
+\noindent print "OK, moved \$target to \$target.old\textbackslash n";
+
+\noindent \} else \{
+
+\noindent 
+
+\noindent If we couldn't rename the file, we explain why and start from the beginning again:
+
+\noindent 
+
+\noindent print "Couldn't rename file: \$!\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Otherwise, they said something we weren't prepared for:
+
+\noindent 
+
+\noindent 
+
+\noindent \} else \{
+
+\noindent print "I didn't understand that answer.\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent 
+
+\noindent You may think this program is excessively paranoid, after all, it's 50 lines just to print a message on a
+
+\noindent file. In fact, it isn't paranoid enough: it doesn't check to see whether the backup file already exists before renaming the currently existing file. This just goes to show you can never be too careful when dealing
+
+\noindent with the operating system. Later, we'll see how to turn big blocks of code like this into reusable elements
+
+\noindent so we don't have to copy that lot out every time we want to safely write to a file.
+
+\noindent 
+
+\noindent 
+
+\noindent Directories
+
+\noindent 
+
+\noindent As well as files, we can use Perl to examine directories on the disk. There are two major ways to look at the contents of a directory:
+
+\noindent 
+
+\noindent \textit{Globbing}
+
+\noindent If you're used to using the command shell, you may well be used to the concept of a \textbf{glob}. It's a little like
+
+\noindent a regular expression, in that it's a way of matching file names. However, the rules for globs are much simpler. In a glob, * matches any amount of text.
+
+\noindent 
+
+\noindent So, if I were in a directory containing files: 00INDEX 3com.c 3com.txt perl mail Mail
+
+\noindent 
+
+\noindent ? * would match everything.
+
+\noindent 
+
+\noindent ? 3* would match 3com.c and 3com.txt.
+
+\noindent 
+
+\noindent ? ?ail would match mail and Mail.
+
+\noindent 
+
+\noindent ? *l would match perl, mail and Mail.
+
+\noindent 
+
+\noindent 
+
+\noindent We can do this kind of globbing in Perl: the glob operator takes a string and returns the matching files:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# glob.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @files = glob("*l");
+
+\noindent print "Matched *l : @files\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl glob.plx}
+
+\noindent perl mail Mail
+
+\noindent $>$
+
+\noindent To get all the files in a directory, you would say my @files = glob("*");
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Reading Directories}
+
+\noindent That's the simple way. For more flexibility, you can read files in a directory just like lines in a file. Instead of using open, you use opendir. Instead of getting a filehandle, you get a \textbf{directory handle}:
+
+\noindent 
+
+\noindent 
+
+\noindent opendir DH, "." or die "Couldn't open the current directory: \$!";
+
+\noindent 
+
+\noindent Now to read each file in the directory, we use readdir on the directory handle:
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Examining A Directory
+
+\noindent 
+
+\noindent 
+
+\noindent This program lists the contents of the current directory and uses filetests to examine each file.
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# directory.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent print "Contents of the current directory:\textbackslash n";
+
+\noindent opendir DH, "." or die "Couldn't open the current directory: \$!";
+
+\noindent while (\$\_  = readdir(DH)) \{
+
+\noindent next if \$\_  eq "." or \$\_  eq "..";
+
+\noindent print \$\_,""x (30-length(\$\_));
+
+\noindent print "d" if -d \$\_;
+
+\noindent print "r" if -r \_;
+
+\noindent print "w" if -w \_;
+
+\noindent print "x" if -x \_;
+
+\noindent print "o" if -o \_;
+
+\noindent print "\textbackslash t";
+
+\noindent print -s \_  if -r \_  and --f \_;
+
+\noindent print "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Part of its output looks like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl directory.plx}
+
+\noindent Contents of the current directory:
+
+\begin{tabular}{|p{1.0in}|p{0.5in}|p{0.2in}|} \hline 
+\dots  &  &  \\ \hline 
+directory.plx & rwxo & 449 \\ \hline 
+filetest1.plx & rwxo & 1199 \\ \hline 
+inventory.plx & rwxo & 515 \\ \hline 
+mail & drwxo &  \\ \hline 
+nl.plx & rwxo & 240 \\ \hline 
+todo.log & rwo & 3583 \\ \hline 
+... &  &  \\ \hline 
+$>$ &  &  \\ \hline 
+\end{tabular}
+
+
+
+\noindent The number at the end is the size of the file in bytes; as for the letters, 'd' shows that this is a directory,
+
+\noindent 'r' stands for readable, 'w' for writable, 'x' for executable, and 'o' shows that I am the owner.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent As we've seen on the previous page, once we've opened our directory handle, we can read from it. We read one file name at a time into \$\_, and while there's still some information there, we examine it more closely:
+
+\noindent 
+
+\noindent while (\$\_  = readdir(DH)) \{
+
+\noindent 
+
+\noindent The files . and .. are special directories on DOS and UNIX, referring to the current and parent directories, respectively. We skip these in our program:
+
+\noindent 
+
+\noindent next if \$\_  eq "." or \$\_  eq "..";
+
+\noindent 
+
+\noindent We then print out the name of each file, followed by some spaces. The length of the file name plus the number of spaces will always add up to thirty, so we have nicely arranged columns:
+
+\noindent 
+
+\noindent print \$\_,""x (30-length(\$\_));
+
+\noindent 
+
+\noindent First we test to see if the file is a directory, using the ordinary filetests we saw above:
+
+\noindent 
+
+\noindent print "d" if -d \$\_;
+
+\noindent 
+
+\noindent No, this isn't a typo: I do mean \_ and not \$\_ here. Just as \$\_ is the default value for some operations, such as print,  \_ is the default filehandle for filetests. It actually refers to the last file explicitly tested. Since we tested \$\_ above, we can use \_ for as long as we're referring to the same file:
+
+\noindent 
+
+\noindent print "r" if -r \_;
+
+\noindent print "w" if -w \_;
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{When Perl does a filetest, it actually looks up all the data at once -- ownership, readability, writeability and so on; this is called a }stat \textit{of the file. \_ tells Perl not to do another stat, but to use the data from the previous one. As such, it's more efficient that stat-ing the file each time.}
+
+\noindent 
+
+\noindent Finally, we print out the file's size. This is only possible if we can read the file and only useful if the file
+
+\noindent is not a directory:
+
+\noindent 
+
+\noindent print -s \_  if -r \_  and --f \_;
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Files give our data permanence by allowing us to store it on the disk. It's no good having the best accounting program in the world,  if it loses all your accounts every time the computer is switched off. What we've seen here are the fundamentals of getting data in and out of Perl. In our chapter on
+
+\noindent Databases, we'll see more practical examples of how to read structured files into Perl data structures and write them out again.
+
+\noindent 
+
+\noindent Files are accessed through filehandles. To begin with, we have standard input, standard output, and standard error. We can open other filehandles, either for reading or for writing, with the open operator, and we must always remember to check what happened to the open call.
+
+\noindent 
+
+\noindent 
+
+\noindent The diamond operator $<$FILEHANDLE$>$ reads a line in from the specified filehandle. We can control the
+
+\noindent definition of a line by altering the value of the record separator, held in special variable \$/.
+
+\noindent 
+
+\noindent Writing to a file is done with the print operator. Normally, this writes to standard output, so the filehandle must be specified. Alternatively, you may select another filehandle as the recipient of print's output.
+
+\noindent 
+
+\noindent Pipes can be used to talk to programs outside of Perl. We can read in and write out data to them as if we were looking at the screen or typing on the keyboard. We can also use them as filters to modify our data
+
+\noindent on the way in or out of a program.
+
+\noindent 
+
+\noindent Filetests can be used to check the status of a file in various ways, and we've seen an example of using filetests to ensure that there are no surprises when we're reading or writing a file.
+
+\noindent 
+
+\noindent Finally, we've seen how to read files from directories using the opendir and readdir operators.
+
+\noindent 
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent 1.   Write a program that can search for a specified string within all the files in a given directory.
+
+\noindent 
+
+\noindent 2.   Modify the file backup facility in filetest1.plx so that it checks to see if a backup already exists before renaming the currently existing file. When a backup does exist, the user should be asked
+
+\noindent to confirm that they want to overwrite it. If not, they should be returned to the original query.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

@@ -1,0 +1,521 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Command Line Reference
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent The following is a list of the available switches which can be appended to the calling of perl from the command line. The exact syntax for calling perl from the command line is as follows:
+
+\noindent 
+
+\noindent 
+
+\noindent C:\textbackslash Perl\textbackslash bin\textbackslash Perl.exe (switches) (--) (programfile) (arguments)
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Switch Function}
+
+\noindent 
+
+\noindent -0(octal) This sets the record separator (\$/) by specifying the character's number
+
+\noindent in the ASCII table in octal. For example, if we wanted to set our
+
+\noindent separator to the character 'e' we would say  perl -0101. The default
+
+\noindent is the null character, and \$/ is set to this if no argument is given. See
+
+\noindent Appendix F for a complete ASCII table.
+
+\noindent 
+
+\noindent -a -a can be used in conjunction with -n or -p. It enables autosplit, and uses whitespace as the default delimiter. Using -p will print out the results, which are always stored in the array @F.
+
+\noindent 
+
+\noindent -C Enables native wide character system interfaces
+
+\noindent 
+
+\noindent -c This is a syntactic test only. It stops Perl executing, but reports on any compilation errors that a program has before it exits. Any other switches that have a runtime effect on your program will be ignored will -c is enabled.
+
+\noindent 
+
+\noindent -d filename This switch invokes the Perl debugger. The Perl debugger will only run once you have gotten your program to compile. Enabling -d allows you
+
+\noindent to prompt debugging commands such as install breakpoints, and many
+
+\noindent others.
+
+\noindent 
+
+\noindent \textit{Table continued on following page}
+
+   
+
+   
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent -D(number)
+
+\noindent 
+
+\noindent 
+
+\noindent -D(list)
+
+\noindent 
+
+\noindent -D will set debugging flags, but only if you have debugging compiled into your program. The following table shows you the arguments that you may use for -D, and the resulting meaning of the switch.
+
+\noindent 
+
+\noindent \textbf{Argument}
+
+\noindent \textbf{(number)}
+
+\noindent 
+
+\noindent \textbf{Argument}
+
+\noindent \textbf{(character) Operation}
+
+\noindent 
+
+\noindent 
+
+\[1\] 
+
+
+\noindent p
+
+\noindent 
+
+\noindent Tokenizing and parsing
+
+\noindent 
+
+\noindent 
+
+\[2\] 
+
+
+\noindent s
+
+\noindent 
+
+\noindent Stack snapshots
+
+\noindent 
+
+\noindent 
+
+\[4\] 
+
+
+\noindent l
+
+\noindent 
+
+\noindent Label stack Processing
+
+\noindent 
+
+\noindent 
+
+\[8\] 
+
+
+\noindent t
+
+\noindent 
+
+\noindent Trace execution
+
+\noindent 
+
+\noindent 
+
+\[16\] 
+
+
+\noindent o
+
+\noindent 
+
+\noindent Object method lookup
+
+\noindent 
+
+\noindent 
+
+\[32\] 
+
+
+\noindent c
+
+\noindent 
+
+\noindent String/numeric conversions
+
+\noindent 
+
+\noindent -D(list) (cont.) 64
+
+\noindent p
+
+\noindent 
+
+\noindent Print preprocessor command for -p
+
+\noindent 
+
+\noindent 
+
+\[128\] 
+
+
+\noindent m
+
+\noindent 
+
+\noindent Memory allocation
+
+\noindent 
+
+\noindent 
+
+\[256\] 
+
+
+\noindent f
+
+\noindent 
+
+\noindent Format processing
+
+\noindent 
+
+\noindent 
+
+\[512\] 
+
+
+\noindent r
+
+\noindent 
+
+\noindent Regular expression processing
+
+\noindent 
+
+\noindent 
+
+\[1024\] 
+
+
+\noindent x
+
+\noindent 
+
+\noindent Syntax tree dump
+
+\noindent 
+
+\noindent 
+
+\[2048\] 
+u
+
+\noindent 
+
+\noindent Tainting checks
+
+\noindent 
+
+\noindent 
+
+\[4096\] 
+l
+
+\noindent 
+
+\noindent Memory leaks
+
+\noindent 
+
+\noindent 
+
+\[8192\] 
+h
+
+\noindent 
+
+\noindent Hash dump
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Table continued on following page}
+
+\noindent 
+
+\noindent -D(list) (cont.) 16384
+
+\noindent X
+
+\noindent 
+
+\noindent Scratchpad allocations
+
+\noindent 
+
+\noindent 
+
+\[32768\] 
+
+
+\noindent D
+
+\noindent 
+
+\noindent Cleaning up
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent -e This allows you to write one line of script -- by instructing Perl to
+
+\noindent execute text following the switch on the command line -- without loading and running a program file. Multiple calls may be made to -e in order
+
+\noindent to build up scripts of more than one line.
+
+\noindent 
+
+\noindent -F/pattern/ Causes -a to split using the pattern specified between the delimiters.
+
+\noindent The delimiters may be / /, " ",   or ' '.
+
+\noindent 
+
+\noindent -h Prints out a list of all the command line switches.
+
+\noindent 
+
+\noindent -i(extension) Modifies the $<$$>$ operator. Makes a backup file if an argument is given.
+
+\noindent The argument is treated as the extension the saved file is to be given.
+
+\noindent 
+
+\noindent -I (directory) Causes a directory to be added to the search path when looking for files
+
+\noindent to include. This path will be searched before the default paths, one of which is the current directory, the other is generally
+
+\noindent /usr/local/lib/Perl on Unix and C:\textbackslash perl\textbackslash bin on Windows.
+
+\noindent 
+
+\noindent -l(octal) -l adds line endings, and defines the line terminator by specifying the character's number in the ASCII table in octal. If it is used with -n or -
+
+\noindent p, it will chomp the line terminator. If the argument is omitted, then \$\textbackslash 
+
+\noindent is given the current value of \$/. The default value of the special variable
+
+\noindent \$/ is newline.
+
+\noindent 
+
+\noindent -(mM)(-)module Causes the import of the given module for use by your script, before executing the program.
+
+\noindent 
+
+\noindent -n Causes Perl to assume a while ($<$$>$) \{My Script\} loop around
+
+\noindent your script. Basically it will iterate over the filename arguments. It does no printing of lines.
+
+\noindent 
+
+\noindent -p This is the same as -n, except it will print lines.
+
+\noindent 
+
+\noindent -P -P causes your program to be run through the C preprocessor before it
+
+\noindent is compiled. Bear in mind that the preprocessor directives begin with \#, the same as comments, so rather use ;\# to comment your script when you use the -P switch.
+
+\noindent 
+
+\noindent -s This defines variables with the same name as the switches that follow on the command line. The other switches are also removed from @ARGV.
+
+\noindent The newly defined variables are set to 1 by default. Some parsing of the
+
+\noindent other switches is also enabled.
+
+\noindent 
+
+\noindent -S Causes perl to look for a given program file using the PATH
+
+\noindent environment variable. In other words, it acts much like \#!
+
+\noindent 
+
+\noindent -T Stops data entering a program from performing unsafe operations. It's a good idea to use this when there is a lot of information exchange
+
+\noindent occuring, like in CGI programming.
+
+\noindent 
+
+\noindent -u This will perform a core dump after compiling the program.
+
+\noindent 
+
+\noindent -U This forces Perl to allow unsafe operations.
+
+\noindent 
+
+\noindent -v Prints the version of Perl that is currently being used (includes VERY IMPORTANT perl info).
+
+\noindent 
+
+\noindent -V(:variable) Prints out a summary of the main configuration values used by Perl during compiling. It will also print out the value of the @INC array.
+
+\noindent 
+
+\noindent -w Invokes the rasiing of many useful warnings based on the (poor or bad)
+
+\noindent syntax of the program being run.
+
+\noindent 
+
+\noindent This switch has been deprecated in perl 5.6, in favor of the  use warnings pragma.
+
+\noindent 
+
+\noindent -W Enables all warnings.
+
+\noindent 
+
+\noindent -x(directory) Tells Perl to get rid of extraneous text that precedes the shebang line.
+
+\noindent All switches on the shebang line will still be enabled.
+
+\noindent 
+
+\noindent -X This will disable all warnings. We already know that we always use use warnings when writing our programs. So you won't need this.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent \includegraphics[bb=0mm 0mm 208mm 296mm, width=185.2mm, height=196.3mm, viewport=3mm 4mm 205mm 292mm]{image7.ps}
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

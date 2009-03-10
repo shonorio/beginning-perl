@@ -1,0 +1,620 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent The Perl Standard Modules
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent The following appendix lists and describes the standard and pragmatic modules that are installed with \textbf{Perl 5.6}. For this reference, they have been ordered alphabetically by group. Note that these modules' names are case sensitive and are given as they should be written in a use statement. For more detialed information, you should turn to the module documentation installed with your version of Perl.
+
+\noindent 
+
+\noindent \textit{Pragmatic Modules}
+
+\noindent Using pragmatic modules affects the compilation of your perl programs. These modules are lexically scoped and thus to use or to uninclude them with no like so
+
+\noindent 
+
+\noindent use attrs;
+
+\noindent use warnings;
+
+\noindent no integer;
+
+\noindent no diagnostics;
+
+\noindent 
+
+\noindent is effective only for the duration of the block in which the declaration was made. Furthermore, these declarations may be reversed within any inner blocks in the program.
+
+\noindent 
+
+\noindent \textbf{Name of Module Function}
+
+\noindent 
+
+\noindent attributes Gets or sets the attribute values for a subroutine or variable.
+
+\noindent 
+
+\noindent attrs Gets or sets the attribute values for a subroutine.
+
+\noindent 
+
+\noindent \textbf{Deprecated in Perl 5.6 }in favour of attributes.
+
+\noindent 
+
+\noindent autouse Moves the inclusion of modules into a program from compile time to runtime. Specifically, it postpones the module's loading until one of its functions is called.
+
+\noindent 
+
+\noindent base Takes a list of modules, requires them and then pushes them onto @ISA.
+
+\noindent Essentially, it will establish an IS-A relationship with these classes at compile time.
+
+\noindent \textit{Table continued on following page}
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Name of Module Function}
+
+\noindent 
+
+\noindent blib Used on the command line as -Mblib switch to test your scripts against an uninstalled version of the package named after the switch.
+
+\noindent 
+
+\noindent caller Causes program to inherit the pragmatic attributes of the program which has called it.
+
+\noindent 
+
+\noindent charnames Allows you to specify a long name for a given string literal escape.
+
+\noindent 
+
+\noindent constant Allows you to define constants as a name=$>$value pair.
+
+\noindent 
+
+\noindent diagnostics Returns verbose output when errors occur at runtime. This verbose output consists of the message that perl would normally give plus any accompanying text that that error contained in the perldiag manpage.
+
+\noindent See Chapter 9 for more on diagnostics.
+
+\noindent 
+
+\noindent fields Takes a list of valid class fields for the package and enables them at compile time.
+
+\noindent 
+
+\noindent filetest Changes the operation of the -r -w -x -R -W and -X file test operators.
+
+\noindent 
+
+\noindent integer Changes the mathematical operators in a program to work with integers only and not floating point numbers.
+
+\noindent 
+
+\noindent less Currrently not implemented.
+
+\noindent 
+
+\noindent lib Adds the listed directories to @INC.
+
+\noindent 
+
+\noindent locale Enables\textbackslash disables POSIX locales for built-in operations.
+
+\noindent 
+
+\noindent ops Restricts potentially harmful operations occuring during compile time. overload Allows you to overload built-in perl operations with your own subroutines. re Allows you to alter the way regular expressions behave.
+
+\noindent sigtrap Enables some simple signal handlers.
+
+\noindent 
+
+\noindent strict Enforces the declaration of variables before their use. See Chapter 9 for more on strict.
+
+\noindent 
+
+\noindent subs Allows you to predeclare subroutine names.
+
+\noindent 
+
+\noindent utf8 Enables\textbackslash  disables Unicode support. Note that at the time of writing, Unicode support in Perl was incomplete.
+
+\noindent 
+
+\noindent vars Allows you to predeclare global variable names.
+
+\noindent 
+
+\noindent warnings Switches on the extra syntactic error warning messages.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Standard Modules}
+
+\noindent The standard modules are the group of modules that are installed with your distribution of Perl.
+
+\noindent 
+
+\begin{tabular}{|p{0.2in}|p{1.0in}|p{2.9in}|} \hline 
+\textit{A} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & AnyDBM\_File & Acts as a universal virtual base class for those wanting to access any of \\ \hline 
+ &  & the fivetypes of DBM file. \\ \hline 
+ & AutoLoader & Works with Autosplit to delay the loading of subroutines into the \\ \hline 
+ &  & program until they are called. These subroutines are defined following \\ \hline 
+ &  & the \_\_END\_\_ token in a package file. \\ \hline 
+ & AutoSplit & Splits a program into files suitable for autoloading or selfloading. \\ \hline 
+\newline \textit{B} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & B & The Perl compiler module. \\ \hline 
+ & B::Asmdata & Contains autogenerated data about Perl ops used in the  generation of \\ \hline 
+ &  & bytecode. \\ \hline 
+ & B::Assembler & Assembles Perl bytecode for use elsewhere. \\ \hline 
+ & B::Bblock & Used by B::CC to walk through 'basic blocks' of code. \\ \hline 
+ & B::Bytecode & Compiler backend for generating Perl bytecode. \\ \hline 
+ & B::C & Compiler backend for generating C source code. \\ \hline 
+ & B::CC & Compiler backend for generating optimized C source code. \\ \hline 
+ & B::Debug & Walks the Perl syntax tree, printing debug info about ops \\ \hline 
+ & B::Deparse & Compiler backend for generating Perl source code from compiled \\ \hline 
+ & B::Disassembler & Disassembles Perl bytecode back to Perl source \\ \hline 
+ & B::Graph & Compiler backend for generating graph-description documents that \\ \hline 
+ &  & show the program's structure. \\ \hline 
+ & B::Lint & Module to catch dubious constructs \\ \hline 
+ & B::Showlex & Shows the file-scope variables for a file or the lexical variables for a \\ \hline 
+ &  & subroutine if one is specified. \\ \hline 
+ & B::Stackobj & Helper module for CC backend. \\ \hline 
+ & B::Stash & Shows what stashes are loaded \\ \hline 
+ & B::Terse & Walks the Perl syntax tree, printing terse info about ops \\ \hline 
+ & B::Xref & Compiler backend for generating cross-reference reports \\ \hline 
+ & Benchmark & Contains a suite of routines that let you benchmark your code \\ \hline 
+ & ByteLoader & Used to load byte-compiled Perl code \\ \hline 
+\newline \textit{C} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & CGI & The base class that provides the basic functionality for generating web \\ \hline 
+ &  & content and CGI scripting. See Chapter 13 for more. \\ \hline 
+ & CGI::Apache & Backward compatibility module. \\ \hline 
+ &  & \textbf{Deprecated in Perl 5.6.} \\ \hline 
+ & CGI::Carp & Holds the equivalent of the Carp module's error logging functions \\ \hline 
+ &  & CGI routines for writing time-stamped entries to the HTTPD (or \\ \hline 
+ &  & other) error log. \\ \hline 
+ & CGI::Cookie & Allows access and interaction with Netscape cookies. \\ \hline 
+ & CGI::Fast & Allows CGI access and interaction to a FastCGI web server. \\ \hline 
+ & CGI::Pretty & Generates 'pretty' HTML code on server in place of slightly less pretty \\ \hline 
+ &  & HTML written in the CGI script file. \\ \hline 
+ & CGI::Push & Provides a CGI interface to server-side push functionality. For \\ \hline 
+ &  & example, as used with channels. \\ \hline 
+ & CGI::Switch & Backward compatibility module. \\ \hline 
+ &  & \textbf{Deprecated in Perl 5.6.} \\ \hline 
+ & CPAN & Provides you with the functionality to query, download, and build \\ \hline 
+ &  & Perl modules from any of the CPAN mirrors. \\ \hline 
+ & CPAN::FirstTime & Utility for CPAN::Config to ask a few questions about the system \\ \hline 
+ &  & and then write a config file. \\ \hline 
+ & CPAN::Nox & As CPAN module, but doesn't use any compiled extensions during its \\ \hline 
+ &  & own execution. \\ \hline 
+ & Carp & Provides warn() and die() functionality with the added ability to \\ \hline 
+ &  & say in which module something failed and what it was. \\ \hline 
+ & Carp::Heavy & Carp guts. For internal use only. \\ \hline 
+ & Class::Struct & Lets you declare C-style struct-like complex datatypes and manipulate \\ \hline 
+ &  & them accordingly. \\ \hline 
+ & Config & Allows access to the options and settings used by Configure to build \\ \hline 
+ &  & this installation of Perl. \\ \hline 
+ & Cwd & Gets the pathname of the current working directory \\ \hline 
+\newline \textit{D} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & DB & Programmatic interface to the Perl debugger's API (Application \\ \hline 
+ &  & Programing Interface). N.B.: This may change. \\ \hline 
+ & DB\_File & Provides an interface for access to Berkeley DB versions 1.x. Note \\ \hline 
+ &  & that you can access versions 2.x and 3.x of Berkeley DB with this \\ \hline 
+ &  & module but will have only the version 1.x functionality. \\ \hline 
+\end{tabular}
+
+
+
+\noindent 
+
+\begin{tabular}{|p{0.3in}|p{1.2in}|p{2.7in}|} \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & Data::Dumper & Returns a stringified version of the contents of an object, given a \\ \hline 
+ &  & reference to it. \\ \hline 
+ & Devel::DProf & A perl code profiler. Generates information on the frequency of \\ \hline 
+ &  & calls to subroutines and on the speediness of the subroutines \\ \hline 
+ &  & themselves. \\ \hline 
+ & Devel::Peek & A debugging tool for those trying to write C programs that \\ \hline 
+ &  & interconnect with Perl programs. \\ \hline 
+ & Devel::SelfStubber & Stub generator for a SelfLoading module. \\ \hline 
+ & DirHandle & Provides an alternative set of functions to opendir(), \\ \hline 
+ &  & closedir(), readdir() and rewinddir(). \\ \hline 
+ & Dumpvalue & Dumps info about Perl data to the screen. \\ \hline 
+ & DynaLoader & Dynamically loads C libraries when required into your Perl code. \\ \hline 
+\newline \textit{E} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & English & Allows you to call Perl's special variables (see Appendix B) by \\ \hline 
+ &  & their 'English' names. \\ \hline 
+ & Env & Allows you to access the key\textbackslash value pairs in the environment hash \\ \hline 
+ &  & \%ENV as arrays or scalar values. \\ \hline 
+ & Errno & Exports (to your code) the contents of the errno.h include file. \\ \hline 
+ &  & This contains all the defined error constants on your system. \\ \hline 
+ & Exporter & Implements the default import method for modules. \\ \hline 
+ & Exporter::Heavy & The internals of the Exporter module. \\ \hline 
+ & ExtUtils::Command & Contains equivalents of the common UNIX system commands for \\ \hline 
+ &  & Windows users. \\ \hline 
+ & ExtUtils::Embed & Contains utilities for embedding a Perl interpreter into your \\ \hline 
+ &  & C/C++ programs. \\ \hline 
+ & ExtUtils::Install & Contains three functions for installing, uninstalling and installing- \\ \hline 
+ &  & as-autosplit/autoload, programs. \\ \hline 
+ & ExtUtils::Installed & Keeps track of what modules are and are not installed. \\ \hline 
+ & ExtUtils::Liblist & Determine which libraries should be used in an install and how to \\ \hline 
+ &  & use them and sends its finding for inclusion in a Makefile. \\ \hline 
+ & ExtUtils::MM\_Cygwin & Contains methods to override those in ExtUtils::MM\_Unix \\ \hline 
+ &  & when ExtUtils::MakeMaker is used on a Cygwin system. \\ \hline 
+ & ExtUtils::MM\_OS2 & Contains methods to override those in ExtUtils::MM\_Unix \\ \hline 
+ &  & when ExtUtils::MakeMaker is used on a OS\textbackslash 2 system. \\ \hline 
+\end{tabular}
+
+\textit{Table continued on following page}
+
+\noindent 
+
+\noindent 
+
+\begin{tabular}{|p{0.2in}|p{1.3in}|p{2.6in}|} \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & ExtUtils::MM\_Unix & Contains the methods used by ExtUtils::MakeMaker to \\ \hline 
+ &  & work. \\ \hline 
+ & ExtUtils::MM\_VMS & Contains methods to override those in ExtUtils::MM\_Unix \\ \hline 
+ &  & when ExtUtils::MakeMaker is used on a VMS system. \\ \hline 
+ & ExtUtils::MM\_Win32 & Contains methods to override those in ExtUtils::MM\_Unix \\ \hline 
+ &  & when ExtUtils::MakeMaker is used on a Windows system. \\ \hline 
+ & ExtUtils::MakeMaker & Used to create makefiles for an extension module. \\ \hline 
+ & ExtUtils::Manifest & Utilities to write and check a MANIFEST file \\ \hline 
+ & ExtUtils::Miniperl & Contains one function to write perlmain.c, a bootstrapper \\ \hline 
+ &  & between Perl and C libraries. \\ \hline 
+ & ExtUtils::Mkbootstrap & Contains one function to write a bootstrap file for use by \\ \hline 
+ &  & DynaLoader \\ \hline 
+ & ExtUtils::Mksymlists & Contains one function to write linker options files for dynamic \\ \hline 
+ &  & extension \\ \hline 
+ & ExtUtils::Packlist & Contains a standard .packlist file manager. \\ \hline 
+ & ExtUtils::testlib & Adds blib/* directories to @INC \\ \hline 
+\newline \textit{F} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & Fatal & Provides a way to replace functions which return false with \\ \hline 
+ &  & functions that raise an exception if not successful. \\ \hline 
+ & Fcntl & Loads the libc fcntl.h defines. \\ \hline 
+ & File::Basename & Provides functions that work on a file's full path name \\ \hline 
+ & File::CheckTree & Allows you to specify file tests to be made on directories and \\ \hline 
+ &  & files within a directory all at once. \\ \hline 
+ & File::Compare & Compares the contents of two files. \\ \hline 
+ & File::Copy & Copies files or directories. \\ \hline 
+ & File::DosGlob & Implements DOS-like globbing but also accepts wildcards in \\ \hline 
+ &  & directory components. \\ \hline 
+ & File::Find & Searches \textbackslash  traverses a file tree for requested file. \\ \hline 
+ & File::Glob & Implements the FreeBSD glob routine. \\ \hline 
+ & File::Path & Creates or deletes a series of directories. \\ \hline 
+ & File::Spec & Group of functions to work on file properties and paths. \\ \hline 
+\end{tabular}
+
+
+
+\noindent 
+
+\begin{tabular}{|p{0.3in}|p{1.3in}|p{2.6in}|} \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & File::Spec::Functions & Support module for File::Spec \\ \hline 
+ & File::Spec::Mac & Contains methods to override those in File::Spec::Unix \\ \hline 
+ &  & when File::Spec is used on a MacOS system. \\ \hline 
+ & File::Spec::OS2 & Contains methods to override those in File::Spec::Unix \\ \hline 
+ &  & when File::Spec is used on a OS/2 system. \\ \hline 
+ & File::Spec::Unix & Methods used by File::Spec \\ \hline 
+ & File::Spec::VMS & Contains methods to override those in File::Spec::Unix \\ \hline 
+ &  & when File::Spec is used on a VMS system. \\ \hline 
+ & File::Spec::Win32 & Contains methods to override those in File::Spec::Unix \\ \hline 
+ &  & when File::Spec is used on a Win32 system. \\ \hline 
+ & File::stat & A by-name interface to Perl's built-in stat() functions \\ \hline 
+ & FindBin & Locates the directory holding the currently running \\ \hline 
+ &  & Perl program. \\ \hline 
+ & FileCache & Allows you to keep more files open than the system allows. \\ \hline 
+ & FileHandle & Provides an OO-style implementation of filehandles. \\ \hline 
+\newline \textit{G} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & GDBM\_File & Provides an interface for access and make use of the GNU \\ \hline 
+ &  & Gdbm library. \\ \hline 
+ & Getopt::Long & Enables the parsing of long switch names on the command line. \\ \hline 
+ &  & See Chapter 9 for more on this. \\ \hline 
+ & Getopt::Std & Enables the parsing of single-character switches and clustered \\ \hline 
+ &  & switches on the command line. See Chapter 9 for more on this. \\ \hline 
+\end{tabular}
+
+
+
+\noindent \textit{I}
+
+\noindent 
+
+\noindent \textbf{Name of Module Function}
+
+\noindent 
+
+\noindent I18N::Collate Compares 8-bit scalar data according to the current locale.
+
+\noindent 
+
+\noindent \textbf{Deprecated in Perl 5.004.}
+
+\noindent 
+
+\noindent IO Front-end to load the IO modules listed below.
+
+\noindent 
+
+\noindent IO::Dir Provides an OO-style implementation for directory handles.
+
+\noindent 
+
+\noindent IO::File Based on FileHandle, it provides an OO-style implementation
+
+\noindent of filehandles.
+
+\noindent 
+
+\noindent \textit{Table continued on following page}
+
+\noindent 
+
+\noindent 
+
+\begin{tabular}{|p{0.2in}|p{1.0in}|p{2.9in}|} \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & IO::Handle & Provides an OO-style implementation for I/O handles. \\ \hline 
+ & IO::Pipe & Provides an OO-style implementation for pipes. \\ \hline 
+ & IO::Poll & Provides an OO-style implementation to system poll calls. \\ \hline 
+ & IO::Seekable & Provides seek(), sysseek() and tell() methods for I/O objects. \\ \hline 
+ & IO::Select & Provides an OO-style implementation for the select system call \\ \hline 
+ & IO::Socket & Provides an OO-style implementation for socket communications \\ \hline 
+ & IO::Socket::INET & Provides an OO-style implementation for AF\_INET domain sockets \\ \hline 
+ & IO::Socket::UNIX & Provides an OO-style implementation for AF\_UNIX domain sockets \\ \hline 
+ & IPC::Msg & Implements a System V Messaging IPC object class. \\ \hline 
+ & IPC::Open2 & Opens a process for both reading and writing \\ \hline 
+ & IPC::Open3 & Opens a process for reading, writing, and error handling \\ \hline 
+ & IPC::Semaphore & Implements a System V Semaphore IPC object class. \\ \hline 
+ & IPC::SysV & Exports all the constants needed by System V IPC calls as defined in \\ \hline 
+ &  & your system's libraries. \\ \hline 
+\newline \textit{M} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & Math::BigFloat & Enables the storage of arbitrarily long floating-point numbers. \\ \hline 
+ & Math::BigInt & Enables the storage of arbitrarily long integers. \\ \hline 
+ & Math::Complex & Enables work with complex numbers and associated mathematical \\ \hline 
+ &  & functions \\ \hline 
+ & Math::Trig & Provides all the trigonometric functions not defined in the core of Perl. \\ \hline 
+\newline \textit{N} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & NDBM\_File & Provides access to 'new' DBM files via tied hashes. \\ \hline 
+ & Net::Ping & Provides the ability to ping a remote machine via TCP, UDP and \\ \hline 
+ &  & ICMP protocols. \\ \hline 
+ & Net::hostent & Replaces the core gethost*() functions with those that return \\ \hline 
+ &  & Net::hostent objects. \\ \hline 
+ & Net::netent & Replaces the core getnet*() functions with those that return \\ \hline 
+ &  & Net::netent objects. \\ \hline 
+\end{tabular}
+
+
+
+\noindent 
+
+\noindent \textbf{Name of Module Function}
+
+\noindent 
+
+\noindent Net::protoent Replaces the core getproto*() functions with those that return
+
+\noindent Net::protoent objects.
+
+\noindent 
+
+\noindent Net::servent Replaces the core getserv*() functions with those that return
+
+\noindent Net::servent objects.
+
+\begin{tabular}{|p{0.3in}|p{1.1in}|p{2.9in}|} \hline 
+\newline \textit{O} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & O & This is the generic frontend for the Perl compiler. The backends in the \\ \hline 
+ &  & B module group are all addressed with this. \\ \hline 
+ & Opcode & Allows you to disable named opcodes when compiling Perl code \\ \hline 
+\newline \textit{P} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & Pod::Checker & Provides a syntax error checker for pod documents. \\ \hline 
+ &  & Note that this was still in beta at the time of publication. \\ \hline 
+ & Pod::Html & Pod to HTML converter. \\ \hline 
+ & Pod::InputObjects & A set of objects that can be used to represent pod files. \\ \hline 
+ & Pod::Man & Pod to *roff converter. \\ \hline 
+ & Pod::Parser & Base class for creating POD filters and translators. \\ \hline 
+ & Pod::Select & Used to extract selected sections of POD from input \\ \hline 
+ & Pod::Text & Pod to formatted ASCII text converter. \\ \hline 
+ & Pod::Text::Color & Pod to formatted, colored ASCII text converter. \\ \hline 
+ & Pod::Usage & Print a usage message from embedded pod documentation \\ \hline 
+ & POSIX & Provides access to (nearly) all the functions and identifiers named in \\ \hline 
+ &  & the POSIX international standard 1003.1. \\ \hline 
+\newline \textit{S} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & Safe & Creates a number of 'safe' compartments in memory in which perl \\ \hline 
+ &  & code can be tested and the functions for this testing. \\ \hline 
+ & SDBM\_File & Provides access to sdbm files via tied hashes. \\ \hline 
+ & Search::Dict & Provides function to look for a key in a dictionary file. \\ \hline 
+\end{tabular}
+
+
+
+\noindent \textit{Table continued on following page}
+
+\noindent 
+
+\noindent 
+
+\begin{tabular}{|p{0.2in}|p{1.0in}|p{2.9in}|} \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & SelectSaver & Selects a filehandle on creation, saves it and restores it on destruction. \\ \hline 
+ & SelfLoader & As Autoloader, works with Autosplit to delay the loading of \\ \hline 
+ &  & subroutines into the program until they are called. These subroutines \\ \hline 
+ &  & are defined following the \_\_DATA\_\_ token in a package file. \\ \hline 
+ & Shell & Allows shell commands to be run transparently within perl programs. \\ \hline 
+ & Socket & Imports the defines from libc's socket.h header file and makes \\ \hline 
+ &  & available some network manipulation fucntions. \\ \hline 
+ & Symbol & Qualifies variable names and creates anonymous globs. \\ \hline 
+ & Sys::Hostname & Makes several attempts to get the system hostname and then cahces \\ \hline 
+ &  & the result. \\ \hline 
+ & Sys::Syslog & Perl's interface to the libc syslog calls \\ \hline 
+\newline \textit{T} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & Term::Cap & Provides the interface to a terminal capability database. \\ \hline 
+ & Term::Complete & Provides word completion on the word list in an array. \\ \hline 
+ & Term::ReadLine & Provides access to various 'readline' packages. \\ \hline 
+ & Test & Provides a simple framework for writing test scripts \\ \hline 
+ & Test::Harness & Implements a test harness to run a series of test scripts and return \\ \hline 
+ &  & results. \\ \hline 
+ & Text::Abbrev & Takes a list and returns a hash containing the elements of the list as \\ \hline 
+ &  & the values and unambiguous abbreviations of each element as their \\ \hline 
+ &  & respective keys. \\ \hline 
+ & Text::ParseWords & Provides functions for parsing a text file into an array of tokens or an \\ \hline 
+ &  & array of arrays. \\ \hline 
+ & Text::Soundex & Implementation of the Soundex Algorithm. \\ \hline 
+ & Text::Tabs & Works through lines of text replacing tabs with spaces, or if space- \\ \hline 
+ &  & saving, replacing spaces with tabs if there are none in the text. \\ \hline 
+ & Text::Wrap & Simple paragraph formatter. Takes text, wraps lines around text \\ \hline 
+ &  & boundaries and controls the indenting of the text. \\ \hline 
+ & Tie::Array & Base class for tied arrays. \\ \hline 
+ & Tie::Handle & Base class definitions for tied handles. \\ \hline 
+ & Tie::Hash & Base class definitions for tied hashes. \\ \hline 
+\end{tabular}
+
+
+
+\noindent 
+
+\begin{tabular}{|p{0.3in}|p{1.0in}|p{2.9in}|} \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & Tie::RefHash & Allows you to use references as the keys in a hash if it is tied to this \\ \hline 
+ &  & module. \\ \hline 
+ & Tie::Scalar & Base class definitions for tied scalars. \\ \hline 
+ & Tie::SubstrHash & Allows you to rigidly define key and value lengths within the hash for \\ \hline 
+ &  & the entire time it is tied to this module. \\ \hline 
+ & Time::gmtime & Object-based interface to Perl's built-in gmtime() function. \\ \hline 
+ & Time::Local & Provides efficient conversion functions between GMT and local time. \\ \hline 
+ & Time::localtime & Object-based interface to Perl's built-in localtime() function. \\ \hline 
+ & Time::tm & Internal object used by Time::gmtime and Time::localtime \\ \hline 
+\newline \textit{U} &  &  \\ \hline 
+ & \textbf{Name of Module} & \textbf{Function} \\ \hline 
+ & UNIVERSAL & The base class for ALL classes (blessed references) \\ \hline 
+ & User::grent & Object-based interface to Perl's built-in getgr*() functions \\ \hline 
+ & User::pwent & Object-based interface to Perl's built-in getpw*() functions \\ \hline 
+\end{tabular}
+
+ 
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent \includegraphics[bb=0mm 0mm 208mm 296mm, width=185.2mm, height=196.3mm, viewport=3mm 4mm 205mm 292mm]{image6.ps}
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

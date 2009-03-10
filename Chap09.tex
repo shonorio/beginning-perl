@@ -1,0 +1,2512 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Running and Debugging Perl
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent By now, we've essentially covered the whole of the core Perl language. We've yet to see how we can use pre-packaged modules to accomplish a great many common tasks, including applying Perl to networking, CGI and database manipulation. But right now, we've finished as much of the language as you'll need to know for pretty much everything you'll want to do with Perl. Congratulations for getting this far!
+
+\noindent 
+
+\noindent You should also be getting used to analyzing the problem you want to solve, breaking it down into component parts, and thinking about how to explain those parts to the computer in a language it can understand. That's not all, however.
+
+\noindent 
+
+\noindent Everyone makes mistakes. It's a simple fact of life, and programming is just the same. When you write programs, you will make mistakes. As we mentioned in the first chapter, the name for a mistake in programming is a \textbf{bug}, and the process of removing bugs is called \textbf{debugging}. After breaking down your ideas and writing the code, you'll come to the next two phases of software development: testing and debugging.
+
+\noindent 
+
+\noindent In this chapter, we'll see how Perl helps us with these stages. In particular, we'll cover the following areas:
+
+\noindent 
+
+\noindent ? \textbf{Error Messages}
+
+\noindent How the perl interpreter tells you you've used the language incorrectly.
+
+\noindent 
+
+\noindent ? \textbf{Diagnostic Modules}
+
+\noindent What modules can help us isolate and understand problems with our code.
+
+\noindent 
+
+\noindent ? \textbf{Perl Command Line Switches}
+
+\noindent Creating test programs using the perl command line.
+
+\noindent 
+
+\noindent ? \textbf{Debugging Techniques and the Perl Debugger}
+
+\noindent How to remove the problems that we've found.
+
+\noindent 
+
+\noindent By the end of this chapter, you should be able to recognize, diagnose, and hopefully fix any programming errors you make. We'll also look at how to construct test cases and quick one-line programs on the perl command line.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent Error Messages
+
+\noindent 
+
+\noindent There are two types of mistake you can make when programming: a syntax error and a logic error. A \textbf{syntax error }is something like a typo or a result of misunderstanding how to use the language, meaning that your code doesn't actually make sense any more. Since your code isn't properly written in Perl, perl can't understand it and complains about it.
+
+\noindent 
+
+\noindent A \textbf{logic error}, on the other hand, is where the instructions you give make perfect sense, but don't actually do what you think they ought to. This type of error is far more dastardly to track down but there are ways and means to do so. For the time being, though, we'll start by looking at the way Perl detects and reports syntax errors:
+
+\noindent 
+
+\noindent Try It Out : Examining Syntax Errors
+
+\noindent 
+
+\noindent Let's create a few syntax errors, and see how Perl reports them to us. Take the following program,
+
+\noindent for example:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# errors.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$a;
+
+\noindent print "Hello, world."
+
+\noindent \$a=1;
+
+\noindent if (\$a == 1 \{
+
+\noindent print "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent As you should be able to see if you look carefully, this contains a number of mistakes. This is what Perl makes of it:
+
+\noindent 
+
+\noindent $>$\textbf{perl errors.plx}
+
+\noindent Scalar found where operator expected at errors.plx line 8, near "\$a"
+
+(Missing semicolon on previous line?) syntax error at errors.plx line 8, near "\$a" syntax error at errors.plx line 9, near "1 \{"
+
+\noindent Execution of errors.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How it Works}
+
+\noindent What's Perl complaining about? Firstly, it sees something up on line 8:
+
+\noindent 
+
+\noindent \$a=1;
+
+\noindent 
+
+\noindent Well, there's nothing wrong with that. That's perfectly valid code. When we're trying to track down and understand syntax errors, the key thing to remember is that the line number Perl gave us is \textit{as far as it got }before realizing there was a problem -- that doesn't necessarily mean that the line itself has a problem. If, for instance, we miss out a closing bracket, Perl may go all the way to the end of the file before complaining. In this case, though, Perl gives us an additional clue:
+
+\noindent 
+
+\noindent 
+
+\noindent (Missing semicolon on previous line?)
+
+\noindent 
+
+\noindent In fact, this is exactly the problem:
+
+\noindent 
+
+\noindent print "Hello, world."
+
+\noindent 
+
+\noindent Line 7 doesn't end with a semicolon. But what of the error message, 'Scalar found where operator expected'? What does this mean? Like all of Perl's error messages, it means exactly what it says. Perl found a scalar where it thought there should be an operator. But why? Well, Perl had just finished processing a string, which was fed to print. But since there wasn't a semicolon, it was trying to find a way to continue the statement. The only way to continue would be to have an operator to link the string with something else: the concatenation operator, for instance, to connect it to another scalar. However, instead of such an operator, Perl found the scalar \$a. Since you can't put a string right next to a variable, Perl complains, and as there's no way for this to make sense, it also gives us a 'syntax error'.
+
+\noindent 
+
+\noindent The next problem is in line 9:
+
+\noindent 
+
+\noindent if (\$a == 1 \{
+
+\noindent 
+
+\noindent Here we have no clue to help us track down the bug. It's a syntax error pure and simple, and we can fix it easily by providing the missing bracket. It should, of course, look like this:
+
+\noindent 
+
+\noindent if (\$a == 1) \{
+
+\noindent 
+
+\noindent 
+
+\noindent Syntax Error Checklist
+
+\noindent 
+
+\noindent Tracking down syntax errors can be troublesome, but it's a skill that comes with practice. Most of the errors you're likely to experience are going to fall into one of the six categories below:
+
+\noindent 
+
+\noindent \textit{Missing Semicolons}
+
+\noindent We've seen this already, and it's probably the most common syntax error there is. Every statement in Perl, unless it's at the end of a block, should finish with a semicolon. Sometimes you'll get the helpful hint we got above:
+
+\noindent 
+
+\noindent (Missing semicolon on previous line?)
+
+\noindent 
+
+\noindent but otherwise you've just got to find it yourself. Remember that the line number you get in any error message may well not be the line number the problem occurs on -- just when the problem is detected.
+
+\noindent 
+
+\noindent \textit{Missing Open/Close Brackets}
+
+\noindent The next most common error comes when you forget to open or close a bracket or brace. Missed closing braces are the most troublesome, because Perl sometimes goes right the way to the end of the file before reporting the problem. For example:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# braces.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent 
+
+\noindent if \{
+
+\noindent print "Hello";
+
+\noindent 
+
+\noindent my \$file = shift;
+
+\noindent if (-e \$file) \{
+
+\noindent print "File exists.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent This will give us:
+
+\noindent 
+
+\noindent $>$\textbf{perl braces.plx}
+
+\noindent Missing right curly or square bracket at braces.plx line 12, at end of line syntax error at braces.plx line 12, at EOF
+
+\noindent Execution of braces.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent The problem is, our missing brace is only at line 7, but Perl can't tell that. To find where the problem is
+
+\noindent in a large file, there are a variety of things you can do:
+
+\noindent 
+
+\noindent ? Indent your code as we have done to make the block structure as clear as possible. This won't affect what perl sees, but it helps \textit{you }to see how the program hangs together, making it more readily obvious when this sort of thing happens.
+
+\noindent 
+
+\noindent ? Deliberately leave out semicolons where you think a block should end, and you'll cause a
+
+\noindent syntax error more quickly. However, you'll need to remember to add the semicolon if you add extra statements to the block.
+
+\noindent 
+
+\noindent ? Use an editor which helps you out: Editors like vi and emacs automatically flash up
+
+\noindent matching braces and brackets (called \textbf{balancing}) and are freely available for both UNIX and
+
+\noindent Windows.
+
+\noindent 
+
+\noindent We'll also be looking at some more general techniques for tracking down bugs later on in this chapter.
+
+\noindent 
+
+\noindent \textit{Runaway String}
+
+\noindent In a similar vein, don't forget to terminate strings and regular expressions. A runaway string will cause a cascade of errors as code looks like strings and strings look like code all the way through your program.
+
+\noindent If you're lucky though, Perl will catch it quickly and tell you where it starts -- miss off the closing " in line 7 of the above example, and Perl will produce this message amongst the rest of the mess:
+
+\noindent 
+
+\noindent (Might be a runaway multi-line "" string starting on line 7)
+
+\noindent 
+
+\noindent This is also particularly pertinent when you're dealing with here-documents. Let's look again at the example we saw in Chapter 2:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#heredoc.plx use warnings; print$<$$<$EOF;
+
+\noindent 
+
+\noindent This is a here-document. It starts on the line after the two arrows,
+
+\noindent and it ends when the text following the arrows is found at the beginning
+
+\noindent of a line, like this:
+
+\noindent 
+
+\noindent EOF
+
+\noindent 
+
+\noindent 
+
+\noindent Since perl treats everything between print$<$$<$EOF; and the terminator EOF as plain text, it only takes
+
+\noindent a broken terminator for perl to interpret the rest of your program as nothing more than a long string
+
+\noindent of characters.
+
+\noindent 
+
+\noindent \textit{Missing Comma}
+
+\noindent If you forget a comma where there should be one, you'll almost always get the 'Scalar found where operator expected' message. This is because Perl is trying to connect two parts of a statement together and can't work out how to do it.
+
+\noindent 
+
+\noindent \textit{Brackets Around Conditions}
+
+\noindent You need brackets around the conditions of if, for, while, and their English negatives unless, until. However, you don't need brackets around the conditions when using them as statement modifiers.
+
+\noindent 
+
+\noindent \textit{Barewords}
+
+\noindent If an error message contains the word 'bareword', it means that Perl couldn't work out what a word was supposed to be. Was it a scalar variable and you forgot the type symbol? Was it a filehandle used in a funny context? Was it an operator or subroutine name you spelled wrong? For example, if we run:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bareword.plx use warnings; use strict;
+
+\noindent 
+
+\noindent Hello;
+
+\noindent 
+
+\noindent perl will tell us:
+
+\noindent 
+
+\noindent $>$\textbf{perl bareword.plx}
+
+\noindent Bareword "Hello" not allowed while "strict subs" in use at bareword.plx line 5.
+
+\noindent Execution of braces.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent We'll see more in the section on barewords in use strict below.
+
+\noindent 
+
+\noindent 
+
+\noindent Diagnostic Modules
+
+\noindent 
+
+\noindent Hopefully, I've already drummed into you the importance of writing use strict and use
+
+\noindent warnings in your code. Now it's time to explain what those, and other modules like them, actually do.
+
+\noindent 
+
+\noindent As we'll see in the next chapter, use introduces an external module, while warnings and strict are both standard Perl modules that come with the Perl distribution. They're just ordinary Perl code. The special thing about them is that they fiddle with internal Perl variables, which will alter the behavior of
+
+\noindent the perl interpreter.
+
+\noindent 
+
+\noindent Strictly speaking these are \textbf{pragmas }(or, for the linguistically inclined, \textit{pragmata}) rather than modules.
+
+\noindent These have all lower-case names and are particularly concerned with altering the operation of perl itself, rather than providing you with ready-made code.
+
+\noindent 
+
+\noindent 
+
+\noindent use warnings
+
+\noindent 
+
+\noindent The warnings pragma changes the way perl produces warnings. Ordinarily, there are a number of warnings that you can turn on and off, categorized into a series of areas: syntactic warnings, obsolete ways of programming, problems with regular expressions, input and output, and so on.
+
+\noindent 
+
+\noindent \textit{Redeclaring Variables}
+
+\noindent By default, all warnings are turned off. If you merely say use warnings, everything is turned on. So, for example, without specifying use warnings, the following code will execute without issue:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# warntest.plx
+
+\noindent \# add 'use warnings;' command here
+
+\noindent 
+
+\noindent my \$a = 0;
+
+\noindent my \$a = 4;
+
+\noindent 
+
+\noindent However, with use warnings specified after the filename comment, here is what perl tells you:
+
+\noindent 
+
+\noindent $>$\textbf{perl warntest.plx}
+
+\noindent "my" variable \$a masks earlier declaration in same scope at warntest.plx line 6.
+
+\noindent $>$
+
+\noindent 
+
+\noindent What does this mean? It means that in line 6, we declared a new variable \$a. If you remember, my
+
+\noindent creates a completely new variable. However, we already have a variable \$a, which we declared in line
+
+\noindent 5. By re-declaring it in line 6, we lose the old value of 0. This is a warning in the 'misc' category.
+
+\noindent 
+
+\noindent \textit{Misspelling Variable Names}
+
+\noindent Let's see another common cause of error - misspelling variable names:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# warntest2.plx
+
+\noindent \# add 'use warnings;' command here
+
+\noindent 
+
+\noindent my \$total = 30;
+
+\noindent print "Total is now \$total\textbackslash n";
+
+\noindent \$total += 10;
+
+\noindent print "Total is now \$tutal\textbackslash n";
+
+\noindent 
+
+\noindent Without warnings, we see this:
+
+\noindent 
+
+\noindent $>$ \textbf{perl warntest2.plx}
+
+\noindent Total is now 30
+
+\noindent Total is now
+
+\noindent 
+
+\noindent Why has our variable lost its value? Let's turn on warnings and run this again. Now we get:
+
+\noindent 
+
+\noindent $>$ \textbf{perl warntest2.plx}
+
+\noindent Name "main::tutal" used only once: possible typo at warntest2.plx line 8. Total is now 30
+
+\noindent Use of uninitialized value in concatenation (.) at warntest2.plx line 8.
+
+\noindent Total is now
+
+\noindent 
+
+\noindent 
+
+\noindent Aha! A warning in the 'once' category has been fired, telling us that we've only used the variable tutal
+
+\noindent once. Obviously, we've misspelled total here.
+
+\noindent 
+
+\noindent That's enough to help us track down and fix the problem, but what about the other error: \$tutal
+
+\noindent certainly had an uninitialized value, but where is the concatenation? We didn't use the . operator --
+
+\noindent however, perl did. Internally, perl understands "something \$a" to be "something ".\$a. Since the
+
+\noindent \$a in this case was undefined, perl complained.
+
+\noindent 
+
+\noindent \textit{The Scope of use warnings}
+
+\noindent The warnings pragma is \textbf{lexically scoped}, so its effects will last throughout the same block of code as a my variable would -- that is, within the nearest enclosing braces or the current file. For instance, the following program has warnings throughout:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# warntest3.plx
+
+\noindent use warnings;
+
+\noindent 
+
+\noindent \{
+
+\noindent my @a = qw(one , two , three , four);
+
+\noindent \}
+
+\noindent my @b = qw(one , two , three , four);
+
+\noindent 
+
+\noindent Therefore perl responds with the following warnings, in the qw category:
+
+\noindent 
+
+\noindent $>$\textbf{perl warntest3.plx}
+
+\noindent Possible attempt to separate words with commas at warntest3.plx line 6. Possible attempt to separate words with commas at warntest3.plx line 8.
+
+\noindent $>$
+
+\noindent 
+
+\noindent reminding us that since qw() automatically changes separate words into separate elements, we don't need to separate them with commas.
+
+\noindent 
+
+\noindent If you really \textbf{do }want commas as some elements of your array, you may turn warnings off by saying no warnings. In the following program, warnings are only turned on for the code outside the brackets:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# warntest4.plx use warnings;
+
+\noindent 
+
+\noindent \{
+
+\noindent no warnings;
+
+\noindent my @a = qw(one , two , three , four);
+
+\noindent \}
+
+\noindent my @b = qw(one , two , three , four);
+
+\noindent 
+
+\noindent Now perl will only give the one warning, for the second array:
+
+\noindent 
+
+\noindent $>$ \textbf{perl warntest4.plx}
+
+\noindent Possible attempt to separate words with commas at warntest3.plx line 9.
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent To turn off or on certain classes of warnings, give them as a list after the use or no warnings. So, in
+
+\noindent this case, to just turn off the warning about qw but leave the others untouched, you would write:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# warntest4.plx use warnings;
+
+\noindent 
+
+\noindent \{
+
+\noindent no warnings "qw";
+
+\noindent my @a = qw(one , two , three , four);
+
+\noindent \}
+
+\noindent my @b = qw(one , two , three , four);
+
+\noindent 
+
+\noindent The categories of warnings you can turn on and off are organized hierarchically as follows, and the warnings they cover are detailed in the perldiag documentation:
+
+\noindent 
+
+\noindent 
+
+\noindent all
+
+\noindent 
+
+\noindent 
+
+\begin{tabular}{|p{1.0in}|p{0.6in}|p{0.4in}|p{0.6in}|p{0.4in}|p{0.6in}|p{0.4in}|} \hline 
+chmod &  & once &  & signal &  & taint \\ \hline 
+\newline closure &  & \newline overflow &  & \newline substr &  & \newline unmask \\ \hline 
+exiting &  & \newline pack &  & syntax &  & \newline uninitialized \\ \hline 
+glob &  & \newline portable &  &  & ambiguous & \newline unpack \\ \hline 
+\newline io &  & \newline recursion &  &  & \newline bareword & \newline untie \\ \hline 
+ & \newline closed & \newline redefine &  &  & \newline deprecated & \newline utf8 \\ \hline 
+ & exec & regexp &  &  & digit & \newline void \\ \hline 
+ & \newline newline & severe &  &  & \newline parenthesis & y2k \\ \hline 
+ & \newline pipe & debugging &  &  & \newline precedence &  \\ \hline 
+ & \newline unopened & inplace &  &  & \newline printf &  \\ \hline 
+\newline misc &  &  & \newline internal &  & prototype &  \\ \hline 
+\newline numeric &  &  & \newline malloc &  & qw &  \\ \hline 
+ &  &  &  &  & \newline reserved &  \\ \hline 
+ &  &  &  &  & \newline semicolon &  \\ \hline 
+\end{tabular}
+
+
+
+\noindent 
+
+\noindent 
+
+\noindent use strict
+
+\noindent 
+
+\noindent You should also know by now that use strict forces you to declare your variables before using them. In fact, it controls three areas of your programming: variables, references, and subroutines.
+
+\noindent 
+
+\noindent \textit{Strict on Variables}
+
+\noindent First, we'll look at the variables. When use strict is applied, a variable must either be declared lexically (using my \$var) and belong to a block or file, or be declared globally, to be available in every part of the program. You can do this either by using our \$var (in the same way as my) or by
+
+\noindent specifying its full name, \$main::var. We'll see where the main comes from in the next chapter.
+
+\noindent 
+
+\noindent 
+
+\noindent You may see another way of declaring a global, use vars '\$var', which does exactly the same as
+
+\noindent our. our was introduced in Perl 5.6.0 and is recommended for use, wherever backward compatibility isn't an issue.
+
+\noindent 
+
+\noindent If use strict applies and you have not used one of these forms of declaration, Perl will not allow you
+
+\noindent to run the program:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# strictvar.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$a = 5;
+
+\noindent \$main::b = "OK";
+
+\noindent our \$c = 10;
+
+\noindent \$d = "BAD";
+
+\noindent 
+
+\noindent The first three variables are fine, but:
+
+\noindent 
+
+\noindent $>$\textbf{perl strictvar.plx}
+
+\noindent Global symbol "\$d" requires explicit package name at strictvar.plx line 9. Execution of strictvar.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent To fix this, you just need to use one of the above ways of declaring the variable. Here's an important lesson in debugging: don't turn off the warnings -- \textbf{fix the bug}. This is especially important when we come to our next cause of problems, references.
+
+\noindent 
+
+\noindent \textit{Strict on References}
+
+\noindent One thing novice programmers often want to do is to construct a variable whose name is generated from the contents of another variable. For instance, you're totalling numbers in a file with several
+
+\noindent sections. Each time you come to a new section, you want to keep the total in another variable. So, you might think you want \$total1, \$total2, \$total3, and so on, with \$section pointing to the
+
+\noindent current section. The problem then is to create a variable out of "total" plus the current value of
+
+\noindent \$section. How do you do it?
+
+\noindent 
+
+\noindent ? \textbf{Honest answer}:
+
+\noindent You can say \$\{"total".\$section\}.
+
+\noindent ? \textbf{Better answer}:
+
+\noindent Don't do it. In such cases, it's almost always better to use a hash or an array. Here, since the sections are numeric, you'd use an array of totals. It's far easier to say \$total[\$section]. More generally, if your sections are named, you'd use a hash, \$total\{\$section\}.
+
+\noindent 
+
+\noindent Why? Well, the most obvious reason is because you know how to use hashes and arrays, and when the question was asked, you didn't know how to construct a variable by name. Use what you know! Don't
+
+\noindent try and be too clever if there's a simple solution. Constructing these \textbf{symbolic references}, as they are
+
+\noindent known, can play havoc with any of your variables.
+
+\noindent 
+
+\noindent Suppose you're making a variable not out of \$\{"total".\$section\} but \$\{\$section\} where
+
+\noindent \$section is read from the file. If reading the section name goes horribly wrong, you may have
+
+\noindent \$section become one of Perl's special variables, either causing an error or creating weird behavior later in your program -- arrays may suddenly stop working, regular expression behavior may become unpredictable, and so on. This kind of thing is a nightmare to debug.
+
+\noindent 
+
+\noindent 
+
+\noindent Even if it goes right, there's no guarantee that \$section won't contain a name you're using somewhere
+
+\noindent else in the program. A variable name you're using may be blown away at any moment by something outside your program. This isn't a pretty situation to get into, and use strict stops you from getting into it by disallowing the use of symbolic references.
+
+\noindent 
+
+\noindent \textit{Strict on Subroutines}
+
+\noindent Last, but not least, use strict disallows 'poetry optimization', which lets you use barewords as
+
+\noindent strings. This means if you want to use the name of a subroutine without brackets, you must declare the subroutine first. For example:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# strictsubs1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$a = twelve;
+
+\noindent sub twelve \{ return 12 \}
+
+\noindent 
+
+\noindent blows up with an error:
+
+\noindent 
+
+\noindent $>$\textbf{perl strictsubs1.plx}
+
+\noindent Bareword "twelve" not allowed while "strict subs" in use at strictsubs1.plx line 6
+
+\noindent Execution of strictsubs1.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent However, this is okay. You'll get the query 'Name "main::a" used only once: possible typo' but that's simply because we've declared \$a and then not used it. We'll come back to this error in a minute:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# strictsubs2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent sub twelve \{ return 12 \}
+
+\noindent \$a = twelve;
+
+\noindent 
+
+\noindent Of course, you can always get round the limitation on barewords, simply by not using them. A
+
+\noindent subroutine name with parentheses is always OK:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# strictsubs3.plx use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent sub twelve \{ return 12 \}
+
+\noindent \$a = twelve();
+
+\noindent 
+
+\noindent These three areas -- variables, symbolic references and subroutines -- are split into categories just like the warnings. These are vars, refs, and subs respectively.
+
+\noindent 
+
+\noindent As before, use strict turns on all checks. You can turn on and off all or individual checks on a lexical basis just as you could with use warnings:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# nostrict.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent our \$first = "this";
+
+\noindent our \$second = "first";
+
+\noindent our \$third;
+
+\noindent 
+
+\noindent \{
+
+\noindent no strict ('refs');
+
+\noindent \$third = \$\{\$second\};
+
+\noindent \}
+
+\noindent 
+
+\noindent print "\$third\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl nostrict.plx}
+
+\noindent Name "main::first" used only once: possible typo at nostrict.plx line 6. this
+
+\noindent $>$
+
+\noindent 
+
+\noindent The warnings have been turned off for our symbolic link, but again we get that warning about only explicitly using \$first once, even though we have indirectly used it again. This is a useful reminder of how warnings work: perl will check to see that the code \textit{looks }structurally sound, but won't actually calculate runtime values or resolve variables. If it did, it would have picked up above on \$\{\$second\} being resolved as \$first.
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Don't turn off these checks simply because they stop your program from running. You}
+
+\noindent \textbf{should always find a way to fix the program so as to satisfy them.}
+
+\noindent 
+
+\noindent 
+
+\noindent use diagnostics
+
+\noindent 
+
+\noindent There's another pragma that may help you while debugging. use diagnostics will show you not only an error message or warning but also the explanatory text from the perldiag documentation page. For instance:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# diagtest.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent use diagnostics;
+
+\noindent 
+
+\noindent my \$a, \$b = 6;
+
+\noindent \$a = \$b;
+
+\noindent 
+
+\noindent should give something like:
+
+\noindent 
+
+\noindent $>$perl \textbf{diagtest.plx}
+
+\noindent Parentheses missing around "my" list at diagtest.plx line 7 (\#1)
+
+\noindent (W parenthesis) You said something like my \$foo, \$bar = @\_;
+
+\noindent 
+
+\noindent 
+
+\noindent when you meant
+
+\noindent 
+
+\noindent my (\$foo, \$bar) = @\_;
+
+\noindent 
+
+\noindent Remember that "my", "our", and "local" bind tighter than comma.
+
+\noindent $>$
+
+\noindent 
+
+\noindent This is helpful when you're debugging but remember that when use diagnostics is seen, the
+
+\noindent entirety of the perldiag page has to be read into memory, which takes up some time. It's a good idea
+
+\noindent to use it when writing a program and then remove it when you're done.
+
+\noindent 
+
+\noindent Alternatively, there's a standalone program called splain, which explains Perl's warnings and error messages in the same way. Simply collect up the output of your program and paste it to splain. If you're going to use a pipe, remember that warnings end up on standard error, so you'll have to say perl myprogram.plx \textbar  2$>$\&1 \textbar   splain to feed standard error there, too. Note that splain won't work on Windows.
+
+\noindent 
+
+\noindent 
+
+\noindent Perl Command Line Switches
+
+\noindent 
+
+\noindent All of our programs so far have started with this line, the 'shebang' line:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent 
+
+\noindent and we've called our program by saying:
+
+\noindent 
+
+\noindent $>$\textbf{perl program.plx}
+
+\noindent 
+
+\noindent or possibly on UNIX with:
+
+\noindent 
+
+\noindent $>$\textbf{./program.plx}
+
+\noindent 
+
+\noindent The primary purpose of that first line is to tell UNIX what to do with the file. If we say
+
+\noindent ./program.plx, this just says 'run the file program.plx', it's the 'shebang' line that says how it
+
+\noindent should be run. It should be passed to the file /usr/bin/perl, which is where the Perl interpreter will usually live.
+
+\noindent 
+
+\noindent However, that's not all it does, and it isn't just for UNIX: Perl reads this line itself and looks for any additional text, in the form of \textbf{switches}, which notify Perl of any special behavior it should turn on when processing the file. If we call the Perl interpreter directly on the command line, by saying perl program.plx, we can also specify some switches before Perl even starts looking at the file in question.
+
+\noindent 
+
+\noindent Switches all start with a minus sign and an alphanumeric character, and must be placed after perl but before the name of the program to be run. For instance, the switch -w, which is roughly equivalent to use warnings; can be specified in the file, like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl -w
+
+\noindent \# program.plx
+
+\noindent ...
+
+\noindent 
+
+\noindent 
+
+\noindent or on the command line like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -w program.plx}
+
+\noindent 
+
+\noindent This allows us to change Perl's behavior either when writing the program or when running it. Some switches can only be used on the command line. By the time perl has opened and read the file, it may
+
+\noindent be too late to apply the behavior. This is most clearly illustrated in the case of the --e switch, which we'll be taking a look at next.
+
+\noindent 
+
+\noindent There are two major types of switch: those that take an argument and those that do not. -w does not take an argument, and neither does -c. (We'll see what -c does very soon.) If you want to specify
+
+\noindent both switches, you can either put them one after the other, -w -c, or combine them in a \textbf{cluster}, by
+
+\noindent saying -wc.
+
+\noindent 
+
+\noindent For switches that take an argument, such as -i, the argument must directly follow the switch. So, while you can combine -w, -c, and -i00 as -wci00, you may not say -i00wc, as the wc will be interpreted
+
+\noindent as part of the argument to -i. You must either put switches that take an argument at the end of a cluster
+
+\noindent or separate them entirely.
+
+\noindent 
+
+\noindent 
+
+\noindent -e
+
+\noindent 
+
+\noindent The most commonly used switch is -e. This may only be used on the command line, because it tells
+
+\noindent perl not to load and run a program file but to run the text following --e as a program. This allows you to write quick Perl programs on the command line. For example, the very first program we wrote can be
+
+\noindent run from the command line like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -e 'print "Hello world\textbackslash n";'}
+
+\noindent Hello world
+
+\noindent $>$
+
+\noindent 
+
+\noindent Notice that we surround the entire program in single quotes. This is because, as we saw when looking at
+
+\noindent @ARGV, the shell itself splits up the arguments on the command line into separate words. Without the
+
+\noindent quotes, our program would just be print, with "Hello world\textbackslash n" as the first element of @ARGV.
+
+\noindent 
+
+\noindent There are two problems with this. First, we can't put single quotes inside our single quotes, and second, some operating systems' shells prefer you to use double rather than single quotes around your program. They then have differing degrees of difficulty coping with quotes in the program.
+
+\noindent 
+
+\noindent For instance, DOS, Windows and so on, will want to see this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -e "print \textbackslash "Hello world\textbackslash n\textbackslash ";"}
+
+\noindent 
+
+\noindent You can get around most of this by judicious use of the q// and qq// operators. For instance, you
+
+\noindent could say perl -e 'print qq/Hello world\textbackslash n/;', which easily translates to a DOS-acceptable form as perl -e "print qq/Hello world\textbackslash n/;". Note that on UNIX systems, single quotes are usually preferable, as they prevent the shell interpolating your variables.
+
+\noindent 
+
+\noindent In the following examples, we'll be showing examples in single-quoted format. If you're using Windows, just convert them to double-quoted format as described above.
+
+\noindent 
+
+\noindent 
+
+\noindent This technique is most commonly used for two purposes:
+
+\noindent 
+
+\noindent ? To construct quick programs in conjunction with some of the other switches we'll see below
+
+\noindent 
+
+\noindent ? To test out little code snippets and check how Perl works.
+
+\noindent 
+
+\noindent For example, if I wasn't sure whether an underscore would be matched by \textbackslash w in a regular expression, I'd write something like this to check:
+
+\noindent 
+
+\noindent $>$ \textbf{perl -e 'print qq/Yes, it's included\textbackslash n/ if q/\_/ =\~{} /\textbackslash w/;'}
+
+\noindent Yes, it's included
+
+\noindent $>$
+
+\noindent 
+
+\noindent It's often quicker to do this than to go hunting through books and online documentation trying to look it up. As Larry Wall says, 'Perl programming is an empirical science'. You learn by doing it. If you're not sure about some element of Perl, get to a command line and try it out!
+
+\noindent 
+
+\noindent -n and -p
+
+\noindent 
+
+\noindent As mentioned above, you can combine -e with other switches to make useful programs on the
+
+\noindent command line. The most common switches used in this way are -n and -p. These are both concerned with reading $<$ARGV$>$. In fact, -n is equivalent to this:
+
+\noindent 
+
+\noindent while ($<$$>$) \{ "..your code here.." \}
+
+\noindent 
+
+\noindent We can use this to produce programs for scanning through files, searching for matching lines, changing text, and so on. For example, here's a one-liner to print out the subject of any new items of mail I have, along with whom the mail is from:
+
+\noindent 
+
+\noindent Try It Out : New Mail Check
+
+\noindent 
+
+\noindent All the incoming mail arrives in a file called Mailbox on my computer. Each piece of mail contains a
+
+\noindent header, which contains information about it. For instance, here's part of the header from an email I sent
+
+\noindent to perl5-porters:
+
+\noindent 
+
+\noindent Date: Mon, 3 Apr 2000 14:22:03 +0900
+
+\noindent From: Simon Cozens $<$simon@cozens.net$>$ To: perl5-porters@perl.org
+
+\noindent Subject: [PATCH] t/lib/b.t
+
+\noindent Message-ID: $<$20000403142203.A1437@SCOZENS$>$
+
+\noindent Mime-Version: 1.0
+
+\noindent Content-Type: text/plain; charset=us-ascii
+
+\noindent X-Mailer: Mutt 1.0.1i
+
+\noindent 
+
+\noindent As you can see, each header line consists of some text, then a colon and a space, then some more text. If we extract the lines that start Subject: and From:, we can summarize the contents of the mailbox.
+
+\noindent 
+
+\noindent Here's how to do it on the command line:
+
+\noindent 
+
+\noindent $>$\textbf{perl -ne 'print if /\^{}(Subject\textbar From): /' Mailbox }From: Simon Cozens $<$simon@brecon.co.uk$>$ Subject: [PATCH] t/lib/b.t
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent To extract the relevant lines, we could write a program like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use warnings; use strict;
+
+\noindent 
+
+\noindent open INPUT, "Mailbox" or die \$!;
+
+\noindent while ($<$INPUT$>$) \{
+
+\noindent print if /\^{}(Subject\textbar From): /;
+
+\noindent \}
+
+\noindent 
+
+\noindent However, that's a lot of work for a little job, and Perl was invented to make this sort of thing easy. Instead we use the -n flag to give us a while($<$$>$) loop and -e to provide the remaining line. Perl internally translates our one-line incantation to this:
+
+\noindent 
+
+\noindent LINE: while (defined(\$\_  = $<$ARGV$>$)) \{
+
+\noindent print \$\_  if /\^{}(Subject\textbar From): /;
+
+\noindent \}
+
+\noindent 
+
+\noindent As you may suspect, we're not confined to just printing text with these one-liners. Indeed, we can use this to modify parts of a file. Let's say we had an old letter file newyear.txt containing this text:
+
+\noindent 
+
+\noindent Thank you for your custom throughout the previous year. We
+
+\noindent look forward to facing the challenges that 1999 will bring us, and hope that we will continue to serve you this year as well.
+
+\noindent 
+
+\noindent All our best wishes for a happy and prosperous 1999!
+
+\noindent 
+
+\noindent We could use perl to print an updated version of it as follows:
+
+\noindent 
+
+\noindent $>$\textbf{perl -ne 's/1999/2000/g; print' newyear.txt}
+
+\noindent Thank you for your custom throughout the previous year. We look forward to facing the challenges that 2000 will bring us,
+
+\noindent and hope that we will continue to serve you this year as well.
+
+\noindent 
+
+\noindent All our best wishes for a happy and prosperous 2000!
+
+\noindent $>$
+
+\noindent 
+
+\noindent Of course, we're only printing the changed version to STDOUT. We could go the next logical step and use redirection to save this output to a file instead, as we saw in Chapter 6.
+
+\noindent 
+
+\noindent $>$\textbf{perl -ne 's/1999/2000/g; print' newyear.txt $>$changedfile.txt}
+
+\noindent $>$
+
+\noindent 
+
+\noindent Since this is a pretty common operation -- 'do something to the incoming data and print it out again' -- perl lets use the -p flag instead of -n to automatically print out the line once we're finished. We can therefore save ourselves a valuable few keystrokes by saying this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -pe 's/1999/2000/g' newyear.txt}
+
+\noindent 
+
+\noindent As you saw from the translation, these are ordinary loops, and we can use next and last on them as usual. To print out only those lines that don't start with a hash sign (\#) we can say this:
+
+\noindent 
+
+\noindent 
+
+\noindent $>$\textbf{perl -ne 'next if /\^{}\#/; print' strictvar.plx}
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$a = 5;
+
+\noindent \$main::b = "OK";
+
+\noindent our \$c = 10;
+
+\noindent \$d = "BAD";
+
+\noindent $>$
+
+\noindent 
+
+\noindent Note that we don't, and actually \textbf{can't }say:
+
+\noindent 
+
+\noindent $>$\textbf{perl -pe 'next if /\^{}\#/'}
+
+\noindent 
+
+\noindent This is because -p uses a special control structure, continue, translating internally to this:
+
+\noindent 
+
+\noindent LINE: while (defined(\$\_  = $<$ARGV$>$)) \{ "Your code here";
+
+\noindent \} continue \{ print \$\_;\}
+
+\noindent 
+
+\noindent Anything in a continue \{ \} block will always get executed at the end of an iteration -- even if next
+
+\noindent is used (although is still by-passed by last).
+
+\noindent 
+
+\noindent 
+
+\noindent -c
+
+\noindent 
+
+\noindent -c stops perl from running your program -- instead, all it does is check that the code can be compiled as valid Perl. It's a good way to quickly check that a program has no glaring syntax errors. It also loads up and checks any modules that the program uses, so you can use it to check that the program has
+
+\noindent everything it needs:
+
+\noindent 
+
+\noindent $>$\textbf{perl --ce 'print "Hello, world\textbackslash n";'}
+
+\noindent -e syntax OK
+
+\noindent $>$\textbf{perl -ce 'print ("Hello, world\textbackslash n"));'}
+
+\noindent syntax error at -e line 1, near "))"
+
+\noindent -e had compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Be careful though, because this won't necessarily prove that your program will run properly -- it checks
+
+\noindent that your program is grammatically correct, but not whether it makes sense. For instance, this looks fine:
+
+\noindent 
+
+\noindent $>$\textbf{perl --ce 'if (1) \{ next \}'}
+
+\noindent -e syntax OK
+
+\noindent $>$
+
+\noindent 
+
+\noindent but if you try to run it normally, you'll get an error:
+
+\noindent 
+
+\noindent $>$\textbf{perl -e 'if (1) \{ next \}'}
+
+\noindent Can't "next" outside a loop block at -e line 1.
+
+\noindent $>$
+
+\noindent 
+
+\noindent This is the difference between a compile-time and a runtime error. A compile-time error can be
+
+\noindent detected in advance and means that perl couldn't understand what you said. A runtime error means that what you said was comprehensible but (for whatever reason) can't be done.
+
+\noindent -c only checks for compile-time errors.
+
+\noindent 
+
+\noindent 
+
+\noindent -i
+
+\noindent 
+
+\noindent When we're searching and replacing the contents of a file, we usually don't want to produce a new, revised copy on standard output, but rather change the file as it stands. You might think of doing something like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -pe 's/one/two/g' textfile.txt $>$ textfile.txt}
+
+\noindent 
+
+\noindent There's a problem with that though, as you'll know if you've tried it, it's quite possible that you'll completely lose the file. This is because (unless you're running in a shell that's smart enough to watch your back) the shell opens the file it's writing to first and \textbf{then }passes the filehandle to perl as standard output. Perl opens the file after this has taken place, but by this time, the original contents of the file have been wiped out.
+
+\noindent 
+
+\noindent To get around this yourself, you'd have to go through contortions like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -pe 's/one/two/g' textfile.txt $>$ textfile.new}
+
+\noindent $>$\textbf{mv textfile.new textfile.txt}
+
+\noindent 
+
+\noindent The UNIX command mv is the same as the ren command in Windows: Both commands are used to rename files.
+
+\noindent 
+
+\noindent Perl provides you with a way to avoid this. The -i switch opens a temporary file and automatically replaces the file to be edited with the temporary file after processing. You can do what we want just like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -pi -e 's/one/two/g' textfile.txt}
+
+\noindent 
+
+\noindent Well, you \textit{might }be able to -- as it stands, you may find that this just returns the message:
+
+\noindent 
+
+\noindent Can't do inplace edit without backup
+
+\noindent 
+
+\noindent This happens because perl doesn't know how you want to name the temporary file. Notice though, that
+
+\noindent I separated -i from the -e switch: this is because -i takes an optional argument. Anything
+
+\noindent immediately following the -i will be treated as an extension to be added to the original filename as a name for the backup file. So, for instance:
+
+\noindent 
+
+\noindent $>$\textbf{perl -pi.old -e 's/one/two/g' textfile.txt}
+
+\noindent 
+
+\noindent will take in a file, textfile.txt, save it away as textfile.txt.old, and then replace every instance of 'one' with 'two' in textfile.txt.
+
+\noindent 
+
+\noindent 
+
+\noindent -M
+
+\noindent 
+
+\noindent If you need to load any modules from the command line, you can use the -M switch. For instance, to produce politically correct one-liners, we should really say something like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -Mstrict -Mwarnings --e ...}
+
+\noindent 
+
+\noindent 
+
+\noindent However, the kind of code we're likely to put on the command line doesn't really need this sort of
+
+\noindent strictness. It's still useful to have the -M switch to load modules -- the CPAN modules LWP::Simple,
+
+\noindent Tk, and HTML::Parser have been used in the past to create a one-line graphical web browser!
+
+\noindent 
+
+\noindent 
+
+\noindent -s
+
+\noindent 
+
+\noindent As well as passing switches to perl, you may want your program to have switches of its own. The -s switch (usually specified on the shebang line) tells perl to interpret all command line switches following the filename as variables (for example: \$v, \$h) and removed from @ARGV. This means that you can process these switches in any way you want.
+
+\noindent 
+
+\noindent For instance, a lot of programs will display a help message explaining their usage, when called with the
+
+\noindent -h switch at the command line. Similarly, they'll give their version number if -v is used. Let's make some of our own programs do this:
+
+\noindent 
+
+\noindent Try It Out : Reading Command Line Options
+
+\noindent 
+
+\noindent We're going to add 'help' and 'version number' messages to nl.plx, the line numbering program
+
+\noindent we wrote in the last chapter. Note that this example uses our and will therefore only work for Perl versions 5.6 and above:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl -s
+
+\noindent \# nl3.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$lineno;
+
+\noindent my \$current = "";
+
+\noindent our (\$v,\$h);
+
+\noindent 
+
+\noindent if (defined \$v) \{
+
+\noindent print "\$0 - line numberer, version 3\textbackslash n";
+
+\noindent exit;
+
+\noindent \}
+
+\noindent if (defined \$h) \{
+
+\noindent print $<$$<$EOF;
+
+\noindent \$0 -- Number lines in a file
+
+\noindent 
+
+\noindent Usage : \$0 [-h\textbar -v] [filename filename...]
+
+\noindent 
+
+\noindent This utility prints out each line in a file to standard output,
+
+\noindent with line numbers added.
+
+\noindent EOF
+
+\noindent exit;
+
+\noindent \}
+
+\noindent 
+
+\noindent while ($<$$>$) \{
+
+\noindent if (\$current ne \$ARGV) \{
+
+\noindent \$current = \$ARGV;
+
+\noindent print "\textbackslash n\textbackslash t\textbackslash tFile: \$ARGV\textbackslash n\textbackslash n";
+
+\noindent \$lineno=1;
+
+\noindent \}
+
+\noindent print \$lineno++;
+
+\noindent print ": \$\_";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent If we now pass the -h option, it's not treated as a filename, but rather as a request for help:
+
+\noindent 
+
+\noindent $>$\textbf{perl --s nl3.plx -h}
+
+\noindent nl3.plx  Number lines in a file
+
+\noindent 
+
+\noindent Usage : nl3.plx [-h\textbar -v] [filename filename...]
+
+\noindent 
+
+\noindent This utility prints out each line in a file to standard output, with line numbers added.
+
+\noindent $>$
+
+\noindent 
+
+\noindent If you're fortunate enough to be using an operating system that allows you to use Perl programs as executables, the shebang line will take care of specifying the --s switch, so you won't need to repeat
+
+\noindent it on the command line. So while this will work fine on UNIX:
+
+\noindent 
+
+\noindent $>$\textbf{nl3.plx -v}
+
+\noindent nl3.plx - line numberer, version 3
+
+\noindent 
+
+\noindent you'll probably need to say this on Windows:
+
+\noindent 
+
+\noindent $>$\textbf{perl --s nl3.plx --v}
+
+\noindent nl3.plx - line numberer, version 3
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The -s on the shebang or command line tells perl that any switches following the name of the Perl program will cause a Perl variable of the same name to be defined. For instance, this command line:
+
+\noindent 
+
+\noindent $>$\textbf{perl -s something -v -abc}
+
+\noindent 
+
+\noindent will set the variables \$v and \$abc. We therefore need to be ready to receive these variables, otherwise we will fall foul of use strict, so we put:
+
+\noindent 
+
+\noindent our (\$v,\$h);
+
+\noindent 
+
+\noindent If the variable is defined, we do something with it:
+
+\noindent 
+
+\noindent if (defined \$v) \{
+
+\noindent print "\$0 - line numberer, version 3\textbackslash n";
+
+\noindent exit;
+
+\noindent \}
+
+\noindent 
+
+\noindent The special variable \$0 contains the name of the program currently being run. It's good form to put this
+
+\noindent in any informational messages you produce about the program.
+
+\noindent 
+
+\noindent While -s is handy for quick tasks, there are two things that make it unsuitable for use in big programs:
+
+\noindent 
+
+\noindent ? You have no control over what switches should be recognized. Perl will set any variable, regardless of whether you want it to or not. If you're not actually using that switch, this will generate warnings. For instance:
+
+\noindent 
+
+\noindent $>$\textbf{perl -s nl3.plx -v -foobar}
+
+\noindent Name "main::foobar" used only once: possible typo. nl3.plx - line numberer, version 3
+
+\noindent $>$
+
+\noindent 
+
+\noindent ? -abc is treated as one switch and sets \$abc, rather than the three switches -a, -b, and -c.
+
+\noindent 
+
+\noindent 
+
+\noindent For this reason, it's recommended that you use the standard modules Getopt::Std or
+
+\noindent Getopt::Long instead. Appendix D gives a brief rundown of all perl's standard modules or for more detailed information, refer to the perlmod manpage.
+
+\noindent 
+
+\noindent -I and @INC
+
+\noindent 
+
+\noindent Perl knows where to look for modules and Perl files included via do or require by looking for them in the locations given by a special variable, the array @INC. You can add directories to this search path on
+
+\noindent the command line, by using the -I option:
+
+\noindent 
+
+\noindent 
+
+\noindent perl --I/private/perl program
+
+\noindent 
+
+\noindent will cause Perl to look in the directory /private/perl for any files it needs to find besides those in
+
+\noindent @INC. For more details on working with @INC up close, just have a look in the next chapter.
+
+\noindent 
+
+\noindent -a and -F
+
+\noindent 
+
+\noindent One of perl's ancestors is the UNIX utility awk. The great thing about awk was that when reading data
+
+\noindent in a tabular format, it could automatically split each column into a separate variable for you. The perl equivalent would use an array and would look something like this:
+
+\noindent 
+
+\noindent while ($<$$>$) \{
+
+\noindent my @array = split;
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent The -a switch, used with -n and -p, does this kind of split for you. It splits to the array @F, so
+
+\noindent 
+
+\noindent $>$\textbf{perl -an '...'}
+
+\noindent 
+
+\noindent is equivalent to:
+
+\noindent 
+
+\noindent LINE: while (defined(\$\_  = $<$ARGV$>$)) \{
+
+\noindent @F = split;
+
+\noindent 'Your code here';
+
+\noindent \}
+
+\noindent 
+
+\noindent So, to get the first word of every line in a file, you could say this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -ane 'print \$F[0],"\textbackslash n"' chapter9.txt}
+
+\noindent Running
+
+\noindent 
+
+\noindent By
+
+\noindent 
+
+\noindent You
+
+\noindent 
+
+\noindent Everyone
+
+\noindent \dots 
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent By default, -a splits on spaces -- although you can change it by specifying another switch, -F, which will
+
+\noindent take your chosen delimiter as an argument. For instance, the fields in a UNIX password file are (as we saw in Chapter 5), delimited by colons. We can extract the home directory from the file by looking at
+
+\noindent the fifth element of the array. If our passwd file contains the line:
+
+\noindent 
+
+\noindent 
+
+\noindent simon:x:10018:10020::/home/simon:/bin/bash
+
+\noindent 
+
+\noindent We'll get the following result:
+
+\noindent 
+
+\noindent $>$\textbf{perl -F: -ane 'print \$F[5],"\textbackslash n" if /\^{}simon/' passwd}
+
+\noindent /home/simon
+
+\noindent $>$
+
+\noindent 
+
+\noindent -l and --0
+
+\noindent 
+
+\noindent It's rather annoying to have to specify "\textbackslash n" on the end of everything we print, just to get a new line, especially if we're doing things on the command line. The -l switch sets the \textit{output }record separator \$\textbackslash  equal to the current value of the \textit{input }record separator \$/. The former   is added on automatically at the end of every print statement. Since the latter is usually \textbackslash n, the newline character, -l adds a newline
+
+\noindent to everything we print. Additionally, if used with the -n or -p switches, it will automatically chomp any
+
+\noindent input.
+
+\noindent 
+
+\noindent We can cut the above program down by a few more keystrokes like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl -F: -lane 'print \$F[5] if /\^{}simon/' passwd}
+
+\noindent /home/simon
+
+\noindent $>$
+
+\noindent 
+
+\noindent If --l is followed by a valid octal number, then the character with that ASCII value (see Appendix F) is used as the output record separator instead of new line. However, this is relatively rare.
+
+\noindent 
+
+\noindent Alternatively, you can set the input record separator using the -0 switch. Likewise, if this is followed by
+
+\noindent an octal number, \$/ will be set to that character. For instance, -0100 will effectively execute \$/="A";
+
+\noindent at the beginning of the program. -0 on its own or followed by something that isn't an octal number will cause \$/ to be set to the undefined value, causing the entire file to be read in at once:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{While you can conceivably use -l on the shebang line to save printing newlines in}
+
+\noindent \textbf{your program, it's actually a bad idea -- many people will probably miss it and wonder}
+
+\noindent \textbf{where all the new lines are coming from. It will also get you into trouble if you want a}
+
+\noindent \textbf{print statement that doesn't cause a newline.}
+
+\noindent 
+
+\noindent 
+
+\noindent -T
+
+\noindent 
+
+\noindent When you're dealing with data that's being downloaded from an unreliable source from the outside world, you'll probably want to be careful what you do with it. If you're asking the user for a filename, which you pass directly to open, you're potentially allowing the user to do all kinds of horrible things. Say, for instance, you were given the filename rm -rf /\textbar  and used it as it was (\textbf{DON'T!}). You may
+
+\noindent well find afterwards that several of the files on your disk had disappeared...
+
+\noindent 
+
+\noindent 
+
+\noindent To  force you  to  clean up this insecure  data,  Perl  has  a  switch,  --T,  that  turns  on  'taint  mode'.  When
+
+\noindent this switch  is in operation,  any  data  coming  into  your  program  is  tainted,  and may  not be  used for
+
+\noindent any operations Perl deems 'unsafe' for  example,  passing  to  open.  Furthermore,  any  data  derived  from tainted data becomes tainted itself.  The  only  way  to  untaint  data  is  to  take a  regular
+
+\noindent expression backreference:
+
+\noindent 
+
+\noindent \$tainted =\~{} /([\textbackslash w.]+)/;
+
+\noindent \$untainted = \$1;
+
+\noindent 
+
+\noindent We'll look at this in a lot more detail in the section on taint checking in Chapter 13.
+
+\noindent 
+
+\noindent 
+
+\noindent Debugging Techniques
+
+\noindent 
+
+\noindent Earlier in the chapter, we looked at bugs that perl can trap easily -- bugs that turn up when what you
+
+\noindent write doesn't make sense. However, a lot of the time you'll write something that makes sense but doesn't
+
+\noindent do what you want it to do. While there's no magic formula to find the problem for you here, there are several techniques you can use to track down the problem. Perl itself includes a debugging environment
+
+\noindent to help you in your investigations.
+
+\noindent 
+
+\noindent Before the Debugger...
+
+\noindent Before I explain how the debugger works, though, I have to admit that I'm an old-fashioned soul, and don't really believe in debuggers. People seem to see the debugger as a substitute for understanding the problem -- just run the program through the debugger, and it'll magically uncover the error. While that would be lovely, it's not actually the case. The debugger can only help you along the way, and there are other ways of debugging a program that may well be far more effective than firing it up.
+
+\noindent 
+
+\noindent \textit{Debugging Prints}
+
+\noindent It's an old programming proverb: When in doubt, print it out. Are you sure that the data coming into
+
+\noindent your program is what you think it is? Print it out! Do you know that a regular expression has done what you think it should have to a variable? Print it out, before and after. Do you know how many times Perl has gone through a certain loop or section of code? Is Perl taking far longer than it should with
+
+\noindent something trivial? Print out a little message saying where you are in the code. print is by far the most powerful and useful debugging tool at your disposal!
+
+\noindent 
+
+\noindent \textit{Pare It Down}
+
+\noindent If you're not sure where an error is occurring, try and isolate it. Cut or comment out unrelated lines and see if the problem still occurs. Keep commenting lines out until the problem goes away, and then look
+
+\noindent at what you've changed.
+
+\noindent 
+
+\noindent The same technique can be used when you've got inexplicable behavior. It's a lot easier to spot a bug when the odd behavior is demonstrated in five lines than in fifty. Alternatively, if you can't reproduce the problem that way, start a new program that \textit{just }has the troublesome logic in it and see if you can find anything odd about that. This will also test whether there's something wrong with the data you're feeding into your program.
+
+\noindent 
+
+\noindent 
+
+\noindent In  any  case,  the smaller you  can  make  your  demonstration  code,  the  better  --  especially  if  you're
+
+\noindent planning on asking  someone else  about  it.  The  smaller  your  haystack,  the  more  chance  you  have
+
+\noindent of finding  a needle  in it.  Furthermore,  plenty  of people  may  be  willing  to  help  you  if  you  can
+
+\noindent produce two  lines that  demonstrate  a  problem  --  fewer  will  if  they think  you  expect  them  to  debug your entire program.
+
+\noindent 
+
+\noindent Here are a some other problems that can cause weirdness without actually causing an error:
+
+\noindent 
+
+\noindent \textit{Context}
+
+\noindent Is there a problem with context? Always make sure you know what you're expecting from a function -- whether you want an array or a scalar -- and ensure that you're collecting the result in the appropriate type of variable.
+
+\noindent 
+
+\noindent \textit{Scope}
+
+\noindent Has a variable you've declared with my gone out of scope and become undefined or returned to its original value (from before you my'd it)? Remember that declaring variables my inside a block or loop means you won't be able to get at their value outside of it.
+
+\noindent 
+
+\noindent \textit{Precedence}
+
+\noindent Are you saying something like print (2+3)*5? This would add two to three, print it, and multiply the result of the print by five. Have you forgotten brackets around a list? Having warnings turned
+
+\noindent on will help you pick up on most of these sorts of thing, but be careful. Whenever in doubt, bracket more than you need to.
+
+\noindent 
+
+\noindent Using the Debugger
+
+\noindent The Perl debugger isn't a separate program, but a special mode under which perl runs -- to enable it,
+
+\noindent you simply pass the -d switch. As it's a special mode for running your program, you won't get anywhere unless your program compiles correctly first. What the debugger will help you do is to trace the flow of control through your program and allow you to look at variables' values at various stages of operation.
+
+\noindent 
+
+\noindent When you start your program in the debugger, you should see something like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl --d nl3.plx}
+
+\noindent Default die handler restored.
+
+\noindent 
+
+\noindent Loading DB routines from perl5db.pl version 1.07
+
+\noindent Editor support available.
+
+\noindent Enter h or `h h' for help, or `perldoc perldebug' for more help. main::(nl3.plx:6): my \$lineno;
+
+\noindent DB$<$1$>$
+
+\noindent 
+
+\noindent That line 'DB$<$1$>$' is the debugger prompt. Here is a partial list of things you can do at that point:
+
+\noindent 
+
+\noindent \textbf{Command Description}
+
+\noindent 
+
+\noindent T Obtain a 'call trace' of all the subroutines perl is currently processing. This will tell you how you got to be where you are.
+
+\noindent s Step to the next line as you go one line at a time through your program.
+
+\noindent \textit{Table continued on following page}
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Command Description}
+
+\noindent 
+
+\noindent n Step over a subroutine. Call the subroutine reference on the current line, and stop again once control has returned from that.
+
+\noindent Return Repeat the last stepping command.
+
+\noindent 
+
+\noindent r Keep going until the current subroutine returns.
+
+\noindent 
+
+\noindent c Continue -- keep going until something happens that causes the debugger to stop again.
+
+\noindent l List the next few lines to be processed.
+
+\noindent 
+
+\noindent - List the previous lines processed.
+
+\noindent 
+
+\noindent w List the lines around the current line.
+
+\noindent 
+
+\noindent /pattern/ Search forwards in the program code until the pattern matches.
+
+\noindent 
+
+\noindent t Turn on (or off) trace mode. This prints every statement before executing it.
+
+\noindent 
+
+\noindent b Set a breakpoint. Stop running the program and return to the debugger at the given line number or when the given condition is true.
+
+\noindent x Evaluate something in array context and give a tree view of the resulting data structure.
+
+\noindent ! Do the previous command again.
+
+\noindent 
+
+\noindent p Print something out.
+
+\noindent 
+
+\noindent h Get more help.
+
+\noindent 
+
+\noindent 
+
+\noindent We're not going to look any further at the debugger. While it can help you out -- and once you start
+
+\noindent really developing in Perl it really will -- for the time being it's a better learning experience to try and debug your code using the hints and techniques shown in the rest of this chapter. That way you can really get to know how Perl thinks and works.
+
+\noindent 
+
+\noindent 
+
+\noindent Defensive Programming
+
+\noindent 
+
+\noindent Far and away the best way to debug your code is to try and make sure you never have to. While it's impossible to guarantee that there will never be any bugs in your program, there are a lot of things you can do to minimize their number, and to make sure that any potential bugs are easy to locate. In a
+
+\noindent sense, it's all about expecting the worst.
+
+\noindent Strategy
+
+\noindent 
+
+\noindent Before writing another line,  make  sure  you've  got  a  plan.  You  need  to  use just  as  methodical  an approach to  debug  code efficiently  as  you  do  to  write  it  in  the first  place.  Keep  the following  points
+
+\noindent in mind:
+
+\noindent 
+
+\noindent ? Never try to write a large program without trying parts of that program first. Break the task down into small units, which can be tested as they're written.
+
+\noindent 
+
+\noindent ? Track down the first bug, then try the program again -- the second may just have been a consequence of the first one.
+
+\noindent 
+
+\noindent 
+
+\noindent ? Likewise, look out for additional errors after you've 'fixed' the first bug. There could have
+
+\noindent been a knock-on effect revealing subsequent errors.
+
+\noindent 
+
+\noindent \textit{Check Your Return Values}
+
+\noindent There's no excuse for not checking the return values on any operator that gives a meaningful return value. Any operator that interacts with the system will return something by which you can determine whether it succeeded or not, so make use of it. Furthermore, you can always attempt to pre-empt problems by looking to see what could go wrong. Chapter 6 contained an example of defensive programming, when we tested whether files were readable and writeable.
+
+\noindent 
+
+\noindent \textit{Be Prepared for the Impossible}
+
+\noindent Sometimes, things don't go the way you think they should. Data can get shuffled or wiped out by pieces
+
+\noindent of code in ways that you can't explain. In order to pick this up as soon as possible after it happens, test
+
+\noindent to see if the impossible has occurred. If you know a number's going to be 1, 2, or 3, do something like this:
+
+\noindent 
+
+\noindent if (\$var == 1) \{
+
+\noindent \# Do first thing.
+
+\noindent \} elsif (\$var == 2) \{
+
+\noindent \# Do second thing.
+
+\noindent \} elsif (\$var == 3) \{
+
+\noindent \# Do third thing.
+
+\noindent \} else \{
+
+\noindent die "Whoa! This can't happen!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent With luck, you'll never get there, but if you do, you'll be alerted to the fact that something higher up in the program has wiped out the variable. These are a type of trap called \textbf{assertions }or, less formally,
+
+\noindent '\textbf{can't happen' errors}. Eric Raymond, author of 'The Jargon File', says this about them:
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{"Although 'can't happen' events are genuinely infrequent in production code, programmers wise enough to check for them habitually are often surprised at how frequently they are triggered during development and how many headaches checking for them turns out to head off."}
+
+\noindent 
+
+\noindent \textit{Never Trust the User}
+
+\noindent Users are an extremely reliable source of bad data. Don't let bad data be the cause of bugs. Check to ensure you're getting the sort of data you want. Do you want to take the newline character off the end? Are you expecting to be upper case, lower case, mixed case, or don't you care? Try and be flexible wherever possible, since the user is more than likely to get something wrong. Above all, make sure
+
+\noindent you're completely happy with input before acting on it.
+
+\noindent 
+
+\noindent \textit{Definedness and Existence}
+
+\noindent If you're putting elements into arrays or hashes, should they already exist? Should they not exist? Check that you're not wiping data you want to keep, and if you are, ask yourself how you got into that
+
+\noindent situation. Are you sure you've got some data to put in? Check that you're putting the right sort of data into the right place. Are you sure there's something there when you take data out? Make sure the data exists when you've accessed a hash or array.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Have Truthful, Helpful Comments}
+
+\noindent Comments are a useful memory aid to help you keep track of what's going on in the program, so try and use them as intended. Comments that explain data flow -- what the data means and where it comes from
+
+\noindent -- are more helpful than comments that explain what you're doing. Contrast the usefulness of these two sections:
+
+\noindent 
+
+\noindent \$a = 6.28318; \# Assign 6.28318 to \$a
+
+\noindent 
+
+\noindent 
+
+\noindent \$a = 6.28318; \# pi*2
+
+\noindent 
+
+\noindent The problem with comments is that you have to keep them up to date when you change the code. Make sure your comments aren't a distraction (at best) or (at worst) downright misleading. There's an old
+
+\noindent saying: 'If code and comments disagree, both are probably wrong.'
+
+\noindent 
+
+\noindent \textit{Keep the Code Clean}
+
+\noindent Tidy code is much easier to understand and debug than messy code. It's easier to find problems if, among other things, you make sure to always:
+
+\noindent 
+
+\noindent ? keep parallel items aligned together in columns
+
+\noindent 
+
+\noindent ? keep indentation regular
+
+\noindent 
+
+\noindent ? keep to one statement per line
+
+\noindent 
+
+\noindent ? split long statements over multiple lines
+
+\noindent 
+
+\noindent ? use white-space characters to increase readability
+
+\noindent 
+
+\noindent Again, contrast these two snippets. There's this:
+
+\noindent 
+
+\noindent 
+
+\noindent while ($<$$>$) \{
+
+\noindent if ( /\^{}From:\textbackslash s+(.*)/ ) \{ \$from = \$1 \} if ( /\^{}Subject:\textbackslash s+(.*)/ ) \{ \$subject = \$1 \} if ( /\^{}Date:\textbackslash s+(.*)/ ) \{ \$date = \$1 \}
+
+\noindent 
+
+\noindent 
+
+\noindent print "Mail from \$from on \$date concerning \$subject\textbackslash n"
+
+\noindent unless /\textbackslash S+/;
+
+\noindent 
+
+\noindent next until /\^{}From/;
+
+\noindent \}
+
+\noindent 
+
+\noindent versus this:
+
+\noindent 
+
+\noindent 
+
+\noindent while($<$$>$)\{if(/\^{}From:\textbackslash s+(.*)/)\{\$from=\$1\} if(/\^{}Subject:\textbackslash s+(.*)/)\{\$subject=\$1\} if(/\^{}Date:\textbackslash s+(.*)/)\{\$date=\$1\}
+
+\noindent print "Mail from \$from on \$date concerning \$subject\textbackslash n" unless /\textbackslash S+/;
+
+\noindent next until /\^{}From/;\}
+
+\noindent 
+
+\noindent Which one would \textit{you }rather debug?
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Whenever you program, you'll inevitably make mistakes and create bugs. There are two types of bug you'll come up against: the syntax error, which manifests itself with a violent bang, and the logic error, which hides away insidiously inside your program and drives you silently mad. This chapter has shown you how you can deal with both sorts of bug.
+
+\noindent 
+
+\noindent We've looked at Perl's error messages and the most common causes of syntax errors. We've seen how to decode the error messages perl gives, both by employing a little bit of logical thought (the best way) and
+
+\noindent by getting the diagnostics pragma to explain it to us (the easiest way).
+
+\noindent 
+
+\noindent We've also seen how to avoid creating bugs in the first place -- use warnings and use strict act
+
+\noindent as checks to ensure that we're not doing anything too crazy. There are also plenty of ways to use defensive programming, imposing further checks to stop bugs before they happen.
+
+\noindent 
+
+\noindent Perl is a great tool for use on the command line. I'm forever using it to search files for patterns and change files with a search-and-replace, as well as using it to test out snippets of Perl code and examine Perl's behavior. We've looked at various command line switches, which make it easy for us to do complex things: loop over a file, change a file in place, check the syntax of a file or piece of code, and
+
+\noindent so on.
+
+\noindent 
+
+\noindent We've also doffed our cap to the Perl debugger, as well as some other ways to detect and remove bugs
+
+\noindent in our code. Now you're armed to do battle with any bugs that come your way -- and come they will!
+
+\noindent 
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent Take a look at the following file, apply what you've read about, and see if you can knock it into shape:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#buggy.plx
+
+\noindent 
+
+\noindent my \%hash;
+
+\noindent 
+
+\noindent until (/\^{}q/i) \{
+
+\noindent 
+
+\noindent print "What would you like to do? ('o' for options): "
+
+\noindent \$\_ = STDIN;
+
+\noindent 
+
+\noindent if (\$\_ eq "o")\{options\}elsif(\$\_ eq "r")\{read\}elsif(\$\_ eq "l")\{ list \}elsif
+
+\noindent (\$\_ eq "w")\{ write \}elsif (\$\_ eq "d") \{ delete \} elsif (\$\_ eq "x") \{ clear \}
+
+\noindent else \{ print "Sorry, not a recognized option.\textbackslash n"; \}
+
+\noindent 
+
+\noindent sub options \{
+
+\noindent print$<$$<$E0F
+
+\noindent Options available:
+
+\noindent o - view options
+
+\noindent r - read entry
+
+\noindent l - list all entries
+
+\noindent w - write entry
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent EOF;
+
+\noindent \}
+
+\noindent d - delete entry
+
+\noindent x - delete all entries
+
+\noindent 
+
+\noindent sub read \{
+
+\noindent my \$keyname = getkey();
+
+\noindent 
+
+\noindent if (exists \$hash\{"\$keyname"\}) \{
+
+\noindent print "Element '\$keyname' has value \$hash\{\$keyname\}";
+
+\noindent \} else \{
+
+\noindent print "Sorry, this element does not exist.\textbackslash n"\}\}
+
+\noindent 
+
+\noindent sub list \{foreach (sort keys(\%hash)) \{print "\$\_ =$>$ \$hash\{\$\_\}\textbackslash n";\}\}
+
+\noindent 
+
+\noindent sub write \{
+
+\noindent my \$keyname = getkey();
+
+\noindent my \$keyval = getval();
+
+\noindent if (exists \$hash\{\$keyname\}) \{print "Sorry, this element already exists.\textbackslash n"
+
+\noindent \} else \{\$hash\{\$keyname\}=\$keyval;\}\}
+
+\noindent 
+
+\noindent sub delete \{
+
+\noindent my \$keyname = getkey();
+
+\noindent if (exists \$hash\{\$keyname\}) \{
+
+\noindent print "This will delete the entry \$keyname.\textbackslash n";
+
+\noindent delete \$hash\{\$keyname\};\}\}
+
+\noindent 
+
+\noindent sub clear \{undef \%hash;\}
+
+\noindent 
+
+\noindent sub getkey \{print "Enter key name of element: "; chomp(\$\_ = $<$STDIN$>$);)
+
+\noindent 
+
+\noindent sub getval \{print "Enter value of element: "; chomp(\$\_ = $<$STDIN$>$);\}
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

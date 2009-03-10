@@ -1,0 +1,2040 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Modules
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent In Chapter 8, we divided our programs up into subroutines: functional units that help us organize our program. In this chapter, we'll look at modules, which are the next stage of division.
+
+\noindent 
+
+\noindent Very simply, a module is a package within a file. It's a collection of subroutines and variables, all belonging to the same package and stored away in its own file. While subroutines allow us to bundle up individual tasks, modules are more about bundling up an entire area of activity.
+
+\noindent 
+
+\noindent Perl comes with quite a large library of modules, which means there are quite a few tasks already coded. That's great for us, since it means we don't have to program them again -- we'll be taking a look at some of the more useful ones here. Modules were invented to help code reuse, and recycling your code is an excellent principle, and a good habit to get into.
+
+\noindent 
+
+\noindent In fact, reusing ready-made code is such a good idea that there's a whole archive of modules out there, each providing us with a set of subroutines -- a set of tools -- to work in a different area. Most of the publicly available Perl modules can to be found on CPAN, the 'Comprehensive Perl Archive Network'. Later in the chapter we'll see how to find what we want on CPAN, and how to install modules from there. We'll also have a look at how to use some of the major modules that reside there.
+
+\noindent 
+
+\noindent 
+
+\noindent Types of Module
+
+\noindent 
+
+\noindent Despite the fact that the modules you'll find out there can be on any subject under the sun, there are just a few standard ways in which they tend to be categorized. In fact, the CPAN Modules List classifies modules by subject area, development stage, where the support comes from, language used, and interface style. We'll use a slightly simpler classification here:
+
+\noindent 
+
+\noindent ? Pragmatic modules -- as we saw in Chapter 9, these alter the way Perl does certain things. Usually, they pass special information to the perl interpreter, which perl then uses internally.
+
+\noindent 
+
+\noindent ? Standard modules -- these make up the majority of modules out there and are purely Perl code. On the whole, they do things in a pretty standard way, which we'll examine later.
+
+\noindent ? Extension modules combine Perl with C (or other languages) to interface with either the operating system or third-party software.
+
+\noindent 
+
+\noindent There's a full list of both the pragmatic and standard modules installed with Perl in Appendix D.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent Why Do I Need Them?
+
+\noindent 
+
+\noindent Why should you use modules? The simple answer is that it saves time. If you need that program written yesterday, it's exceptionally handy to be able to pull down a bunch of modules that you know will do the job and then simply glue them together. There's not much creativity involved, and you don't learn a great deal doing it that way -- but in some cases, there's just not the time for creativity or learning.
+
+\noindent 
+
+\noindent The second answer is because programmers are lazy and don't like reinventing the wheel. Now, don't get me wrong -- there's good laziness and there's bad laziness. Bad laziness says 'I should get someone else to do this for me', whereas good laziness says 'Maybe someone's already done this.' The good kind pays off. Most of the programming you'll be doing, at some level, has been done before.
+
+\noindent 
+
+\noindent There's also the fact that, as we've seen in several cases already, some of the things we want to do are far from straightforward. Unless we really know what we're doing, we run the risk of making incorrect assumptions or overlooking details.
+
+\noindent 
+
+\noindent Modules that have been kicking around on CPAN for a while will have been used by thousands of individuals, many of whom will have spent time fixing bugs and returning the results to the maintainer. Most of the borderline cases will have been worked out by now, and you can be pretty confident that the modules will do things correctly. When it comes to parsing HTML or reading CGI forms, I'm perfectly willing to admit that the people who wrote HTML::Parser and the CGI modules have done more work on the subject that I have -- so I use their code, instead of trying to work out my own.
+
+\noindent 
+
+\noindent In short: don't reinvent the wheel -- use modules.
+
+\noindent 
+
+\noindent Including Other Files
+
+\noindent A module, as we've mentioned, is just a package stored in a file. We want to get perl to read that file and use it as part of our own program. We have three ways of doing this: do, require and use.
+
+\noindent 
+
+\noindent \textit{do}
+
+\noindent This is the most difficult of the three to understand; the others are just slightly varied forms of do.
+
+\noindent 
+
+\noindent do will look for a file by searching the @INC path (more on that later). If the file can't be found, it'll silently move on. If it is found, it will run the file just as if it was placed in a block within our main program -- but with one slight difference: we won't be able to see lexical variables from the main program once we're inside the additional code. So if we have a file dothis.plx:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# dothis.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my \$a = "Been there, done that, got the T-shirt";
+
+\noindent do "printit.plx";
+
+\noindent 
+
+\noindent and a file printit.plx:
+
+\noindent 
+
+\noindent print \$a;
+
+\noindent 
+
+\noindent 
+
+\noindent we'll get no output, not even a warning that \$a is uninitialized within printit.plx, because we didn't
+
+\noindent turn on warnings in our included file. On the other hand, we can have subroutines in our included file and call them from the main file.
+
+\noindent 
+
+\noindent \textit{require}
+
+\noindent require is like do, but it'll only do once. It'll record the fact that a file has been loaded and will ignore further requests to require it again. It also fails with an error if it can't find the file you're loading:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# cantload.plx use warnings; use strict;
+
+\noindent 
+
+\noindent require "nothere.plx";
+
+\noindent 
+
+\noindent will die with an error like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl cantload.plx}
+
+\noindent Can't locate nothere.plx in @INC (@INC contains: /usr/local/lib/perl5/5.6.0/cygwin
+
+\noindent /usr/local/lib/perl5/5.6.0 /usr/local/lib/perl5/site\_perl/5.6.0/cygwin /usr/local/lib/perl5/site\_perl/5.6.0
+
+\noindent /usr/local/lib/perl5/site\_perl .) at cantload.plx line 6.
+
+\noindent $>$
+
+\noindent 
+
+\noindent This is the @INC array, which contains a list of paths where Perl looks for modules and other additional files. The first two paths are where Perl keeps the standard library. The first includes the word cygwin, which is the operating system I'm running on and contains the parts of the library specific to this operating system. The second is the part of the standard library, which does not depend on the operating system. In Windows, these two libraries are C:/Perl/lib and C:/Perl/site/lib by default.
+
+\noindent 
+
+\noindent The next two paths are the local 'site' modules, which are third-party modules that we'll install from CPAN or create ourselves. The version number reminds us that these are modules specific to that version. The next path doesn't have a Perl version number in it, and that's for site modules that do not need a particular version of Perl. Finally, the . represents the current directory.
+
+\noindent 
+
+\noindent You can also use require like this:
+
+\noindent 
+
+\noindent 
+
+\noindent require Wibble;
+
+\noindent 
+
+\noindent Using a bareword tells perl to look for a file called Wibble.pm in the @INC path. It also converts any instance of :: into a directory separator. For instance, then:
+
+\noindent 
+
+\noindent 
+
+\noindent require Monty::Python;
+
+\noindent 
+
+\noindent will send perl looking for Python.pm in a directory called Monty which is itself in one of the directories given in @INC.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{use}
+
+\noindent The way we normally use modules is, logically enough, with the use statement. This is like require, except that perl applies it \textit{before }anything else in the program starts. If Perl sees a use statement
+
+\noindent \textit{anywhere }in your program, it'll include that module. So, for instance, you can't say this:
+
+\noindent 
+
+\noindent if (\$graphical) \{
+
+\noindent use MyProgram::Graphical;
+
+\noindent \} else \{
+
+\noindent use MyProgram::Text;
+
+\noindent \}
+
+\noindent 
+
+\noindent because when perl's reading your program, it will include \textit{both }modules -- the use takes place way before the value of \$graphical is decided. We say that use takes place at compile time and not at run time.
+
+\noindent 
+
+\noindent Changing @INC
+
+\noindent 
+
+\noindent The default contents of the search path @INC are decided when perl is compiled -- if we move those directories elsewhere, we'll have to recompile perl to get it working again. However, we can tell it to search in directories other than these. @INC is an ordinary array, so you might expect us to be able
+
+\noindent to say:
+
+\noindent 
+
+\noindent push @INC, "my/module/directory";
+
+\noindent use Wibble;
+
+\noindent 
+
+\noindent However, this isn't going to work. Why not? Well, remember that the statement above will execute at run time. Unfortunately the use statement takes place at compile time, well before that. No problem! There's a special subroutine called BEGIN, which is guaranteed execution at compile time, so we can put it there:
+
+\noindent 
+
+\noindent sub BEGIN \{
+
+\noindent push @INC, "my/module/directory";
+
+\noindent \}
+
+\noindent use Wibble;
+
+\noindent 
+
+\noindent Now that'll work just fine. However, it's a little messy, and what's more, there's an easier way to do
+
+\noindent it. We can use the lib pragma to add our directory to @INC before anything else gets a chance to look at it:
+
+\noindent 
+
+\noindent use lib "my/module/directory";
+
+\noindent use Wibble;
+
+\noindent 
+
+\noindent 
+
+\noindent Package Hierarchies
+
+\noindent We've already seen how packages can help us break up a namespace: \$Fred::name isn't the same variable as \$Barney::name. When modules come into play, packages are used to identify the module. Now our variables have a nice namespace, but our modules have to identify themselves by a single
+
+\noindent word. With several thousand modules out there, it gets hard to find the one we want. So the librarians at CPAN have come up with a solution: we split up the module package names into hierarchies. Instead of having tens of modules about sorting, we now have Sort::Fields, Sort::Versions, and so on.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{This hierarchy is only a naming scheme. It doesn't mean that Sort::Fields and}
+
+\noindent \textit{Sort::Versions are somehow related to a bigger package called Sort -- it's simply a way of making it easier to categorize modules.}
+
+\noindent 
+
+\noindent So how do we store these in files? Some operating systems won't let us have colons inside file names, so Sort::Versions.pm won't be legal. However, since these names represent a consistent hierarchy, there's a natural way we can organize them on the disk: as mentioned above, require and use
+
+\noindent translate colons into directory separators, so Sort::Versions will actually be stored in a file called
+
+\noindent Versions.pm in a directory called Sort somewhere off one of the site paths.
+
+\noindent 
+
+\noindent 
+
+\noindent Exporters
+
+\noindent 
+
+\noindent Since modules are usually packages stored in a file, a subroutine in the Text::Wrap module, for example, would normally be tucked away in the Text::Wrap package. However, let's say it would be
+
+\noindent more convenient for us to have this as a subroutine in the package we're currently in -- usually the main package. To do this, perl uses a module called Exporter, which provides it with a way of \textbf{importing }subroutines from the module into the caller's package. Here's how it works:
+
+\noindent 
+
+\noindent When you use a module, as well as reading and executing the code, perl will try and run a subroutine called import inside the module's package. If that's not found, nothing happens, and there's no error. If
+
+\noindent it is found, though, it's called with all the parameters given on the use line. So, for instance:
+
+\noindent 
+
+\noindent 
+
+\noindent use Wibble ("wobble", "bounce", "boing");
+
+\noindent 
+
+\noindent loads the Wibble module and then runs:
+
+\noindent 
+
+\noindent 
+
+\noindent Wibble::import("wobble", "bounce", "boing");
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Theoretically, this import subroutine could do anything. In fact, a few modules use it to let you pass parameters to setup the module. However, you'll usually want to use it to import subroutines and variables.}
+
+\noindent 
+
+\noindent 
+
+\noindent Exporter lets the modules that use it borrow a standard import subroutine. This subroutine checks a number of variables inside the module as well as the parameters that we give it. If we give an empty list, like this:
+
+\noindent 
+
+\noindent 
+
+\noindent use Wibble ();
+
+\noindent 
+
+\noindent then nothing will be imported. If there's a particular subroutine we want to use -- wobble() for example -- then we could call it as Wibble::wobble(), and we'll get it imported into our current
+
+\noindent package. We can only import subroutines that the module is prepared to export, and it'll detail those in
+
+\noindent a package variable called @EXPORT\_OK. So if, for instance, I wanted a to make a Wibble module from which we could import wobble(), bounce() and boing(), I'd say this:
+
+\noindent 
+
+\noindent 
+
+\noindent package Wibble; use warnings; use strict;
+
+\noindent 
+
+\noindent 
+
+\noindent use Exporter;
+
+\noindent our @ISA = qw(Exporter);
+
+\noindent our @EXPORT\_OK = qw(wobble bounce boing);
+
+\noindent 
+
+\noindent sub wobble \{ print "wobble\textbackslash n" \} sub bounce \{ warn  "bounce\textbackslash n" \} sub boing  \{ die "boing!\textbackslash n" \}
+
+\noindent 
+
+\noindent If we don't pass any parameters at all, we get the default subroutines, which are defined in @EXPORT. So
+
+\noindent if our module looked like this:
+
+\noindent 
+
+\noindent package Wibble; use warnings; use strict;
+
+\noindent 
+
+\noindent use Exporter;
+
+\noindent our @ISA = qw(Exporter);
+
+\noindent our @EXPORT\_OK = qw(wobble bounce boing);
+
+\noindent our @EXPORT = qw(bounce);
+
+\noindent 
+
+\noindent sub wobble \{ print "wobble\textbackslash n" \} sub bounce \{ warn  "bounce\textbackslash n" \} sub boing  \{ die "boing!\textbackslash n" \}
+
+\noindent 
+
+\noindent and we ran use Wibble; in our main program, we'd be able to call bounce() from the main
+
+\noindent program, but not wobble() or boing() -- we would have to call these as Wibble::wobble() and
+
+\noindent Wibble::boing().
+
+\noindent 
+
+\noindent We can also define tags with the \%EXPORT\_TAGS hash. This allows us to group together a bunch of subroutines or variables under a group name. For instance, the CGI module (which we'll be using in Chapter 12) allows us to say:
+
+\noindent 
+
+\noindent use CGI qw(:standard);
+
+\noindent 
+
+\noindent which will import all its most useful subroutines.
+
+\noindent 
+
+\noindent 
+
+\noindent The Perl Standard Modules
+
+\noindent 
+
+\noindent As we've mentioned, Perl comes with a number of modules included. Some of these (such as Socket)
+
+\noindent are system specific and generally used by higher-level modules -- some however, are useful on their
+
+\noindent own. You can find a list of all the standard modules in Appendix D. We'll take a quick look at some of the more useful and interesting ones here.
+
+\noindent 
+
+\noindent \textit{File::Find}
+
+\noindent We looked briefly at File::Find when we examined callbacks -- we'll see more of these in the final chapter. This   is a module for traversing directory trees, visiting each file in turn and running a
+
+\noindent subroutine (the callback) on them. We have two subroutines, find and finddepth. The former does a depth-first search (see Chapter 6), visiting directories only after their files have been processed. This is useful if, for example, you want to delete entire directory trees, since you're not usually permitted to
+
+\noindent delete a directory until you've deleted all the files in it.
+
+\noindent 
+
+\noindent 
+
+\noindent Why shouldn't you do this yourself? One of the problems is symbolic links: some operating systems
+
+\noindent have the ability to point one directory into another, which can create loops in the file system, in which you'll get stuck. The main reason, though, is that it involves a lot of work -- work that someone else has done already.
+
+\noindent 
+
+\noindent We call the subroutines with two parameters: the callback subroutine reference, and the directory (or a list of directories) to start from:
+
+\noindent 
+
+\noindent 
+
+\noindent find(\textbackslash \&wanted, "/home/simon/");
+
+\noindent 
+
+\noindent The subroutine works under the following conditions:
+
+\noindent 
+
+\noindent ? You are moved into the same directory as the file under consideration.
+
+\noindent 
+
+\noindent ? The current directory, relative to the top of the tree is held in \$File::Find::dir.
+
+\noindent 
+
+\noindent ? \$\_ contains the name of the current file.
+
+\noindent 
+
+\noindent ? \$File::Find::name is the name including the directory.
+
+\noindent 
+
+\noindent 
+
+\noindent With that, we can do anything. Do you remember, way back in Chapter 1, we wanted a program that would delete useless files? Here it is:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# hoover.plx
+
+\noindent use strict;
+
+\noindent use warnings;
+
+\noindent 
+
+\noindent use File::Find;
+
+\noindent find(\textbackslash \&cleanup, "/");
+
+\noindent 
+
+\noindent sub cleanup \{
+
+\noindent \# Not been accessed in six months?
+
+\noindent if (-A $>$ 180) \{
+
+\noindent print "Deleting old file \$\_\textbackslash n";
+
+\noindent unlink \$\_  or print "oops, couldn't delete \$\_: \$!\textbackslash n";
+
+\noindent return;
+
+\noindent \}
+
+\noindent open (FH, \$\_) or die "Couldn't open \$\_: \$!\textbackslash n";
+
+\noindent for (1..5) \{ \# You've got five chances.
+
+\noindent my \$line = $<$FH$>$;
+
+\noindent if (\$line =\~{} /Perl\textbar Simon\textbar important/i) \{
+
+\noindent \# Spare it.
+
+\noindent return;
+
+\noindent \}
+
+\noindent \}
+
+\noindent print "Deleting unimportant file \$\_\textbackslash n";
+
+\noindent unlink \$\_  or print "oops, couldn't delete \$\_: \$!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent You can of course alter this so it doesn't look for the words 'Perl', 'Simon' or 'important' in their first five
+
+\noindent lines and indeed so it doesn't look through and delete files from your entire directory structure.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Getopt::Std}
+
+\noindent We saw in Chapter 9 how the -s flag gave us a rudimentary way to get perl to pass command line options to our program -- it will take flags from the command line and let us access them as Perl variables with the same name (for example, -h becomes \$h). However, it had a few limitations:
+
+\noindent 
+
+\noindent ? We couldn't use -abc to mean the a flag, the b flag and the c flag.
+
+\noindent 
+
+\noindent ? We couldn't give values to flags.
+
+\noindent 
+
+\noindent ? We had to have all flags as global variables.
+
+\noindent 
+
+\noindent The Getopt::Long and Getopt::Std modules get us round all these problems and provide us with more flexibility besides. Getopt::Std is the simpler of the two, providing us with a way to get single- letter switches with values and support for clustered flags. We can also arrange to have the flags placed
+
+\noindent in a hash. For instance, to provide our wonderful 'Hello World' program (from Chapter 1) with help, a version identifier and (heavens above!) internationalization, we could do this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# hello3.plx
+
+\noindent \# Hello World (Deluxe)
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent use Getopt::Std;
+
+\noindent my \%options;
+
+\noindent getopts("vhl:",\textbackslash \%options);
+
+\noindent 
+
+\noindent if (\$options\{v\}) \{
+
+\noindent print "Hello World, version 3.\textbackslash n";
+
+\noindent exit;
+
+\noindent \} elsif (\$options\{h\}) \{
+
+\noindent print $<$$<$EOF;
+
+\noindent 
+
+\noindent \$0: Typical Hello World program
+
+\noindent 
+
+\noindent Syntax: \$0 [--h\textbar -v\textbar -l $<$language$>$]
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent EOF
+
+\noindent 
+
+\noindent -h : This help message
+
+\noindent -v : Print version on standard output and exit
+
+\noindent -l : Turn on international language support.
+
+\noindent 
+
+\noindent exit;
+
+\noindent \} elsif (\$options\{l\}) \{
+
+\noindent if (\$options\{l\} eq "french") \{
+
+\noindent print "Bonjour, tout le monde.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent die "\$0: unsupported language\textbackslash n";
+
+\noindent \}
+
+\noindent \} else \{
+
+\noindent print "Hello, world.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent getopts takes the following as its arguments: a specification, the letters we want to know about, and a hash reference. If we follow a letter with a colon, we expect that a value will be stored in the hash. If we don't use a colon, then the hash value stored is just true or false depending on whether or not the option was given. We can now get output like this:
+
+\noindent 
+
+\noindent 
+
+\noindent $>$\textbf{perl hello3.plx -l french}
+
+\noindent Bonjour, tout le monde.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Getopt::Std also produces a warning if it sees options it's not prepared for:
+
+\noindent 
+
+\noindent $>$\textbf{perl hello3.plx -f }Unknown option: f Hello, world.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{Getopt::Long}
+
+\noindent The Free Software Foundation, when they were developing the GNU project, decided that single-letter flags weren't friendly enough, so they invented 'long' flags. These use a double minus sign followed by a word. To give a value, you'd say something like --language=french.
+
+\noindent 
+
+\noindent The module Getopt::Long handles this style of options. Its documentation is extremely informative, but it's still useful to see an example. Let's convert the above program to GNU options:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# hellolong.plx
+
+\noindent \# Hello World (Deluxe) - with long flags
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent use Getopt::Long;
+
+\noindent my \%options;
+
+\noindent GetOptions(\textbackslash \%options, "language:s", "help", "version");
+
+\noindent 
+
+\noindent if (\$options\{version\}) \{
+
+\noindent print "Hello World, version 3.\textbackslash n";
+
+\noindent exit;
+
+\noindent \} elsif (\$options\{help\}) \{
+
+\noindent print $<$$<$EOF;
+
+\noindent 
+
+\noindent \$0: Typical Hello World program
+
+\noindent 
+
+\noindent Syntax: \$0 [---help\textbar --version\textbar --language=$<$language$>$]
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent EOF
+
+\noindent 
+
+\noindent --help : This help message
+
+\noindent --version  : Print version on standard output and exit
+
+\noindent --language : Turn on international language support.
+
+\noindent 
+
+\noindent exit;
+
+\noindent \} elsif (\$options\{language\}) \{
+
+\noindent if (\$options\{language\} eq "french") \{
+
+\noindent print "Bonjour, tout le monde.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent die "\$0: unsupported language\textbackslash n";
+
+\noindent \}
+
+\noindent \} else \{
+
+\noindent print "Hello, world.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent We can still use the previous syntax, but now we can also say:
+
+\noindent 
+
+\noindent $>$\textbf{perl hellolong.plx --language=french}
+
+\noindent Bonjour, tout le monde.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{File::Spec}
+
+\noindent If we want to write really portable programs in Perl, we have to be careful when doing things like dealing with file names. File::Spec is a module for handling, constructing and breaking apart file names. It's actually installed as an alias to another module: File::Spec::Unix, File::Spec::Win32, File::Spec::VMS, or whatever's relevant to the local system.
+
+\noindent 
+
+\noindent Normally it has an object-oriented interface, but it's much easier to use the subroutine interface,
+
+\noindent File::Spec::Functions. Here are some of the subroutines it provides:
+
+\noindent 
+
+\noindent \textbf{Function and Syntax Description}
+
+\noindent 
+
+\noindent canonpath (\textit{\$path}) Cleans up \textit{\$path }to its simplest form.
+
+\noindent catdir(\textit{\$directory1,}
+
+\noindent \textit{\$directory2})
+
+\noindent Concatenates the two directories together to form a new path to
+
+\noindent a directory, ensuring an appropriate separator in the middle and removing the separator from the end.
+
+\noindent catfile(\textit{\$directory, \$file}) Like catdir, but the path will end with a file name.
+
+\noindent tmpdir() Finds a writeable directory for temporary files (see the
+
+\noindent File::Temp module before working with temporary files!).
+
+\noindent splitpath(\$path) Splits up a path into volume (drive on Windows, nothing on
+
+\noindent UNIX), directories and filename.
+
+\noindent splitdir(\$path) Splits a path into its constituent directories: the opposite
+
+\noindent of catdir.
+
+\noindent path() Returns the search path for executable files.
+
+\noindent 
+
+\noindent So to find out if there's a copy of the dir program on this computer, I might do this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# whereisit.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent use File::Spec::Functions;
+
+\noindent foreach (path()) \{
+
+\noindent my \$test = catfile(\$\_,"dir");
+
+\noindent print "Yes, dir is in the \$\_  directory.\textbackslash n";
+
+\noindent exit;
+
+\noindent \}
+
+\noindent print "dir was not found here.\textbackslash n";
+
+\noindent 
+
+\noindent \textit{Benchmark}
+
+\noindent There's More Than One Way To Do It -- that's our motto. However, some ways are always going to be faster than others. How can you tell though? You could analyze each of the statements for efficiency, or you could simply roll your sleeves up and try it out.
+
+\noindent 
+
+\noindent 
+
+\noindent Our next module is for testing and timing code. Benchmark exports two subroutines: timethis and
+
+\noindent timethese, the first of which, timethis, is quite easy to use:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# benchtest.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent use Benchmark;
+
+\noindent my \$howmany = 10000;
+
+\noindent my \$what = q/my \$j=1; for (1..100) \{\$j*=\$\_\}/;
+
+\noindent 
+
+\noindent timethis(\$howmany, \$what);
+
+\noindent 
+
+\noindent So, we give it some code and a set number of times to run it. Make sure the code is in single quotes so that Perl doesn't attempt to interpolate it. You should, after a little while, see some numbers. These
+
+\noindent will, of course, vary depending on the speed of your CPU and how busy your computer is, but mine says this:
+
+\noindent 
+
+\noindent $>$\textbf{perl benchtest.plx}
+
+\noindent timethis 10000:  3 wallclock secs ( 2.58 usr +  0.00 sys =  2.58 CPU) @ 3871.47/s (n=10000)
+
+\noindent $>$
+
+\noindent 
+
+\noindent This tells us that we ran something 10,000 times, and it took 3 seconds of real time. These seconds were
+
+\noindent 2.58 spent in calculating ('usr' time) and 0 seconds interacting with the disk (or other non-calculating time). It also tells us that we ran through 3871.47 iterations of the test code each second.
+
+\noindent 
+
+\noindent To test several things and weigh them up against each other, we can use timethese. Instead of taking a string to represent code to be run, it takes an anonymous hash. The hash keys are names given to sections of the code, and the values are corresponding subroutine references, which we
+
+\noindent usually create anonymously.
+
+\noindent 
+
+\noindent To check the fastest way to read a file from the disk, we could do this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# benchtest2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent use Benchmark;
+
+\noindent my \$howmany = 100;
+
+\noindent 
+
+\noindent timethese(\$howmany, \{
+
+\noindent line =$>$ sub \{
+
+\noindent my \$file;
+
+\noindent open TEST, "words" or die \$!;
+
+\noindent while ($<$TEST$>$) \{ \$file .= \$\_  \}
+
+\noindent close TEST;
+
+\noindent \},
+
+\noindent slurp =$>$ sub \{
+
+\noindent my \$file;
+
+\noindent local undef \$/;
+
+\noindent open TEST, "words" or die \$!;
+
+\noindent \$file = $<$TEST$>$;
+
+\noindent close TEST;
+
+\noindent \},
+
+\noindent 
+
+\noindent 
+
+\noindent join =$>$ sub \{
+
+\noindent my \$file;
+
+\noindent open TEST, "words" or die \$!;
+
+\noindent \$file = join "", $<$TEST$>$;
+
+\noindent close TEST;
+
+\noindent \}
+
+\noindent \});
+
+\noindent 
+
+\noindent One way reads the file in a line at a time, one slurps the whole file in at once, and one joins the lines
+
+\noindent together. As you might expect, the slurp method is quite considerably faster:
+
+\noindent 
+
+\noindent Benchmark: timing 100 iterations of join, line, slurp...
+
+\noindent join: 42 wallclock secs (35.64 usr +  3.78 sys = 39.43 CPU) @  2.54/s (n=100) line: 37 wallclock secs (29.77 usr +  3.17 sys = 32.94 CPU) @  3.04/s (n=100) slurp:  6 wallclock secs ( 2.87 usr +  2.65 sys =  5.53 CPU) @ 18.09/s (n=100)
+
+\noindent 
+
+\noindent Also bear in mind that each benchmark will not only time differently between each machine and the next, but often between times you run the benchtest -- so \textit{don't }base your life around benchmark tests.
+
+\noindent If a pretty way to do it is a thousandth of a second slower than an ugly way to do it, choose the pretty
+
+\noindent one. If speed is really \textit{that }important to you, you should probably be programming in something other than Perl.
+
+\noindent 
+
+\noindent \textit{Win32}
+
+\noindent Those familiar with Windows' labyrinthine Win32 APIs will probably want to examine the libwin32
+
+\noindent modules. These all live in the Win32:: hierarchy (older versions may have some in the OLE:: hierarchy too, but this was moved to Win32::OLE::) and come as standard with ActiveState Perl. If you've compiled another Perl yourself on Windows, you can get a copy of the modules from CPAN -- we'll see how in a second.
+
+\noindent 
+
+\noindent These modules, which give you access to such things as Semaphores, Services, OLE, the Clipboard, and
+
+\noindent a whole bunch of other things besides, will probably be of most interest to existing Windows programmers. For the rest of us though, there are two modules that will be of particular use:
+
+\noindent 
+
+\noindent \textit{Win32::Sound}
+
+\noindent The first, Win32::Sound, lets us play with the sound subsystem -- we can play .wav files, set the speaker volume, and so on. We can also use it to play the standard system sounds.
+
+\noindent 
+
+\noindent Try It Out : Playing .wav Files
+
+\noindent 
+
+\noindent The following program will play all the .wav files in the current directory:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# wavplay.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent use Win32::Sound;
+
+\noindent 
+
+\noindent my \$wav;
+
+\noindent Win32::Sound::Volume(65535);
+
+\noindent opendir (DIR, ".") or die "Couldn't open directory: \$!";
+
+\noindent while (\$wav = readdir(DIR)) \{
+
+\noindent Win32::Sound::Play(\$wav);
+
+\noindent \}
+
+\noindent 
+
+\noindent You won't see any output, but if you're in a directory containing .wav files, you should certainly be able to hear some!
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The Win32::Sound module provides us with a number of subroutines:
+
+\noindent 
+
+\noindent \textbf{Function Description}
+
+\noindent 
+
+\noindent Win32::Sound::Volume(\textit{\$left, \$right}) Sets the left and right speaker volumes to the requested amount. If only \$left is given, both speakers are set to that volume. If neither is
+
+\noindent given, the current volume is returned. You can give the volume either as a percentage or a number from 0 to 65535.
+
+\noindent Win32::Sound::Play(\textit{\$name}) Plays the named sound file, or the named system sound. (for example, SystemStart)
+
+\noindent Win32::Sound::Format(\textit{\$filename}) Returns information about the format of the given sound file.
+
+\noindent Win32::Sound::Devices() Lists all the available sound-related devices on the system.
+
+\noindent Win32::Sound::DeviceInfo(\textit{\$device}) Provides information on the given sound device.
+
+\noindent 
+
+\noindent You can get a full list of the subroutines from the Win32::Sound documentation page if you have the
+
+\noindent module installed.
+
+\noindent 
+
+\noindent \textit{Win32::TieRegistry}
+
+\noindent Windows uses a centralized system database to store information about applications, users and its own state. This is called the \textbf{registry}, and we can get at it by using Perl's Win32::TieRegistry module. This just provides a convenient layer around the Win32::Registry module that is rather more technical in nature. Win32::TieRegistry transforms the Windows registry into a Perl hash.
+
+\noindent 
+
+\noindent The registry is a complicated beast, and revolves around a hierarchical tree structure like a hash of hashes or a directory. For instance, information about users' software is stored under HKEY\_CURRENT\_USER\textbackslash Microsoft\textbackslash Windows\textbackslash CurrentVersion\textbackslash . Now we can get to this particular part of the hash by saying the following:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# registry.plx use warnings; use strict;
+
+\noindent use Win32::TieRegistry (Delimiter =$>$ "/") ;
+
+\noindent 
+
+\noindent We load the module, and change the delimiter from a backslash to a forward slash so we don't end up drowning in a sea of backslashes:
+
+\noindent 
+
+\noindent my \$users = \$Registry-$>$
+
+\noindent \{HKEY\_CURRENT\_USER/Software/Microsoft/Windows/CurrentVersion/\};
+
+\noindent 
+
+\noindent Now we've got that key, we can dig further into the depths of the registry. This is where the Windows
+
+\noindent Explorer tips are stored:
+
+\noindent 
+
+\noindent my \$tips = \$users-$>$\{Explorer/Tips\};
+
+\noindent 
+
+\noindent 
+
+\noindent and from there we can add our own tips:
+
+\noindent 
+
+\noindent \$tips-$>$\{/186\} = "It's easy to use Perl as a Registry editor with the
+
+\noindent Win32::TieRegistry module.";
+
+\noindent 
+
+\noindent We can always delete them again, using ordinary hash techniques:
+
+\noindent 
+
+\noindent delete \$tips-$>$\{/186\};
+
+\noindent 
+
+\noindent Again, if you're after more information, it's available in the Win32::TieRegistry documentation, but I'd suggest you lay off reading that until you've digested the following chapter on object
+
+\noindent oriented Perl.
+
+\noindent 
+
+\noindent 
+
+\noindent CPAN
+
+\noindent 
+
+\noindent So far we've been looking at standard modules provided with most perl distributions. However, as we mentioned in the introduction, there's also a central repository for Perl modules -- collections of code that will do virtually any kind of job: the \textbf{Comprehensive Perl Archive Network}, or CPAN, which you can find on the web at http://www.cpan.org.
+
+\noindent 
+
+\noindent So before you ask 'how do I do...?' or start plugging away at any long task, it's always worth taking a quick look here to see if it's already been done. CPAN is searchable in plenty of different ways -- the most common are by keyword, by topic, or by module name. There are also a few CPAN search engines, but the easiest for browsing is probably the web-based CPAN search engine at http://search.cpan.org/. Alternatively, if you know what you're looking for, http://theory.uwinnipeg.ca/search/cpan-search.html is rather good too.
+
+\noindent 
+
+\noindent 
+
+\noindent This lets us look up modules by category, as well as searching for words in the modules' documentation.
+
+\noindent Once we've found a module that might do what we want, we follow a link to get further information on
+
+\noindent it and get ourselves a download. For example, this is what we get for the Archive::Tar module:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Now that we've seen how to find the modules we want, we're ready to look at the various ways in which
+
+\noindent we can install them.
+
+\noindent 
+
+\noindent Installing Modules with PPM
+
+\noindent 
+
+\noindent If you're using ActivePerl, module installation is made very simple by the \textbf{Perl Package Manager }(PPM). This is a useful little tool that's provided along with installations of ActivePerl, which allows us to install modules from the command line with the minimum of effort.
+
+\noindent 
+
+\noindent So without further ado, let's install the Net::FTP module. This is part of the 'libnet' bundle, a
+
+\noindent collection of modules which all relate to networking and which we'll be seeing again in Chapters 12 and
+
+\noindent 14. Installation is quite simple -- it involves installing the libnet bundle of which Net::FTP is a part.
+
+\noindent 
+
+\noindent 1.   Type \textbf{ppm }at the command line, this will give you the PPM prompt: PPM$>$
+
+\noindent 
+
+\noindent 2.   Now type \textbf{install libnet }-- you may be asked to confirm your request. If so type \textbf{y}.
+
+\noindent 
+
+\noindent 3.   If you have libnet already installed, you may be asked if you would like to modify/update your libnet configuration. You don't have to, so just type \textbf{no}.
+
+\noindent 
+
+\noindent 4.   Exit the PPM prompt by typing \textbf{quit}, and now you have Net::FTP installed, ready for the next couple of chapters.
+
+\noindent 
+
+\noindent 
+
+\noindent Installing a Module Manually
+
+\noindent 
+
+\noindent We'll now take a look at what's involved in doing the same installation for ourselves. If you search
+
+\noindent CPAN for the module Net::FTP, you should find yourself looking at the file libnet-
+
+\noindent 1.0702.tar.gz (unless there's a newer version out by the time you read this\dots ) Download and
+
+\noindent unpack this file. On UNIX systems, gzip -dc libnet-1.0702.tar.gz \textbar  tar -xvf should do the trick, while you can use Winzip to extract these files on Windows.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Note that you will encounter serious problems with the following procedures if you're running on Windows9x. This being the case, I'd suggest sticking with PPM if you have the option. For Windows NT and Windows 2000 users however, read on.}
+
+\noindent 
+
+\noindent Every module should contain a Makefile.PL, which can be used to generate the instructions to install the module. Let's run that file first:
+
+\noindent 
+
+\noindent $>$\textbf{perl Makefile.PL}
+
+\noindent Checking for Socket...ok
+
+\noindent Checking for IO::Socket...ok Checking if your kit is complete... Looks good
+
+\noindent Writing Makefile for Bundle::Libnet
+
+\noindent $>$
+
+\noindent 
+
+\noindent If you can't install in Perl's site directories because you don't have the appropriate permissions, run:
+
+\noindent 
+
+\noindent $>$\textbf{perl Makefile.PL PREFIX=/my/module/path}
+
+\noindent 
+
+\noindent and it will arrange for the module to be installed there. You should then be sure to add that directory to
+
+\noindent @INC in all of your programs that will be making use of it. You can do this in three ways:
+
+\noindent 
+
+\noindent ? use the lib pragma (as described above)
+
+\noindent 
+
+\noindent ? use the --I flag at the command line
+
+\noindent 
+
+\noindent ? modify the PERL5LIB environment variable
+
+\noindent 
+
+\noindent Makefile.PL first checks that we have all the modules it requires, and then that we've got everything
+
+\noindent we should have in the module archive itself -- a file called MANIFEST contains a list of what should be in the archive. As we saw in step 3 of installing Libnet with PPM, we get asked for information concerning our networking configuration. The default option for each question is in brackets, and we'll get that if we
+
+\noindent press return. You can answer them as best you can or leave the defaults intact and once it's done with the questions, we'll finally see the message:
+
+\noindent 
+
+\noindent Writing Makefile for Net
+
+\noindent 
+
+\noindent Now we're ready to type make -- assuming, of course, we have make on our system.
+
+\noindent 
+
+\noindent \textit{Windows users can download nmake from }http://download.microsoft.com/\textit{ download/vc15/Patch/1.52/W95/EN-US/Nmake15.exe. Just put it in one of your path directories and redirect the following calls from make to nmake.}
+
+\noindent 
+
+\noindent 
+
+\noindent We run make, and it creates a directory called blib, holding all the files that it'll eventually copy to
+
+\noindent the real installation directory:
+
+\noindent 
+
+\noindent $>$\textbf{make}
+
+\noindent mkdir blib mkdir blib/lib
+
+\noindent mkdir blib/arch
+
+\noindent mkdir blib/arch/auto mkdir blib/arch/auto/Net mkdir blib/lib/auto
+
+\noindent mkdir blib/lib/auto/Net
+
+\noindent 
+
+\noindent We run it again, and it now copies the files it needs to there:
+
+\noindent 
+
+\noindent $>$\textbf{make}
+
+\noindent cp Net/Config.pm blib/lib/Net/Config.pm
+
+\noindent cp Net/Domain.pm blib/lib/Net/Domain.pm cp Net/SMTP.pm blib/lib/Net/SMTP.pm
+
+\noindent cp Net/DummyInetd.pm blib/lib/Net/DummyInetd.pm cp Net/Time.pm blib/lib/Net/Time.pm
+
+\noindent cp Net/NNTP.pm blib/lib/Net/NNTP.pm
+
+\noindent cp Net/FTP/dataconn.pm blib/lib/Net/FTP/dataconn.pm cp Net/PH.pm blib/lib/Net/PH.pm
+
+\noindent cp Net/FTP/A.pm blib/lib/Net/FTP/A.pm
+
+\noindent cp Net/FTP/I.pm blib/lib/Net/FTP/I.pm cp libnet.cfg blib/lib/Net/libnet.cfg
+
+\noindent cp Net/POP3.pm blib/lib/Net/POP3.pm
+
+\noindent \dots 
+
+\noindent 
+
+\noindent Once that's done, we check to see if our module's working:
+
+\noindent 
+
+\noindent $>$\textbf{make test}
+
+\noindent PERL\_DL\_NONLAZY=1 /usr/local/bin/perl -Iblib/arch -Iblib/lib -I/usr/local/lib/pe rl5/5.6.0/cygwin -I/usr/local/lib/perl5/5.6.0 -e 'use Test::Harness qw(\&runtests
+
+\noindent \$verbose); \$verbose=0; runtests @ARGV;' t/*.t
+
+\noindent t/ftp...............ok t/hostname..........ok t/nntp..............ok t/ph................ok t/require...........ok t/smtp..............ok
+
+\noindent All tests successful
+
+\noindent Files=6, Tests=11, 10 wallclock secs ( 4.25 cusr +  4.19 csys =  8.44 CPU)
+
+\noindent $>$
+
+\noindent 
+
+\noindent Finally, we actually install it, moving the files from blib to the correct location, as stored in @INC:
+
+\noindent 
+
+\noindent $>$\textbf{make install}
+
+\noindent Installing /usr/local/lib/perl5/site\_perl/5.6.0/Net/Cmd.pm
+
+\noindent Installing /usr/local/lib/perl5/site\_perl/5.6.0/Net/Config.pm Installing /usr/local/lib/perl5/site\_perl/5.6.0/Net/Domain.pm Installing /usr/local/lib/perl5/site\_perl/5.6.0/Net/DummyInetd.pm
+
+\noindent Installing /usr/local/lib/perl5/site\_perl/5.6.0/Net/FTP.pm
+
+\noindent Installing /usr/local/lib/perl5/site\_perl/5.6.0/Net/libnet.cfg
+
+\noindent \dots 
+
+\noindent 
+
+\noindent 
+
+\noindent Hooray! The module's now installed.
+
+\noindent However, there's a much, much easier way of doing it.
+
+\noindent 
+
+\noindent The CPAN Module
+
+\noindent 
+
+\noindent Another easy way to navigate and install modules from CPAN is to use the standard module called CPAN. The 'CPAN Shell' is an extremely powerful tool for finding, downloading, building and installing modules.
+
+\noindent 
+
+\noindent Again, note that you will encounter serious problems with the following procedures if you're running on Windows9x. Windows NT/2000 users note also that this routine really doesn't like spaces in directory paths, but there is a fix, as follows:
+
+\noindent 
+
+\noindent In Windows Explorer, go to your\_perl\_install\_directory\textbackslash lib\textbackslash CPAN, and open the file
+
+\noindent Config.pm in your Perl editor. This is the CPAN module's systemwide configuration file and contains
+
+\noindent all the information the module needs to run. Scan down the list and if any of the paths to files contain spaces, you'll need to change them to their 8.3 format.
+
+\noindent 
+
+\noindent For example, let's say your copy of nmake.exe can be found at C:\textbackslash Program Files\textbackslash Microsoft Visual Studio\textbackslash vc98\textbackslash bin\textbackslash nmake.exe because you previously installed it with Visual C++. Unfortunately, this path has been copied to Config.pm which means the module itself looks for nmake
+
+\noindent in C:\textbackslash Program and of course doesn't find it. By changing the make entry in Config.pm from:
+
+\noindent 
+
+\noindent 'make' =$>$ q[C:\textbackslash Program Files\textbackslash Microsoft Visual Studio\textbackslash VC98\textbackslash bin\textbackslash nmake.EXE],
+
+\noindent 
+
+\noindent to
+
+\noindent 
+
+\noindent 'make' =$>$ q[C:\textbackslash Progra\~{}1\textbackslash Micros\~{}3\textbackslash VC98\textbackslash bin\textbackslash nmake.EXE],
+
+\noindent 
+
+\noindent the problem is solved.
+
+\noindent 
+
+\noindent Try It Out : Using the CPAN module
+
+\noindent 
+
+\noindent 
+
+\noindent To get into the CPAN shell, put:
+
+\noindent 
+
+\noindent $>$\textbf{perl --MCPAN --e shell}
+
+\noindent 
+
+\noindent This is actually just the same as saying:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use CPAN; shell();
+
+\noindent 
+
+\noindent The whole shell is actually a function in the (massively complex) CPAN module. The first time we run it, we'll see something like this:
+
+\noindent 
+
+\noindent /usr/local/lib/perl5/5.6.0/CPAN/Config.pm initialized.
+
+\noindent 
+
+\noindent 
+
+\noindent CPAN is the world-wide archive of perl resources. It consists of about
+
+\noindent 100 sites that all replicate the same contents all around the globe. Many countries have at least one CPAN site already. The resources
+
+\noindent found on CPAN are easily accessible with the CPAN.pm module. If you
+
+\noindent want to use CPAN.pm, you have to configure it properly.
+
+\noindent 
+
+\noindent If you do not want to enter a dialog now, you can answer 'no' to this question and I'll try to autoconfigure. (Note: you can revisit this
+
+\noindent dialog anytime later by typing 'o conf init' at the cpan prompt.) Are you ready for manual configuration? [yes]
+
+\noindent Press the \textit{Enter }key, and you'll be asked a series of questions about your computer and the nearest CPAN server. If you don't know, just keep hitting Enter through the answers. Eventually, you'll end up at a prompt like this:
+
+\noindent 
+
+\noindent cpan shell -- CPAN exploration and modules installation (v1.52) ReadLine support available (try "install Bundle::CPAN")
+
+\noindent 
+
+\noindent cpan$>$
+
+\noindent 
+
+\noindent Now we're ready to issue commands. The install command, as shown in the prompt, will download and install a module. For example, we could install the DBD::mysql module by simply saying
+
+\noindent 
+
+\noindent cpan$>$\textbf{install DBD::mysql}
+
+\noindent 
+
+\noindent Alternatively, we could get information on a module with the i command. Let's get some information on the MLDBM module, another module that we'll look into when we investigate databases:
+
+\noindent 
+
+\noindent cpan$>$\textbf{i MLDBM}
+
+\noindent Module id = MLDBM
+
+\noindent DESCRIPTION  Transparently store multi-level data in DBM CPAN\_USERID  GSAR (Gurusamy Sarathy $<$gsar@ActiveState.com$>$) CPAN\_VERSION 2.00
+
+\noindent CPAN\_FILE GSAR/MLDBM-2.00.tar.gz
+
+\noindent DSLI\_STATUS  RdpO (released,developer,perl,object-oriented) INST\_FILE (not installed)
+
+\noindent 
+
+\noindent So what does this tell us? Well, the module is called MLDBM, and there's a description of it. It was written by the CPAN author GSAR, who translates to Gurusamy Sarathy in the real world. It's at version 2.00, and it's stored on CPAN in the directory GSAR/MLDBM-2.00.tar.gz.
+
+\noindent 
+
+\noindent The funny little code thing is the CPAN classification, which we mentioned in the introduction. It
+
+\noindent tells us this module has been released (the implication being that it's been released for a while), that
+
+\noindent you should contact the developer if you need any support on it, that it's written purely in Perl without any extensions in C, and that it's object-oriented -- and finally, that we don't have it installed. So let's install it:
+
+\noindent 
+
+\noindent cpan$>$ \textbf{install MLDBM}
+
+\noindent 
+
+\noindent \textit{In fact, you don't even have to go into the shell to install a module. As well as exporting the shell}
+
+\noindent \textit{subroutine, CPAN provides us with install, with which we can simply say}
+
+\noindent \textbf{\textit{perl -MCPAN -e 'install "MLDBM"' }}\textit{to produce the same results.}
+
+\noindent 
+
+\noindent 
+
+\noindent You'll then see a few lines that will be specific to your computer. Different systems have different ways
+
+\noindent of downloading files and depend on whether or not you have the external programs lynx, ftp, or
+
+\noindent ncftp or the Perl Net::FTP module installed.
+
+\noindent 
+
+\noindent The CPAN module will download the file. Then, if you've got the Digest::MD5 module installed, it
+
+\noindent will download a special file called a checksum -- which provides a summary of that file so we make sure that what we've downloaded is what's on the server.
+
+\noindent 
+
+\noindent Checksum for /home/simon/.cpan/sources/authors/id/GSAR/MLDBM-2.00.tar.gz ok
+
+\noindent 
+
+\noindent Next, it'll unpack the file:
+
+\noindent 
+
+\noindent MLDBM-2.00/
+
+\noindent MLDBM-2.00/Makefile.PL MLDBM-2.00/t/
+
+\noindent MLDBM-2.00/t/storable.t
+
+\noindent MLDBM-2.00/t/freezethaw.t MLDBM-2.00/t/dumper.t MLDBM-2.00/lib/
+
+\noindent MLDBM-2.00/lib/MLDBM/
+
+\noindent MLDBM-2.00/lib/MLDBM/Serializer/
+
+\noindent MLDBM-2.00/lib/MLDBM/Serializer/Storable.pm MLDBM-2.00/lib/MLDBM/Serializer/FreezeThaw.pm MLDBM-2.00/lib/MLDBM/Serializer/Data/
+
+\noindent MLDBM-2.00/lib/MLDBM/Serializer/Data/Dumper.pm
+
+\noindent MLDBM-2.00/lib/MLDBM.pm MLDBM-2.00/Changes MLDBM-2.00/README MLDBM-2.00/MANIFEST
+
+\noindent 
+
+\noindent and then it will generate and run the Makefile:
+
+\noindent 
+
+\noindent CPAN.pm: Going to build GSAR/MLDBM-2.00.tar.gz
+
+\noindent 
+
+\noindent Checking if your kit is complete... Looks good
+
+\noindent Writing Makefile for MLDBM
+
+\noindent mkdir blib mkdir blib/lib mkdir blib/arch
+
+\noindent mkdir blib/arch/auto
+
+\noindent mkdir blib/arch/auto/MLDBM
+
+\noindent mkdir blib/lib/auto
+
+\noindent mkdir blib/lib/auto/MLDBM
+
+\noindent cp lib/MLDBM/Serializer/FreezeThaw.pm blib/lib/MLDBM/Serializer/FreezeThaw.pm cp lib/MLDBM.pm blib/lib/MLDBM.pm
+
+\noindent cp lib/MLDBM/Serializer/Storable.pm blib/lib/MLDBM/Serializer/Storable.pm
+
+\noindent cp lib/MLDBM/Serializer/Data/Dumper.pm blib/lib/MLDBM/Serializer/Data/Dumper.pm
+
+\noindent /usr/local/bin/make  -- OK
+
+\noindent 
+
+\noindent Once that's successful, it'll test the module out:
+
+\noindent 
+
+\noindent 
+
+\noindent Running make test
+
+\noindent PERL\_DL\_NONLAZY=1 /usr/local/bin/perl -Iblib/arch -Iblib/lib -I/usr/local/lib/perl5/5.6.0/cygwin - I/usr/local/lib/perl5/5.6.0 -e 'use Test::Harness qw(\&runtests
+
+\noindent \$verbose); \$verbose=0; runtests @ARGV;' t/*.t
+
+\noindent t/dumper............ok
+
+\noindent t/freezethaw........skipped test on this platform t/storable..........skipped test on this platform
+
+\noindent All tests successful, 2 tests skipped.
+
+\noindent Files=3, Tests=4,  4 wallclock secs ( 1.29 cusr +  1.52 csys =  2.81 CPU)
+
+\noindent /usr/local/bin/make test -- OK
+
+\noindent 
+
+\noindent and finally install it:
+
+\noindent 
+
+\noindent Running make install
+
+\noindent Installing /usr/local/lib/perl5/site\_perl/5.6.0/MLDBM.pm
+
+\noindent Installing /usr/local/lib/perl5/site\_perl/5.6.0/MLDBM/Serializer/FreezeThaw.pm Installing /usr/local/lib/perl5/site\_perl/5.6.0/MLDBM/Serializer/Storable.pm Installing /usr/local/lib/perl5/site\_perl/5.6.0/MLDBM/Serializer/Data/Dumper.pm Writing /usr/local/lib/perl5/site\_perl/5.6.0/cygwin/auto/MLDBM/.packlist Appending installation info to /usr/local/lib/perl5/5.6.0/cygwin/perllocal.pod
+
+\noindent /usr/local/bin/make install  -- OK
+
+\noindent 
+
+\noindent cpan$>$
+
+\noindent 
+
+\noindent Successfully installed, and with the minimum of effort!
+
+\noindent 
+
+\noindent How about if we don't actually know the name of the module we're looking for? Well, CPAN lets us use
+
+\noindent a regular expression match to locate modules. For instance, if we're about to do some work involving
+
+\noindent MIDI electronic music files, we could search for 'MIDI'. This is what we might see:
+
+\noindent 
+
+\noindent cpan$>$\textbf{i /MIDI/}
+
+\noindent Distribution F/FO/FOOCHRE/MIDI-Realtime-0.01.tar.gz
+
+\noindent Distribution S/SB/SBURKE/MIDI-Perl-0.75.tar.gz
+
+\noindent Module MIDI (S/SB/SBURKE/MIDI-Perl-0.75.tar.gz)
+
+\begin{tabular}{|p{0.7in}|p{0.7in}|p{1.6in}|} \hline 
+Module & MIDI::Event & (S/SB/SBURKE/MIDI-Perl-0.75.tar.gz) \\ \hline 
+Module & MIDI::Opus & (S/SB/SBURKE/MIDI-Perl-0.75.tar.gz) \\ \hline 
+\end{tabular}
+
+Module MIDI::Realtime  (F/FO/FOOCHRE/MIDI-Realtime-0.01.tar.gz)
+
+\begin{tabular}{|p{0.7in}|p{0.7in}|p{1.5in}|} \hline 
+Module & MIDI::Score & (S/SB/SBURKE/MIDI-Perl-0.75.tar.gz) \\ \hline 
+Module & MIDI::Simple & (S/SB/SBURKE/MIDI-Perl-0.75.tar.gz) \\ \hline 
+Module & MIDI::Track & (S/SB/SBURKE/MIDI-Perl-0.75.tar.gz) \\ \hline 
+\end{tabular}
+
+
+
+\noindent 'Distributions' are archive files: zips or tar.gz files containing one or more Perl modules. We see that
+
+\noindent MIDI-Realtime contains just the MIDI::Realtime module, and Sean Burke's MIDI-Perl contains
+
+\noindent a few more modules, so perhaps we'd check that one out.
+
+\noindent 
+
+\noindent Bundles
+
+\noindent 
+
+\noindent Some modules depend on other modules being installed. For instance, the Win32::TieRegistry module needs Win32::Registry to do the hard work of getting at the registry. If you're downloading packages from CPAN manually, you'll have to try each package, find out what's missing and download another repeatedly until you've got everything you need. The CPAN module does a lot of this work for
+
+\noindent you. It can detect dependencies in packages and download and install everything that's missing.
+
+\noindent 
+
+\noindent 
+
+\noindent This is fine for making sure that things work, but as well as \textit{needing }other modules, some merely \textit{suggest}
+
+\noindent other modules. For instance, the CPAN module itself works fine with nothing other than what's in the core, but if you have Term::Readline installed, it gives you a much more flexible prompt, with tab- completion, a command history meaning you can use the up and down arrows to scroll through
+
+\noindent previous commands, and other niceties.
+
+\noindent 
+
+\noindent Enter \textbf{bundles }-- collections of packages that go well together. The CPAN bundle, Bundle::CPAN, for instance, contains various modules that make the CPAN shell easier to use: Term::ReadLine as we mentioned above, Digest::MD5 for security checking the files downloaded, some Net:: modules to make network communication with the CPAN servers nicer, and so on.
+
+\noindent 
+
+\noindent We'll now look here at two particularly useful bundles, which contain modules that I personally
+
+\noindent wouldn't go \textit{anywhere }without.
+
+\noindent 
+
+\noindent \textit{Bundle::LWP}
+
+\noindent Bundle::LWP contains modules for \textit{everything }to do with the Web. It has modules for dealing with HTML, HTTP, MIME types, handling URLs, downloading and mirroring remote web sites, creating web spiders and robots more advanced than our earlier webchecker program in Chapter 8, and so on.
+
+\noindent 
+
+\noindent The main chunk of the bundle is the LWP (libwww-perl) distribution, containing the modules for getting remote web sites. Back in Chapter 8, I mentioned that you could use LWP::Simple to get a get subroutine. Let's have a look at what else it gives us.
+
+\noindent 
+
+\noindent This module will export five subroutines to our current package.
+
+\noindent 
+
+\noindent ? The \textbf{get }subroutine does exactly what we were previously trying to do with lynx -- fetch a web site and return you the underlying HTML. However, this subroutine knows all about proxies, error codes, and the other things that we didn't properly check for:
+
+\noindent 
+
+\noindent \$file = get("http://www.perl.com/");
+
+\noindent 
+
+\noindent ? The \textbf{head }subroutine fetches the header of the site and returns a few headers: what type of document the page is (it's usually going to be text/html) how big it is in bytes, when it was last modified, when it should be regarded as old (these are both UNIX times suitable for
+
+\noindent feeding to localtime) and what the server has to say about itself. Some servers may not return all these headers:
+
+\noindent 
+
+\noindent (\$content\_type, \$document\_length, \$modified\_time, \$expires, \$server) =
+
+\noindent head("http://www.perl.com/");
+
+\noindent 
+
+\noindent The next three routines are all quite similar in that they all involve retrieving an HTML page.
+
+\noindent 
+
+\noindent ? The first, \textbf{getprint}, retrieves the HTML file and then prints it out to standard output --
+
+\noindent useful if you're redirecting to a file or using a filter as some sort of HTML formatter. You can copy a web page to a local file like this:
+
+\noindent 
+
+\noindent getprint("http://www.perl.com/");
+
+\noindent 
+
+\noindent ? Alternatively, you can use the \textbf{getstore }subroutine to store it to a file:
+
+\noindent 
+
+\noindent perl --MLWP::Simple --e
+
+\noindent 'getprint("http://www.perl.com/")' $>$ perlpage.html
+
+\noindent 
+
+\noindent 
+
+\noindent ? Finally, \textbf{mirror }is like getstore, except it checks to see if the remote site's page is newer
+
+\noindent than the one we've already got:
+
+\noindent 
+
+\noindent perl --MLWP::Simple --e
+
+\noindent 'getstore("http://www.perl.com/","perlpage.html")'
+
+\noindent 
+
+\noindent Bundle::LWP functions as a standard exporter, so, as we saw earlier in the chapter, we can prevent any of the five being pulled into our namespace by saying use LWP::Simple() -- if you've already
+
+\noindent got a subroutine called get defined, this may be a good idea for example. Be sure to read the main LWP
+
+\noindent documentation and the lwpcook page which contains a few ideas for things to do with LWP.
+
+\noindent 
+
+\noindent \textit{Bundle::libnet}
+
+\noindent Similarly, Bundle::libnet contains a bunch of stuff for dealing with the network, although it's not nearly as big as LWP. The modules in Bundle::libnet and its dependencies allow you to use FTP, telnet, SMTP mail, and other network protocols. These are object-oriented modules, and we'll be
+
+\noindent looking at them some more in the next chapter.
+
+\noindent 
+
+\noindent Submitting Your Own Module to CPAN
+
+\noindent 
+
+\noindent CPAN contains almost everything you'll ever need. Almost. There'll surely come a day when you're faced with a problem where no known module can help you. If you think it's a sufficiently general problem that other people are going to come across, why not consider making your solution into a module and submitting it to CPAN? Think of it as a way of giving something back to the community that gave you all this\dots 
+
+\noindent 
+
+\noindent Seriously, if you do have something you think would be useful to others, there are a few things you need
+
+\noindent to do to get it to CPAN. It will require a reasonable amount of work, and you may want to leave it until you've finished this book and had a look at the next book in our series, Professional Perl (\textit{Due out October}
+
+\noindent \textit{2000 at time of publication -Ed}). Here's what you should do, though:
+
+\noindent 
+
+\noindent ? Check it's not been written before. Search CPAN. Look at the main modules list at http://www.cpan.org/modules/00modlist.long.html -- there's also a lot of good advice about how to lay out and prepare your module there.
+
+\noindent ? Read the perlmod and perlmodlib documentation pages until you really understand them.
+
+\noindent ? Learn about the Carp module, and use carp and croak instead of warn and die.
+
+\noindent ? Learn about the Test module and how to produce test suites for modules.
+
+\noindent ? Learn about documenting your modules in POD, Plain Old Documentation.
+
+\noindent ? Look at the source to a few simple modules like Text::Wrap and Text::Tabs to get a feel
+
+\noindent of how modules are written.
+
+\noindent ? Take a deep breath, and issue the following command:
+
+\noindent 
+
+\noindent $>$\textbf{h2xs -AXn Your::Module::Name}
+
+\noindent 
+
+\noindent ? Edit the files produced, remembering to create a test suite and provide really good documentation.
+
+\noindent ? Run \textbf{perl Makefile.PL }and then \textbf{make}.
+
+\noindent 
+
+\noindent Your module's now ready to ship!
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Modules save you time. Modules do things well. In essence, a module is just a package stored in a file, which we load with the use statement. We can load in other Perl code from files, using require or do, but use also calls the module's import subroutine, so that modules that want to can use Exporter to move subroutines into our package.
+
+\noindent 
+
+\noindent Perl provides a number of standard modules. You can check out the full list in Appendix D, and you can get documentation on each and every one by running perldoc. We looked briefly at File::Find (for examining files in directory trees), the Getopt modules (for reading options from
+
+\noindent the command line), the File::Spec::Functions module (for portable filename handling), the
+
+\noindent Benchmark module (for timing and testing code), and the Win32 modules (for access to the Windows system and registry).
+
+\noindent 
+
+\noindent CPAN is the Comprehensive Perl Archive Network. It's a repository of good code. You can search it
+
+\noindent from http://search.cpan.org/ or use the Perl module CPAN for easy searching and installation. The CPAN
+
+\noindent module has the advantage of knowing about file dependencies and can therefore download and install files in the correct order.
+
+\noindent 
+
+\noindent Bundles provide sets of related modules. We looked at LWP::Simple (from the libwww bundle), and we'll look more at the libnet bundle in our chapter on networking. Finally, we looked at some of
+
+\noindent what's involved in abstracting your code and putting it into a module.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

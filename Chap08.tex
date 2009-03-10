@@ -1,0 +1,3387 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Subroutines
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent When programming, there'll naturally be processes you want to do again and again: adding up the values in an array, stripping extraneous blank spaces from a string, getting information into a hash in a particular format, and so on. It would be tedious to write out the code for each of these little processes every time we need to use one, and it would be horrific to maintain too: if there are bugs in the way we've specified it, we'll have to go through and find each one of them and fix it. It would be better if we could define a particular process just once, and then be able to call on that just like we've been calling on Perl's built-in operators.
+
+\noindent 
+
+\noindent This is exactly what \textbf{subroutines }allow us to do. Subroutines (or just \textbf{subs}) give us the ability to give a name to a section of code. Then when we need to use that code in our program, we just call it by name.
+
+\noindent 
+
+\noindent Subroutines help our programming for two main reasons. First, they let us reuse code, as we've described above. This makes it easier to find and fix bugs and makes it faster for us to write programs. The second reason is that they allow us to chunk our code into organizational sections. Each subroutine can, for example, be responsible for a particular task.
+
+\noindent 
+
+\noindent So, when is it appropriate to use subroutines in Perl? I would say there would be two cases when a piece of code should be put into a subroutine: first, when you know it will be used to perform a calculation or action that's going to happen more than once. For instance, putting a string into a specific format, printing the header or footer of a report, turning an incoming data record into a hash, and so on.
+
+\noindent 
+
+\noindent One thing we'll see later on is that we can use subroutines in a similar way to the way we've been using Perl's built-in operators. We can give them arguments and get scalars and lists returned to us.
+
+\noindent 
+
+\noindent Second,  if there are logical units  of  your  program  that  you  want  to  break  up  to  make your  program easier to  understand.  I can imagine  few  things  worse  than  debugging  several  thousand  lines  of  Perl that are not  broken up  in any  way (well,  maybe  one  or  two  things).  As  an  extreme  example, sometimes -- and only  sometimes  --  I  like  to  have  a  'main  program',  which  consists  entirely  of  calls
+
+\noindent to  subroutines,  like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use warnings; use strict;
+
+\noindent 
+
+\noindent setup(); get\_input(); process\_input(); output();
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent This  immediately shows me the structure of my program. Each of those four subroutines would, of course, have to be defined, and they'd probably call on other subroutines themselves. This allows us to partition up our programs, to change our single, monolithic piece of code into manageable chunks for ease of understanding, ease of debugging, and ease of maintaining the program.
+
+\noindent 
+
+\noindent The 'Difference' Between Functions and Subroutines
+
+\noindent 
+
+\noindent Instead of the term 'subroutine', you're sure to come across the word 'function' many times as you deal with Perl and Perl resources. So let's have a look at the difference between 'function', 'subroutine', and 'operator'. The problem is that other programming languages use the terms ever so slightly differently.
+
+\noindent 
+
+\noindent \textit{Usually}
+
+\noindent In most programming languages, and in computer science in general, the following definitions apply:
+
+\noindent 
+
+\noindent ? A \textbf{function }is something that takes a number of arguments (possibly zero), does something with them, and returns a value. A function can either be built into the programming language or it can be supplied by the user.
+
+\noindent 
+
+\noindent ? An \textbf{operator }is a function that is usually represented by a symbol rather than a name and is almost always built into the programming language.
+
+\noindent 
+
+\noindent ? A \textbf{subroutine }is some code provided by the user that performs an action and doesn't return a value. Unfortunately, languages like C have functions that can return nothing. These 'void functions' could be called subroutines -- but they're not. That's life.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{In Perl}
+
+\noindent Because some people who know other languages use the usual terms, Perl's definitions are a little confusing:
+
+\noindent 
+
+\noindent ? If someone mentions a \textbf{function }in Perl, they almost certainly mean something built into Perl.
+
+\noindent However, they might be coming from C and mean a subroutine. The main reference documentation for Perl built-ins is called perlfunc. You can also find the complete list in Appendix C.
+
+\noindent 
+
+\noindent ? An \textbf{operator }in Perl can have a name instead of a symbol, so it can look very much like a function. Hence, some people tend to use the terms interchangeably. Those built-ins that have symbols instead of names are documented in perlop, which also refers to 'named operators'. perl itself speaks about the 'print operator', so we've used that terminology in this book. However, you're equally likely to hear Perl people talk about 'the print function'.
+
+\noindent 
+
+\noindent ? \textbf{Subroutines }in Perl are akin to C's functions -- they are sections of code that can take
+
+\noindent arguments, perform some operations with them, and may return a meaningful value, but don't have to. However, they're always user-defined rather than built-ins:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Simply put: Subroutines are chunks of code you give Perl; Functions and Operators}
+
+\noindent \textbf{are things that Perl provides.}
+
+\noindent 
+
+\noindent 
+
+\noindent Understanding Subroutines
+
+\noindent 
+
+\noindent Now we know what subroutines are, it's time to look at how to define them and how to use them. First, we'll learnhow to create subroutines.
+
+\noindent 
+
+\noindent Defining a Subroutine
+
+\noindent 
+
+\noindent So,  we can  give Perl some code,  and  we  can  give  it  a  name,  and that's  our subroutine.  Here's  how
+
+\noindent we do it:
+
+\noindent 
+
+\noindent 
+
+\noindent sub marine \{
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent There are three sections to this declaration:
+
+\noindent 
+
+\noindent ? The keyword sub. This is case-sensitive and needs to be in lower case.
+
+\noindent 
+
+\noindent ? The name we're going to give it. The rules for naming a subroutine are exactly those for naming variables; names must begin with an alphabetic character or an underscore, to be followed by one or more alphanumerics or underscores. Upper case letters are allowed, but we tend to reserve all-uppercase names for special subroutines. And again, as for variables, you can have a scalar \$fred, an array @fred, a hash \%fred, a filehandle fred, and a subroutine fred, and they'll all be distinct.
+
+\noindent 
+
+\noindent ? A block of code delimited by curly brackets, just as we saw when we were using while and
+
+if. Notice that we don't need a semicolon after the closing brace. After we've done that, we can use our subroutine.
+
+\noindent Before we go any further, it's worth taking a quick time out to ponder how we name our subroutines.
+
+\noindent You can convey a lot about a subroutine's purpose with its name, much like that of a variable. Here are some guidelines -- not hard-and-fast rules -- about how you should name subroutines.
+
+\noindent 
+
+\noindent ? If they're primarily about performing an activity, name them with a verb, for example,
+
+\noindent summarize or download.
+
+\noindent 
+
+\noindent ? If they're primarily about returning information, name them after what they return, for example, greeting or header.
+
+\noindent 
+
+\noindent ? If they're about testing whether a statment is true or not, give them a name that makes sense
+
+\noindent in an if statement; starting with is\_\dots  or can\_\dots  helps, or if that isn't appropriate, name them with an adjective: for example, is\_available, valid, or readable.
+
+\noindent 
+
+\noindent ? Finally, if you're converting between one thing and another, try and convey both things.
+
+\noindent Traditionally this is done with an 2 or \_to\_ in the middle: text2html, metres\_to\_feet. That way you can tell easily what's being expected and what's being produced.
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Version Information
+
+\noindent 
+
+\noindent It's traditional for programs to  tell  you  their  version  and  name  either  when  they  start  up  or  when
+
+\noindent you  ask them with  a special option.  It's  also  convenient  to  put the  code  that  prints  this  information into  a subroutine to  get it out  of the  way.  Let's  take  our  very  first  program  and update  it  for  this traditional practice.
+
+\noindent 
+
+\noindent Here's what we  started with, version 1:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use warnings;
+
+\noindent print "Hello, world.\textbackslash n";
+
+\noindent 
+
+\noindent And here it is with warnings and strict modes turned on and version information:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# hello2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent sub version \{
+
+\noindent print "Beginning Perl's \textbackslash "Hello, world.\textbackslash " version 2.0\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent my \$option = shift;
+
+\noindent version if \$option eq "-v" or \$option eq "--version";
+
+\noindent print "Hello, world.\textbackslash n";
+
+\noindent 
+
+\noindent Now, we're starting to look like a real utility:
+
+\noindent 
+
+\noindent $>$\textbf{perl hello2.plx -v}
+
+\noindent Beginning Perl's "Hello, world." version 2.0
+
+\noindent Hello, world.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent As before, we have the sub keyword, a name, version, and then the block of code. We've defined the
+
+\noindent version subroutine as follows:
+
+\noindent 
+
+\noindent sub version \{
+
+\noindent print "Beginning Perl's \textbackslash "Hello, world.\textbackslash " version 2.0\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent It's a simple block of code that calls the print statement. It didn't have to -- it could have done anything. Any code that's valid in the main program is valid inside a subroutine, including:
+
+\noindent 
+
+\noindent ? Calling other subroutines
+
+\noindent 
+
+\noindent ? Calling the current subroutine again -- see the section 'Recursion' at the end of the chapter on this very subject.
+
+\noindent 
+
+\noindent We call this block the \textbf{body }of the subroutine, just like we had the body of a loop; similarly, it stretches from the open curly bracket after the subroutine name to the matching closing bracket.
+
+\noindent 
+
+\noindent 
+
+\noindent Now we've defined it, we can use it. We just give the name, and Perl runs that block of code, albeit with
+
+\noindent the proviso that we've added the right flag on the command line:
+
+\noindent 
+
+\noindent version if \$option eq "-v" or \$option eq "--version";
+
+\noindent 
+
+\noindent When it's finished doing version, it comes back and carries on with the next statement:
+
+\noindent 
+
+\noindent print "Hello, world.\textbackslash n";
+
+\noindent 
+
+\noindent No doubt version th3ree will address the warnings that Perl gives if you call this program without appending -v or --version to its name.
+
+\noindent 
+
+\noindent Order of Declaration
+
+\noindent 
+
+\noindent If we just call our subroutines by name, as we did above, we're forced to declare them before we use them. This may not sound much of a limitation, but there are times when we'll want to declare our
+
+\noindent subroutines after the main part of the program. In fact, that's the usual way to structure a program. This
+
+\noindent is because when you open up the file in your editor, you can see what's going on right there at the top of the file, without having to scroll through a bunch of definitions first. Take the extreme example at the beginning of this chapter:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use warnings; use strict;
+
+\noindent 
+
+\noindent setup(); get\_input(); process\_input(); output();
+
+\noindent 
+
+\noindent That would then be followed, presumably, by something like this:
+
+\noindent 
+
+\noindent sub setup \{
+
+\noindent print "This is some program, version 0.1\textbackslash n";
+
+\noindent print "Opening files...\textbackslash n";
+
+\noindent open\_files();
+
+\noindent print "Opening network connections...\textbackslash n";
+
+\noindent open\_network();
+
+\noindent print "Ready!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent sub open\_files \{
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent That's far easier to understand than trawling through a pile of subroutines before getting to the four lines that constitute our main program. It also encourages the 'top-down' school of programming.
+
+\noindent 
+
+\noindent \textit{Traditional programming methodology, which I've been using here, states that we should start at the highest level of our program and break it down into smaller and smaller problems -- starting at the}
+
+\noindent \textit{top and working down. There's also a bottom-up school of thought that dictates you should write}
+
+\noindent \textit{your basic operations first, then glue them together. There's even been the suggestion of a 'middle-}
+
+\noindent \textit{out' style that starts at a middle layer and adds smaller operations and higher-level structure at the same time. I encourage you to start with top-down programming until something else becomes}
+
+\noindent \textit{natural.}
+
+\noindent 
+
+\noindent 
+
+\noindent However, in order to get this to work, we need to provide hints to Perl as to what we're doing. That's
+
+\noindent why the calls to subroutines above have a pair of brackets around them: setup(), open\_files(), and so on. This helps to tell Perl that it should be looking for a subroutine somewhere instead of referring to a filehandle or anything else it could have been. What happens if we don't do this?
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subdecl.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent setup;
+
+\noindent sub setup \{
+
+\noindent print "This is some program, version 0.1\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent $>$\textbf{perl subdec1.plx}
+
+\noindent Bareword "setup" not allowed while "strict subs" in use at subdecl.plx line 6. Execution of subdec1.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Perl didn't know  what we meant  at  the  time,  so  it  complained.  To  tell  it  we're  talking  about a subroutine,  we use  brackets,  just  like  when  we want  the  parameters  to  an  operator  like print to
+
+\noindent be unambiguous.
+
+\noindent 
+
+\noindent There's another way we can tell Perl that we're going to refer to a subroutine and that's to provide a \textbf{forward definition }-- also known as \textbf{pre-declaring }the subroutine. This means 'we're not going to define this right now, but look out for it later.'
+
+\noindent 
+
+\noindent We do this by just saying sub NAME;. Note that this does require a semicolon at the end. Here's another way of writing the above:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use warnings; use strict;
+
+\noindent sub setup; sub get\_input; sub process\_input; sub output;
+
+\noindent sub open\_files; sub open\_network;
+
+\noindent ...
+
+\noindent 
+
+\noindent From now on, we can happily use the subroutines without the brackets:
+
+\noindent 
+
+\noindent setup; get\_input; process\_input; output;
+
+\noindent 
+
+\noindent sub setup \{
+
+\noindent print "This is some program, version 0.1\textbackslash n";
+
+\noindent print "Opening files...\textbackslash n";
+
+\noindent open\_files;
+
+\noindent print "Opening network connections...\textbackslash n";
+
+\noindent open\_network;
+
+\noindent print "Ready!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent sub open\_files \{
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Alternatively, you can ask Perl to provide the forwards for you. If we say use subs (\dots ), we can
+
+\noindent provide a list of subroutine names to be pre-declared:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use warnings; use strict;
+
+\noindent use subs qw(setup get\_input process\_input output pen\_files open\_network);
+
+\noindent ...
+
+\noindent 
+
+\noindent Personally, however, I tend to leave in the brackets to remind me I'm dealing with subroutines. You may also see yet another way of calling subroutines:
+
+\noindent 
+
+\noindent \&setup;
+
+\noindent \&get\_input;
+
+\noindent \&process\_input;
+
+\noindent \&output;
+
+\noindent 
+
+\noindent This was popular in the days of Perl 4, and we'll see later why the ampersand is important. For the time being, think of the ampersand as being the 'type symbol' for subroutines.
+
+\noindent 
+
+\noindent 
+
+\noindent Subroutines for Calculation
+
+\noindent As we mentioned at the beginning of the chapter, as well as being set pieces of code to be executed whenever we need them, we can also use subroutines just like Perl's built-in functions and operators. We can pass parameters to the subroutine and expect an answer back.
+
+\noindent 
+
+\noindent Parameters and Arguments
+
+\noindent Just like with Perl's built-ins, we pass parameters by placing them between the brackets:
+
+\noindent 
+
+\noindent my\_sub(10,15);
+
+\noindent 
+
+\noindent What happens to them there? Well, they end up in one of Perl's special variables, the array @\_ and from there we can get at them:
+
+\noindent 
+
+\noindent Try It Out : Totalling a List
+
+\noindent 
+
+\noindent We'll write a subroutine that takes a list of values, adds them up, and prints the total:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# total1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent total(111, 107, 105, 114, 69);
+
+\noindent total(1...100);
+
+\noindent 
+
+\noindent sub total \{
+
+\noindent my \$total = 0;
+
+\noindent \$total += \$\_  for @\_;
+
+\noindent print "The total is \$total\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent And to see it in action:
+
+\noindent 
+
+\noindent $>$ \textbf{perl total1.plx}
+
+\noindent The total is 506
+
+\noindent The total is 5050
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent We can pass any list to a subroutine, just like we can to print. When we do so, the list ends up in @\_
+
+\noindent where it's up to us to do something with it. Here, we go through each element of it and add them up:
+
+\noindent 
+
+\noindent \$total += \$\_  for @\_;
+
+\noindent 
+
+\noindent This is a little cryptic, but it's how you're likely to see it done in real Perl code. You could write this a little less tersely as follows:
+
+\noindent 
+
+\noindent my @args = @\_;
+
+\noindent foreach my \$element (@args) \{
+
+\noindent \$total = \$total+\$element;
+
+\noindent \}
+
+\noindent 
+
+\noindent In the first example, @\_ would contain (111, 107, 105, 114, 69), and we'd add each value to
+
+\noindent \$total in turn.
+
+\noindent 
+
+\noindent Return Values
+
+\noindent 
+
+\noindent However, sometimes we don't want to perform an action like printing out the total, but instead we want
+
+\noindent to return a result. We may also want to return a result to indicate whether what we were doing succeeded. This will allow us to say things like:
+
+\noindent 
+
+\noindent \$sum\_of\_100 = total(1...100);
+
+\noindent 
+
+\noindent There are two ways to do this: implicitly or explicitly. The implicit way is nice and easy. We just make the value we want to return the last thing in our subroutine:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# total2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my \$total = total(111, 107, 105, 114, 69);
+
+\noindent my \$sum\_of\_100 = total(1...100);
+
+\noindent 
+
+\noindent 
+
+\noindent sub total \{
+
+\noindent my \$total = 0;
+
+\noindent \$total += \$\_  for @\_;
+
+\noindent \$total;
+
+\noindent \}
+
+\noindent 
+
+\noindent It doesn't need to be a variable: we could use any expression there. We can also return a list instead of a single scalar.
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Splitting Time
+
+\noindent 
+
+\noindent 
+
+\noindent Let's split a time in seconds up to hours, minutes, and seconds. We give a subroutine a time in seconds,
+
+\noindent and it returns a three-element list with the hours, minutes, and remaining seconds:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# seconds1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my (\$hours, \$minutes, \$seconds) = secs2hms(3723);
+
+\noindent print "3723 seconds is \$hours hours, \$minutes minutes and \$seconds seconds";
+
+\noindent print "\textbackslash n";
+
+\noindent 
+
+\noindent sub secs2hms \{
+
+\noindent my (\$h,\$m);
+
+\noindent my \$seconds = shift;
+
+\noindent \$h = int(\$seconds/(60*60)); \$seconds \%= 60*60;
+
+\noindent \$m = int(\$seconds/60); \$seconds \%= 60;
+
+\noindent (\$h,\$m,\$seconds);
+
+\noindent \}
+
+\noindent 
+
+\noindent This tells us that:
+
+\noindent 
+
+\noindent $>$\textbf{perl seconds1.plx}
+
+\noindent 3723 seconds is 1 hours, 2 minutes and 3 seconds
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Just like a built-in function, when we're expecting a subroutine to return a list, we can use an array or list of variables to collect the return values:
+
+\noindent 
+
+\noindent 
+
+\noindent my (\$hours, \$minutes, \$seconds) = secs2hms(3723);
+
+\noindent 
+
+\noindent When secs2hms returns, this'll be equivalent to:
+
+\noindent 
+
+\noindent 
+
+\noindent my (\$hours, \$minutes, \$seconds) = (1,2,3);
+
+\noindent 
+
+\noindent Now let's look at how the subroutine works. We start in the usual way: sub, the name, and a block:
+
+\noindent 
+
+\noindent 
+
+\noindent sub secs2hms \{
+
+\noindent 
+
+\noindent We have two variables to represent hours and minutes, and we read the parameters in from @\_. If you don't tell shift which array to take data from, it'll read from @\_ if you're in a subroutine or @ARGV if you're not:
+
+\noindent 
+
+\noindent 
+
+\noindent my (\$h,\$m);
+
+\noindent my \$seconds = shift;
+
+\noindent 
+
+\noindent 
+
+\noindent Then the actual conversion: There are 3600 (60*60) seconds in an hour, and so the number of hours is
+
+\noindent the number of seconds divided by 3600. However, that'll give us a floating-point number -- if we divided
+
+\noindent 3660 by 3600, we'd get 1.0341666\dots  we'd rather have 'one and a bit', so we use int() to get the integer value, the '1' part of the division, and use the modulus operator to get the remainder. After dealing with
+
+\noindent the first 3600 seconds, we want to carry on looking at the next 123:
+
+\noindent 
+
+\noindent 
+
+\noindent \$h = int(\$seconds/(60*60)); \$seconds \%= 60*60;
+
+\noindent 
+
+\noindent The second statement on this line sets \$seconds to \$seconds \% (60*60).   If it was 3723 before, it'll be 123 now.
+
+\noindent 
+
+\noindent The same goes for minutes: we divide to get 'two and a bit', and the remainder tells us that there are three seconds outstanding. Hence, our values are 1 hour, 2 minutes, and 3 seconds:
+
+\noindent 
+
+\noindent 
+
+\noindent \$m = int(\$seconds/60); \$seconds \%= 60;
+
+\noindent 
+
+\noindent We return this just by leaving a list of the values as the last thing in the subroutine:
+
+\noindent 
+
+\noindent 
+
+\noindent (\$h,\$m,\$seconds);
+
+\noindent 
+
+\noindent \textit{The return Statement}
+
+\noindent The explicit method of returning something from a subroutine is to say return(...).  The first
+
+\noindent return statement we come across will immediately return that list to the caller. So, for instance:
+
+\noindent 
+
+\noindent 
+
+\noindent sub secs2hms \{
+
+\noindent my (\$h,\$m);
+
+\noindent my \$seconds = shift;
+
+\noindent \$h = int(\$seconds/(60*60)); \$seconds \%= 60*60;
+
+\noindent \$m = int(\$seconds/60); \$seconds \%= 60;
+
+\noindent return (\$h,\$m,\$seconds);
+
+\noindent print "This statement is never reached.";
+
+\noindent \}
+
+\noindent 
+
+\noindent This also means we can have more than one return statement, and it's often useful to do so.
+
+\noindent 
+
+\noindent \textit{Caching}
+
+\noindent One particularly effective use of this is called \textbf{caching}, and it's a technique we can use to make subroutines that do calculations work faster. To use caching, we store each answer we generate from a
+
+\noindent set of parameters into a cache, usually a hash. If we see those parameters again, we can fetch the answer from the cache rather than work it all out from scratch. For example, here's a subroutine that gets the
+
+\noindent first line in a file:
+
+\noindent 
+
+\noindent sub first\_line \{
+
+\noindent my \$filename = shift;
+
+\noindent open FILE, \$filename or return "";
+
+\noindent my \$line = $<$FILE$>$;
+
+\noindent return \$line;
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent And here's that subroutine with caching:
+
+\noindent 
+
+\noindent my \%cache;
+
+\noindent sub first\_line \{
+
+\noindent my \$filename = shift;
+
+\noindent return \$cache\{\$filename\} if exists \$cache\{\$filename\}
+
+\noindent open FILE, \$filename or return "";
+
+\noindent my \$line = $<$FILE$>$;
+
+\noindent \$cache\{filename\} = \$line;
+
+\noindent return \$line;
+
+\noindent \}
+
+\noindent 
+
+\noindent Although it's possible that the first lines of those files change while we're running the program, it's not likely. So, we check to see if we've seen a file before; if we have, we give the answer we got last time
+
+\noindent and return. If we haven't seen it before, we open the file, check it out, and then store the answer in the
+
+\noindent cache for next time.
+
+\noindent 
+
+\noindent If you've got subroutines where the answer is likely to be the same every time you call with a given parameter, and where you're doing significantly more work than a simple lookup, consider using a cache like this.
+
+\noindent 
+
+\noindent Context
+
+\noindent 
+
+\noindent Some of Perl's built-ins do different things in different contexts: localtime, for instance, returns a string in scalar context and a breakdown of the time in list context. As perlfunc puts it, \textit{'There is no}
+
+\noindent \textit{rule that relates the behavior of an expression in list context to its behavior in scalar context, or vice versa. It might}
+
+\noindent \textit{do two totally different things.'}
+
+\noindent 
+
+\noindent We can make our subs sensitive to context as well. Perl provides two functions to allow us to examine how we were called. The more complex one is caller, and the one we'll look at is wantarray. Strictly speaking, it tells us whether our caller wants a list. If so, it will be true. If a single scalar is required, then it will be false. If the caller isn't planning to do anything with what we give it, it will be the undefined value. So, for instance, we can emulate localtime like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# seconds2.plx use warnings; use strict;
+
+\noindent my (\$hours, \$minutes, \$seconds) = secs2hms(3723);
+
+\noindent print "3723 seconds is \$hours hours, \$minutes minutes and \$seconds seconds\textbackslash n";
+
+\noindent my \$time = secs2hms(6868);
+
+\noindent print "6868 seconds is \$time\textbackslash n";
+
+\noindent 
+
+\noindent sub secs2hms \{
+
+\noindent my (\$h,\$m);
+
+\noindent my \$seconds = shift;
+
+\noindent \$h = int(\$seconds/(60*60)); \$seconds \%= 60*60;
+
+\noindent \$m = int(\$seconds/60); \$seconds \%= 60;
+
+\noindent if (wantarray) \{
+
+\noindent return (\$h,\$m,\$seconds);
+
+\noindent \}
+
+\noindent return "\$h hours, \$m minutes and \$seconds seconds";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent $>$\textbf{perl seconds2.plx}
+
+\noindent 3723 seconds is 1 hours, 2 minutes and 3 seconds
+
+\noindent 6868 seconds is 1 hours, 54 minutes and 28 seconds
+
+\noindent $>$
+
+\noindent 
+
+\noindent To be honest, however, it's pretty unlikely that you'll ever do this: It's best to have a subroutine that returns the same thing all the time, unless it's being used by someone other than yourself.
+
+\noindent 
+
+\noindent Subroutine Prototypes
+
+\noindent 
+
+\noindent If your subroutines are likely to be used by someone else, you might want to consider using subroutine prototypes. You'll also need to think about these if you're planning on passing more than one array to a subroutine. We'll look later at how that is done.
+
+\noindent 
+
+\noindent A subroutine prototype tells Perl what sort of arguments it's expecting. This can be used to check to
+
+\noindent ensure that the user is passing the right number of parameters, and it can also change the way Perl reads your program. For instance, you can make it possible to leave off the brackets from around your parameters, in the same way that print "one", "two"; is the same as print("one","two");
+
+\noindent and you can chose whether:
+
+\noindent 
+
+\noindent print mysub "one", "two";
+
+\noindent 
+
+\noindent means:
+
+\noindent 
+
+\noindent print( mysub("one", "two") );
+
+\noindent 
+
+\noindent or:
+
+\noindent 
+
+\noindent print( mysub("one"), "two" );
+
+\noindent 
+
+\noindent That is, how many arguments your subroutine should swallow up.
+
+\noindent 
+
+\noindent Prototypes talk about the number of scalars we allow, and we use a dollar sign for each one. So, the prototype for a subroutine that takes two arguments would be \$\$. Prototypes come between the name and the block of the subroutine definition, in brackets, like this:
+
+\noindent 
+
+\noindent sub sum\_of\_two\_squares (\$\$) \{
+
+\noindent my (\$a,\$b) = (shift, shift);
+
+\noindent return \$a**2+\$b**2;
+
+\noindent \}
+
+\noindent 
+
+\noindent The problem is, just like when we wanted to use subroutines without the brackets, Perl hadn't read as far
+
+\noindent as their definition when it came across the call and so didn't know what to expect. When using prototypes we need to ensure that Perl gets to read the prototype before we use the subroutine, and to
+
+\noindent do this, we can use a forward definition at the top of the program, like so:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sumsquare.plx use warnings; use strict;
+
+\noindent sub sum\_of\_two\_squares (\$\$);
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Using Prototypes
+
+\noindent 
+
+\noindent Now  if we try to  give any more  or less  than  two  parameters,  Perl  complains  even  before  the
+
+\noindent program starts:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sumsquare.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent sub sum\_of\_two\_squares (\$\$);
+
+\noindent 
+
+\noindent my (\$first, \$second) = @ARGV;
+
+\noindent print "The sum of the squares of \$first and \$second is ";
+
+\noindent print sum\_of\_two\_squares(\$first, \$second),"\textbackslash n";
+
+\noindent 
+
+\noindent print sum\_of\_two\_squares(\$first, \$second, 0),"\textbackslash n";
+
+\noindent 
+
+\noindent sub sum\_of\_two\_squares (\$\$) \{
+
+\noindent my (\$a,\$b) = (shift, shift);
+
+\noindent return \$a**2+\$b**2;
+
+\noindent \}
+
+\noindent 
+
+\noindent We try to use three parameters, but Perl won't allow it because we've told it only to accept two:
+
+\noindent 
+
+\noindent $>$\textbf{perl sumsquare.plx 10 20}
+
+\noindent Too many arguments for main::sum\_of\_two\_squares at sumsquare.plx line 11, near "0)" Execution of sumsquare.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent If we comment out that line, it works as expected:
+
+\noindent 
+
+\noindent $>$ \textbf{perl sumsquare.plx 10 20}
+
+\noindent The sum of the squares of 10 and 20 is 500
+
+\noindent $>$
+
+\noindent 
+
+\noindent You can specify that the number may vary by the use of a semicolon in the prototype. Everything after the semicolon is tentative; you can also use an @\_ sign to denote 'any number of parameters'.
+
+\noindent 
+
+\noindent 
+
+\noindent Understanding Scope
+
+\noindent 
+
+\noindent It's now time to have a serious look at what we're doing when we declare a variable with my. The truth,
+
+\noindent as we've briefly glimpsed it, is that Perl has two types of variable. One type is the \textbf{global variable }(or
+
+\noindent \textbf{package variable}), which can be accessed anywhere in the program. The second type is the \textbf{lexical variable, }which we declare with my.
+
+\noindent 
+
+\noindent Global Variables
+
+\noindent 
+
+\noindent Global variables are what you get if you don't use my. If we were to say:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \$x = 10;
+
+\noindent 
+
+\noindent 
+
+\noindent then \$x would be a global variable. They're also called package variables because they live inside a
+
+\noindent package (a package is just a convenient place to put subroutines and variables).
+
+\noindent 
+
+\noindent When we start programming, we're in a package called main. If we assign \$x, as above, then we create
+
+\noindent a package variable \$x in package main. Perl knows it by its full name, \$main::x -- the variable \$x in the main package. But because we're in the main package when we make the assignment, we can just call it by its short name, \$x. It's like the phone system -- you don't have to dial the area code when you
+
+\noindent call someone in the same region as you.
+
+\noindent 
+
+\noindent We can create a variable in another package by using a fully-qualified name. Instead of the main package, we can have a package called Fred. Here we'll store all of Fred's variables and subroutines. So, to get at the \$name variable in package Fred, we say \$Fred::name, like this:
+
+\noindent 
+
+\noindent \$x = 10;
+
+\noindent \$Fred::name = "Fred Flintstone";
+
+\noindent 
+
+\noindent The fact that  it's in a different  package  doesn't  mean  we can't  get at  it.  Remember  that  these  are global variables,  available from  anywhere  in  our  program.  All  packages  do  is  give us  a  way  of subdividing the namespace.
+
+\noindent 
+
+\noindent What do we mean by 'subdividing the namespace'? Well, the namespace is the set of names we can give our variables. Without packages, we could only have one \$name. What packages do is help us make
+
+\noindent \$name in package Fred different to \$name in package Barney and \$name in package main.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# globals.plx
+
+\noindent use warnings;
+
+\noindent \$main::name = "Your Name Here";
+
+\noindent \$Fred::name = "Fred Flintstone";
+
+\noindent \$Barney::name = "Barney Rubble";
+
+\noindent 
+
+\noindent print "\textbackslash \$name in package main is \$name\textbackslash n";
+
+\noindent print "\textbackslash \$name in package Fred is \$Fred::name\textbackslash n";
+
+\noindent print "\textbackslash \$name in package Barney is \$Barney::name\textbackslash n";
+
+\noindent 
+
+\noindent $>$ perl globals.plx
+
+\noindent \$name in package main   is Your Name Here
+
+\noindent \$name in package Fred   is Fred Flintstone
+
+\noindent \$name in package Barney is Barney Rubble
+
+\noindent 
+
+\noindent You can change what package you're currently working in with the aptly named package operator. We could write the above like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# globals2.plx use warnings;
+
+\noindent \$main::name = "Your Name Here";
+
+\noindent \$Fred::name = "Fred Flintstone";
+
+\noindent \$Barney::name = "Barney Rubble";
+
+\noindent 
+
+\noindent print "\textbackslash \$name in package main is \$name\textbackslash n";
+
+\noindent package Fred;
+
+\noindent print "\textbackslash \$name in package Fred is \$name\textbackslash n";
+
+\noindent package Barney;
+
+\noindent print "\textbackslash \$name in package Barney is \$name\textbackslash n";
+
+\noindent package main;
+
+\noindent 
+
+\noindent 
+
+\noindent When use strict is in force, it makes us use the full names for our package variables. If we try and
+
+\noindent say this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#strict1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent \$x = 10;
+
+\noindent print \$x;
+
+\noindent 
+
+\noindent Perl will give us an error -- Global symbol "\$x" requires explicit package name. The package name it's looking for is main, and it wants us to say \$main::x
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#strict2.plx use warnings; use strict;
+
+\noindent \$main::x = 10;
+
+\noindent print \$main::x;
+
+\noindent 
+
+\noindent As we've seen before, we can also use the our operator to tell Perl that a given variable should be treated as a package variable in the current package. This works just as well:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#strict3.plx use warnings; use strict;
+
+\noindent our \$x;
+
+\noindent \$x = 10;
+
+\noindent print \$x;
+
+\noindent 
+
+\noindent Global variables can be accessed and altered at any time by any subroutine or assignment that you care
+
+\noindent to apply to it. Of course, this is handy if you want to store a value -- for instance, the user's name -- and be able to get it anywhere.
+
+\noindent 
+
+\noindent It's also an absolute pain in the neck when it comes to subroutines. Here's why:
+
+\noindent 
+
+\noindent 
+
+\noindent \$a = 25;
+
+\noindent \$b = some\_sub;
+
+\noindent print \$a;
+
+\noindent 
+
+\noindent Looks innocent, doesn't it? Looks like we should see the answer 25. But what happens if some\_sub uses and changes the global \$a? Any variable anywhere in your program can be wiped out by another part
+
+\noindent of your program. We call this 'action at a distance', and it gets real spooky to debug. Packages alleviate
+
+\noindent the problem, but to make sure that we never get into this mess, you have to ensure that every variable in your program has a different name. In small programs, that's feasible, but in huge team efforts, it's a nightmare. It's far clearer to be able to restrict the possible effect of a variable to a certain area of code,
+
+\noindent and that's exactly what lexical variables do.
+
+\noindent 
+
+\noindent 
+
+\noindent Lexical Variables
+
+\noindent 
+
+\noindent The range of effect that a variable has is called its \textbf{scope}, and lexical variables declared with my are said
+
+\noindent to have \textbf{lexical scope, }that is, they exist from the point where they're declared until the end of the
+
+\noindent enclosing block, brackets, subroutine, or file. The name 'lexical' comes from the fact that they're confined to a well-defined chunk of text.
+
+\noindent 
+
+\noindent Each block has got a 'pad' in which it keeps its current lexical variables, if any. If Perl doesn't find the variable you're referring to in the current pad, it'll look to the surrounding blocks until it finds it -- or doesn't. Every time you say my, you're creating a new variable attached to the current pad. It's
+
+\noindent completely independent of any variables in other pads, and you use can use it to 'hide' similarly-named
+
+\noindent lexicals that exist outside of the current block:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$x;
+
+\noindent \$x = 30;
+
+\noindent \{
+
+\noindent my \$x; \# New \$x
+
+\noindent \$x = 50;
+
+\noindent \# We can't see the old \$x, even if we want to.
+
+\noindent \}
+
+\noindent \# This \$x is, and always has been, 30.
+
+\noindent 
+
+\noindent Great. We can now use variables in our subroutines in the knowledge that we're not going to upset any behavior outside them. We know that if we say:
+
+\noindent 
+
+\noindent 
+
+\noindent sub strip \{
+
+\noindent my \$input = shift;
+
+\noindent \$input =\~{} s/\^{}\textbackslash s+//;
+
+\noindent \$input =\~{} s/\textbackslash s+\$//;
+
+\noindent return \$input;
+
+\noindent \}
+
+\noindent 
+
+\noindent that we're not going to clobber any other \$input in the program. The highlighted part shows you the lifespan of the variable: It comes into existence at the my statement and goes away at the end of the nearest set of braces. We say that it 'goes out of scope' at the end of the subroutine. Once it's out of scope, we shouldn't expect to be able to get to it again. In a sense, we've created a temporary variable.
+
+\noindent 
+
+\noindent \textit{Runtime Scope}
+
+\noindent However, we can't use this trick for global variables, and Perl's special variables such as \$\_ and \$/ are globals. What can we do to temporarily set their value? One way to do it is like this:
+
+\noindent 
+
+\noindent 
+
+\noindent sub slurp \{
+
+\noindent my \$save = \$/;
+
+\noindent undef \$/;
+
+\noindent my \$file = $<$$>$;
+
+\noindent \$/ = \$save;
+
+\noindent return \$file;
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent That is, we can save away the current contents to a separate variable, and replace \$/ with its old
+
+\noindent contents when we're finished. Alternatively, we can get Perl to do the saving and restoring for us automatically: to give a global variable a specific local value, use the local operator:
+
+\noindent 
+
+\noindent sub slurp \{
+
+\noindent local \$/ = undef; my \$file = $<$$>$; return \$file;
+
+\noindent \}
+
+\noindent 
+
+\noindent local gives a variable \textbf{runtime scope}. This means that any statement executed between local and the end of the block will see the new value of the variable. How does this differ from lexical scope? The key
+
+\noindent is that, as we've seen in this chapter, program flow doesn't just go straight through blocks of code We can temporarily bounce off into subroutines, too. So, the difference is:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Runtime scope means a variable has a temporary value for the duration of the current}
+
+\noindent \textbf{block, inclusive of any side trips into other subroutine blocks, that is seen everywhere}
+
+\noindent \textbf{in the program -- because it's a global. Lexical scope, on the other hand, creates a}
+
+\noindent \textbf{variable that is only visible to the statements inside the block.}
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Runtime Scope
+
+\noindent 
+
+\noindent 
+
+\noindent This program uses local to give \$\_ a runtime scope. You should be able to see how local differs
+
+\noindent from my:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# runtime.plx
+
+\noindent use strict;
+
+\noindent use warnings;
+
+\noindent my \$x = 10; \# Line 5
+
+\noindent \$\_  = "alpha";
+
+\noindent \{
+
+\noindent my \$x = 20;
+
+\noindent local \$\_  = "beta";
+
+\noindent somesub(); \# Line 10
+
+\noindent \}
+
+\noindent somesub();
+
+\noindent 
+
+\noindent sub somesub \{
+
+\noindent print "\textbackslash \$x is \$x\textbackslash n";
+
+\noindent print "\textbackslash \$\_  is \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent $>$\textbf{perl runtime.plx}
+
+\noindent \$x is 10
+
+\noindent \$\_ is beta
+
+\noindent \$x is 10
+
+\noindent \$\_ is alpha
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Can you see what's happening? Although we say my \$x = 20; on line 8, that only affects statements between line 8 and the end of the block, which is line 11. It's a lexical variable that is constrained by the actual text, not by the order of execution. It doesn't have any effect when we call somesub on line 10. local, on the other hand, affects everything we do between lines 9 and 11, and that includes calling somesub. Its scope is determined by the statements that get executed.
+
+\noindent 
+
+\noindent \textit{When to Use my() and When to Use local}
+
+\noindent Mark-Jason Dominus gives simple but effective advice:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Don't use local. Always use my.}
+
+\noindent 
+
+\noindent 
+
+\noindent This is somewhat of an overstatement, but it's a justified one. Unless you're dealing with special
+
+\noindent variables like \$/, you usually want to use my. If you need to lie to Perl for some period of time about a global's value, try rethinking your design.
+
+\noindent 
+
+\noindent 
+
+\noindent Passing More Complex Parameters
+
+\noindent 
+
+\noindent Sometimes we want to pass things other than an ordinary list of scalars, so it's important to understand how passing parameters works.
+
+\noindent 
+
+\noindent @\_ Provides Aliases!
+
+\noindent 
+
+\noindent Remember when we did something like this:
+
+\noindent 
+
+\noindent 
+
+\noindent @array = (1, 2, 3, 4);
+
+\noindent for (@array) \{
+
+\noindent \$\_++;
+
+\noindent \}
+
+\noindent print "@array\textbackslash n";
+
+\noindent 
+
+\noindent We found that this would print "2, 3, 4, 5". The elements of the array had been affected. We said then that the iterator variable is an alias to the elements of the list. Well, the same goes for the elements of
+
+\noindent @\_. They're actually aliases for the things we pass. That's why we've got to be careful when we're dealing with @\_   directly. It's dangerous to say, for example:
+
+\noindent 
+
+\noindent sub add\_one\_and\_double \{
+
+\noindent \$\_[0]++;
+
+\noindent return \$\_[0]*2;
+
+\noindent \}
+
+\noindent 
+
+\noindent because if we tried:
+\noindent 
+
+\noindent 
+
+\noindent add\_one\_and\_double;
+
+\noindent 
+
+\noindent 
+
+\noindent Perl would try to modify a constant, which is by definition impossible. Hence, we tend to avoid using @\_
+
+\noindent directly and instead make local copies of the arguments, either wholesale into an array:
+
+\noindent 
+
+\noindent my @args = @\_;
+
+\noindent 
+
+\noindent into named variables as a group:
+
+\noindent 
+
+\noindent my (\$filename, \$title, \$description) = @\_;
+
+\noindent 
+
+\noindent or individually by calling shift (especially if the number of parameters can vary):
+
+\noindent 
+
+\noindent my \$filename = shift; my \$title = shift; my \$description = shift;
+
+\noindent 
+
+\noindent @\_ has, effectively, runtime scope. Each subroutine has its own copy of @\_, meaning that if one subroutine calls another, we have not lost the argument values to one of them:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subscope.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent first(1,2,3);
+
+\noindent 
+
+\noindent sub first \{
+
+\noindent print "In first, arguments are @\_\textbackslash n";
+
+\noindent second(4,5,6);
+
+\noindent print "Back in first, arguments are @\_\textbackslash n";
+
+\noindent 
+
+\noindent \}
+
+\noindent sub second \{
+
+\noindent print "In second, arguments are @\_\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent In first, arguments are 1 2 3
+
+\noindent In second, arguments are 4 5 6 
+
+\noindent Back in first, arguments are 1 2 3
+
+\noindent 
+
+\noindent The question of which variable has scope to where can often be quite tricky to answer, but remember that a lot of trouble may be avoided by naming your variables wisely in the first place.
+
+\noindent 
+
+\noindent Lists Always Collapse
+
+\noindent 
+
+\noindent We've seen this before, but it's worth saying it again: when you put an array inside a list, the list collapses. The original structure of the array is lost, even before we start putting anything in the parameter array @\_. That's why you can't say something like:
+
+\noindent 
+
+\noindent check\_same(@a, @b)
+
+\noindent 
+
+\noindent and expect to work out where @a ends and @b starts. As far as Perl's concerned there's just one list there. To get around this, you can use references.
+
+\noindent 
+
+\noindent 
+
+\noindent Passing References to a Subroutine
+
+\noindent 
+
+\noindent There's actually nothing special about passing references into a subroutine, so long as we remember that we can modify the original value when we dereference:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subrefs1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$a = 5;
+
+\noindent increment(\textbackslash \$a);
+
+\noindent print \$a;
+
+\noindent 
+
+\noindent sub increment \{
+
+\noindent my \$reference = shift;
+
+\noindent \$\$reference++;
+
+\noindent \}
+
+\noindent 
+
+\noindent However, what we can do is use prototypes to take a reference behind the scenes. If in a prototype, instead of a dollar sign, we give a type symbol followed by a backslash, Perl will automatically take a reference to that type of variable. So, sub something (\textbackslash \$) will look for a single scalar variable and take a reference to it. sub something (\$\textbackslash \%\$) looks for a scalar, a hash, and a scalar and will take a reference to the hash.
+
+\noindent 
+
+\noindent For instance, if we change the above to:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subrefs2.plx use warnings; use strict;
+
+\noindent sub increment (\textbackslash \$);
+
+\noindent 
+
+\noindent 
+
+\noindent my \$a = 5;
+
+\noindent increment(\$a);
+
+\noindent print \$a;
+
+\noindent 
+
+\noindent 
+
+\noindent sub increment (\textbackslash \$) \{
+
+\noindent my \$reference = shift;
+
+\noindent \$\$reference++;
+
+\noindent \}
+
+\noindent 
+
+\noindent Notice how we no longer need to take the reference ourselves. We can just say increment(\$a)
+
+\noindent instead of (\textbackslash \$a). Other languages call this \textbf{pass by reference}, as opposed to \textbf{pass by value}. Actually, all
+
+\noindent we're doing is passing a reference and Perl constructs that for us.
+
+\noindent 
+
+\noindent This  is exactly how  we  get arrays  and  hashes  to  keep  their  structure  when  we're  passing  them  to
+
+\noindent a subroutine.
+
+\noindent 
+
+\noindent 
+
+\noindent Passing Arrays and Hashes to a Subroutine
+
+\noindent Because the prototype can make a reference for us, we can actually take arrays, hashes and more complicated data structures and let them keep their structure.
+
+\noindent 
+
+\noindent Try It Out : Passing Arrays
+
+\noindent 
+
+\noindent So, to see if two arrays have the same contents, you could do this:
+
+\noindent 
+
+\noindent sub check\_same (\textbackslash @\textbackslash @) \{
+
+\noindent my (\$ref\_one, \$ref\_two) = @\_;
+
+\noindent \# Same size?
+
+\noindent return 0 unless @\$ref\_one == @\$ref\_two;
+
+\noindent for my \$elem (0..\$\#\$ref\_one) \{
+
+\noindent return 0 unless \$ref\_one-$>$[\$elem] eq \$ref\_two-$>$[\$elem];
+
+\noindent \}
+
+\noindent \# Same if we got this far return 1;
+
+\noindent \}
+
+\noindent 
+
+\noindent Putting that into a program looks like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# passarray.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent sub check\_same (\textbackslash @\textbackslash @);
+
+\noindent 
+
+\noindent my @a = (1, 2, 3, 4, 5);
+
+\noindent my @b = (1, 2, 4, 5, 6);
+
+\noindent my @c = (1, 2, 3, 4, 5);
+
+\noindent print "\textbackslash @a is the same as \textbackslash @b" if check\_same(@a,@b);
+
+\noindent print "\textbackslash @a is the same as \textbackslash @c" if check\_same(@a,@c);
+
+\noindent 
+
+\noindent 
+
+\noindent sub check\_same (\textbackslash @\textbackslash @) \{
+
+\noindent my (\$ref\_one, \$ref\_two) = @\_;
+
+\noindent \# Same size?
+
+\noindent return 0 unless @\$ref\_one == @\$ref\_two;
+
+\noindent for my \$elem (0..\$\#\$ref\_one) \{
+
+\noindent return 0 unless \$ref\_one-$>$[\$elem] eq \$ref\_two-$>$[\$elem];
+
+\noindent \}
+
+\noindent \# Same if we got this far
+
+\noindent return 1;
+
+\noindent \}
+
+\noindent 
+
+\noindent As expected:
+
+\noindent 
+
+\noindent $>$\textbf{perl passarray.plx}
+
+\noindent @a is the same as @c
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Using the prototype here and at the top of the program means that Perl will take references to two arrays. Hence, what we'll see in @\_ are two array references:
+
+\noindent 
+
+\noindent sub check\_same (\textbackslash @\textbackslash @) \{
+
+\noindent my (\$ref\_one, \$ref\_two) = @\_;
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{If you use a prototype at the start of your program as a forward definition, you must}
+
+\noindent \textbf{explicitly use the same prototype again at the definition proper, or Perl will complain}
+
+\noindent \textbf{of a prototype mismatch.}
+
+\noindent 
+
+\noindent 
+
+\noindent We can special-case check the  size:  if  our  arrays  aren't  the same  size,  there's  no  way they  can  be  the
+
+\noindent same.
+
+\noindent 
+
+\noindent return 0 unless @\$ref\_one == @\$ref\_two;
+
+\noindent 
+
+\noindent Now we come to the comparison. We're going to stop as soon as we find something that differs, since that proves that they're not the same:
+
+\noindent 
+
+\noindent for my \$elem (0..\$\#\$ref\_one) \{
+
+\noindent return 0 unless \$ref\_one-$>$[\$elem] eq \$ref\_two-$>$[\$elem];
+
+\noindent \}
+
+\noindent 
+
+\noindent If we got to the end of the array and we didn't return, then they didn't differ:
+
+\noindent 
+
+\noindent return 1;
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{This only works when we're passing something to a subroutine. We can't do a similar}
+
+\noindent \textbf{trick for returning arrays, and hence}
+
+\noindent 
+
+\noindent (@a\textbf{, }@b\textbf{) = somesub();}
+
+\noindent 
+
+\noindent \textbf{will never work. The list will be flattened, there'll be no way to tell where }@a\textbf{ ends and}
+
+\noindent @b\textbf{ begins, and everything will end up in }@a\textbf{. If you need to do this, pass references to}
+
+\noindent \textbf{the arrays and have the subroutine fill them.}
+
+\noindent 
+
+\noindent 
+
+\noindent Passing Filehandles to a Subroutine
+
+\noindent 
+
+\noindent Passing  filehandles to  a subroutine  is  somewhat  special.  You  can  actually  either  pass  a  glob or  a reference to  a glob.  It doesn't  make  any  difference.  You  can  then  collect  the  filehandle  into  a  glob, like this:
+
+\noindent 
+
+\noindent sub say\_hello \{
+
+\noindent *WHERE = shift;
+
+\noindent print WHERE "Hi there!\textbackslash n"
+
+\noindent \}
+
+\noindent say\_hello(*STDOUT);
+
+\noindent 
+
+\noindent 
+
+\noindent Alternatively, you can also collect the filehandle into an ordinary scalar and use that in place of a
+
+\noindent filehandle, as we do below:
+
+\noindent 
+
+\noindent sub say\_hello \{
+
+\noindent my \$fh = shift;
+
+\noindent print \$fh "Hi there!\textbackslash n"
+
+\noindent \}
+
+\noindent sub get\_line \{
+
+\noindent my \$fh = shift;
+
+\noindent my \$response = $<$\$fh$>$;
+
+\noindent chomp \$response;
+
+\noindent \$response =\~{} s/\^{}\textbackslash s+//;
+
+\noindent return \$response;
+
+\noindent \}
+
+\noindent 
+
+\noindent say\_hello(*STDOUT);
+
+\noindent get\_line (*STDIN );
+
+\noindent 
+
+\noindent 
+
+\noindent Default Parameter Values
+
+\noindent 
+
+\noindent One thing that's occasionally useful is the ability to give the parameters for your subroutine a default value, that is, give the parameter a value to run through the subroutine with if one is not specified when the subroutine is called. This is very easily done with the \textbar \textbar  operator.
+
+\noindent 
+
+\noindent The logical or operator, \textbar \textbar , has a very special feature: it returns the last thing it saw. So, for instance, if we say \$a = 3 \textbar \textbar  5, then \$a will be set to 3. Because 3 is a true value, it has no need to examine
+
+\noindent anything else, and so 3 is the last thing it sees. If, however, we say \$a = 0 \textbar \textbar  5, then \$a will be set to
+
+\noindent 5; 0 is not a true value, so it looks at the next one, 5, which is the last thing it sees.
+
+\noindent 
+
+\noindent Hence, anything we get from @\_ that doesn't have a true value can be given a default with the \textbar \textbar  operator. We can create subroutines with a flexible number of parameters and have Perl fill in the blanks for us:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# defaults.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent sub log\_warning \{
+
+\noindent my \$message = shift \textbar \textbar  "Something's wrong";
+
+\noindent my \$time = shift \textbar \textbar  localtime; \# Default to now.
+
+\noindent print "[\$time] \$message\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent log\_warning("Klingons on the starboard bow", "Stardate 60030.2");
+
+\noindent log\_warning("/earth is 99\% full, please delete more people");
+
+\noindent log\_warning();
+
+\noindent 
+
+\noindent $>$\textbf{perl defaults.plx}
+
+\noindent [Stardate 60030.2] Klingons on the starboard bow
+
+\noindent [Wed May 3 04:07:50 2000] /earth is 99\% full, please delete more people
+
+\noindent [Wed May 3 04:07:51 2000] Something's wrong
+
+\noindent $>$
+
+\noindent 
+
+\noindent One by-product of specifying defaults for parameters is the opportunity to use those parameters as flags. Your subroutine can then alter its functionality based on the number of arguments passed to it.
+
+\noindent 
+
+\noindent 
+
+\noindent Named Parameters
+
+\noindent One of the more horrid things about calling subroutines is that you have to remember which order the parameters are set. Was it username first and then password, or host first and then username, or\dots ?
+
+\noindent 
+
+\noindent Named parameters are a neat way of solving this. What we'd rather say is something like this:
+
+\noindent 
+
+\noindent logon( username =$>$ \$name, password =$>$ \$pass, host =$>$ \$hostname);
+
+\noindent 
+
+\noindent and then give the parameters in any order. Now, Perl makes this really, really easy because that set of parameters can be thought of as a hash:
+
+\noindent 
+
+\noindent sub logon \{
+
+\noindent die "Parameters to logon should be even" if @\_  \% 2;
+
+\noindent my \%args = @\_;
+
+\noindent print "Logging on to host \$args\{hostname\}\textbackslash n";
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent Whether and how often you use named parameters is a matter of style. For subroutines that take lots of parameters, some of which may be optional, it's an excellent idea; For those that take two or three parameters, it's probably not worth the hassle.
+
+\noindent 
+
+\noindent 
+
+\noindent References to Subroutines
+
+\noindent 
+
+\noindent Just like variables, you can take references to subroutines. That's where the ampersand (\&) type symbol comes in.
+
+\noindent 
+
+\noindent Declaring References to Subroutines
+
+\noindent The same rules apply here as for taking references to variables. Put a backslash before the name, but include the ampersand:
+
+\noindent 
+
+\noindent sub something \{ print "Wibble!\textbackslash n" \}
+
+\noindent 
+
+\noindent my \$ref = \textbackslash \&something;
+
+\noindent 
+
+\noindent Alternatively, we can create an anonymous subroutine by saying sub \{BLOCK\}:
+
+\noindent 
+
+\noindent my \$ref = sub \{ print "Wibble!\textbackslash n" \}
+
+\noindent 
+
+\noindent \textit{Calling a Subroutine Reference}
+
+\noindent Just like before, there are two ways to call subroutine references. Directly:
+
+\noindent 
+
+\noindent \&\{\$ref\};
+
+\noindent \&\{\$ref\}(@parameters);
+
+\noindent \&\$ref(@parameters);
+
+\noindent 
+
+\noindent 
+
+\noindent Or through an arrow notation:
+
+\noindent 
+
+\noindent 
+
+\noindent \$ref-$>$();
+
+\noindent \$ref-$>$(@parameters);
+
+\noindent 
+
+\noindent 
+
+\noindent Callbacks
+
+\noindent 
+
+\noindent OK, now we can create and use subroutine references. Why would we want to? The usual thing we do with them is pass them to another subroutine. This is called a \textbf{callback}, because it allows the subroutine
+
+\noindent to 'call back' our code at certain times. This means we can turn a very general subroutine into something that does exactly what we want.
+
+\noindent 
+
+\noindent Try It Out : Using a Callback
+
+\noindent 
+
+\noindent 
+
+\noindent For instance, the core module File::Find will give us a subroutine called find. This takes two (or
+
+\noindent more) parameters: a callback and a list of directories. All it does -- and this is a harder task than it
+
+\noindent sounds -- is go through every file underneath each directory in the list, walk into any directories it finds, and call the callback with certain variables set. We can use this to create a directory browser:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# biglist.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent use File::Find;
+
+\noindent find ( \textbackslash \&callback, "/") ; \# Warning: Lists EVERY FILE ON THE DISK!
+
+\noindent 
+
+\noindent sub callback \{
+
+\noindent print \$File::Find::name, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Or we could delete every file  whose  name  ends  in  .bak:  (a  typical  extension  for temporary backup files):
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# backupkill.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent use File::Find;
+
+\noindent find ( \textbackslash \&callback, "/") ;
+
+\noindent 
+
+\noindent sub callback \{
+
+\noindent unlink \$\_  if /\textbackslash .bak\$/;
+
+\noindent \}
+
+\noindent 
+
+\noindent or indeed, anything we want. We'll see more of File::Find in Chapter 10, where we'll explain how these examples work. We'll also see at the end of the book that callbacks are particularly important for graphical applications.
+
+\noindent 
+
+\noindent 
+
+\noindent Arrays and Hashes of References to Subroutines
+
+\noindent 
+
+\noindent Another use for subroutine references is to allow us to call one of a selection of subroutines. For
+
+\noindent instance, if we're writing a menu system that calls a subroutine related to each menu option. We could naturally write it like this:
+
+\noindent 
+
+\noindent print "Type c for customer menu, s for sales menu and o for orders menu.\textbackslash n";
+
+\noindent chomp (my \$choice = $<$$>$);
+
+\noindent if (\$choice eq "c") \{
+
+\noindent customer\_menu();
+
+\noindent \} elsif (\$choice eq "s") \{
+
+\noindent sales\_menu();
+
+\noindent \} elsif (\$choice eq "o") \{
+
+\noindent orders\_menu();
+
+\noindent \} else \{
+
+\noindent print "Unknown option.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent However,  that's messy. What  we're doing  is  relating  a  string  to  a  subroutine,  and  relating  one  thing
+
+\noindent to  another in Perl should always  make  you  think  of  a  hash.  Here's  how  we  could  use a  hash of subroutine references:
+
+\noindent 
+
+\noindent my \%menu = (
+
+\noindent c =$>$ \textbackslash \&customer\_menu,
+
+\noindent s =$>$ \textbackslash \&sales\_menu, o =$>$ \textbackslash \&orders\_menu
+
+\noindent \}
+
+\noindent print "Type c for customer menu, s for sales menu and o for orders menu.\textbackslash n";
+
+\noindent chomp (my \$choice = $<$$>$);
+
+\noindent if (exists \$menu\{\$choice\}) \{
+
+\noindent \# Call it!
+
+\noindent \$menu\{\$choice\}-$>$();
+
+\noindent \} else \{
+
+\noindent print "Unknown option.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Much neater.
+
+\noindent 
+
+\noindent 
+
+\noindent Recursion
+
+\noindent 
+
+\noindent recursion, \textit{n.}: \textit{See }recursion
+
+\noindent 
+
+\noindent 
+
+\noindent The above joke, so old it has hair on it, gives you an idea as to what recursion is -- it's something that
+
+\noindent refers to itself in its definition. Specifically, recursion in computer programming is a subroutine that calls itself as part of its operation.
+
+\noindent 
+
+\noindent Of course, we have to be careful when we're doing this: we've got to make sure we stop somewhere and that our programs don't loop away into oblivion. The thing that tells us when to stop is called the \textbf{terminating condition}.
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Spidering a Web Site
+
+\noindent 
+
+\noindent A web site is a collection of pages linked together
+
+\noindent in some way. If you're running a web site, you might want to ensure that all the links work
+
+\noindent properly: that the pages inside your site can be read and that links to other sites on the Internet are still valid. The general procedure we need to follow is something like this: to check a page, get the web page, extract all links, get those pages to ensure that they are valid and reachable, and then check those pages still on our site.  So, let's say we had the following set of pages:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent index. html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent music. html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent perl. html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent computers. html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent www. perl. com
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent www. wrox. com
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent We'd start  at http://www.mysite.org/index.html,  and  from  there  we'd  find links  to  computers.html
+
+\noindent and music.html -- we'd want  to  check  each  of these.  Examining  each  of  those  for links  would  give
+
+\noindent us a  link to  perl.html, where  we'd  find  links  to  http://www.perl.com/ and  http://www.wrox.com/.
+
+\noindent We'd want to  make  sure that  these  pages  were  reachable,  but  since  these  were  off our site,  we
+
+\noindent wouldn't  examine them for further  links.  Any  broken  pages  beyond  that  are not  something  we  can do anything about.
+
+\noindent 
+
+\noindent Now, you should notice that there are two routes we can take to do this, starting from index.html:
+
+\noindent We could see extract links on the first level, computing.html and music.html. Then we could visit the links we got from that level, perl.html Then we could go to the external sites, where we'd have to
+
+\noindent stop. That's called a \textbf{breadth-first search}, and it looks like this:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent index.
+
+\noindent html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent computers.
+
+\noindent html
+
+\noindent music.
+
+\noindent html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent perl.
+
+\noindent html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent www.
+
+\noindent wrox. com
+
+\noindent www.
+
+\noindent perl. com
+
+\noindent 
+
+\noindent 
+
+\noindent Breadth First Search
+
+\noindent 
+
+\noindent 
+
+\noindent The important thing about a breadth-first search is that for each 'level' we need to keep track of which
+
+\noindent links to visit on the next level. It's what we did when traversing the tree of references at the end of
+
+\noindent Chapter 6. This isn't recursive, because we're not doing exactly the same thing with each site we get to.
+
+\noindent 
+
+\noindent However, there's another way we could do this
+
+\noindent which avoids the need to explicitly keep track of where we're going next time: we could go first to computers.html, then follow the link to perl.html, then follow the external links, and then back up and visit music.html. If there's a link, we visit it. If not, we go back to where we were. This is a \textbf{depth-first search}, and we can implement it recursively:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent computers. html
+
+\noindent 
+
+\noindent 
+
+\noindent index. html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent music. html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent perl.
+
+\noindent html
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent www.
+
+\noindent wrox. com
+
+\noindent www.
+
+\noindent perl. com
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Depth First Search
+
+\noindent 
+
+\noindent 
+
+\noindent Notice how each visit to a page is a similar shape to the ones above? That's the recursion. And notice how on external sites and pages with no links, we close the loop and head off to the next page? Those are our terminating conditions. We'll also add another terminating condition, of course -- don't investigate a page if the link is dead.
+
+\noindent 
+
+\noindent Here's what it looks like in Perl:
+
+\noindent 
+
+\noindent sub traverse \{
+
+\noindent my \$url = shift;
+
+\noindent return if \$seen\{\$url\}++; \# Break circular links
+
+\noindent my \$page = get(\$url);
+
+\noindent if (\$page) \{
+
+\noindent print "Link OK : \$url\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Link dead : \$url\textbackslash n";
+
+\noindent return; \# Terminating condition : if dead.
+
+\noindent \}
+
+\noindent return unless in\_our\_site(\$url); \# Terminating condition : if external.
+
+\noindent my @links = extract\_links(\$page);
+
+\noindent return unless @links; \# Terminating condition : no links
+
+\noindent for my \$link (@links) \{
+
+\noindent traverse(\$link) \# Recurse;
+
+\noindent \}
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Now let's turn that into a full program:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# webchecker.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent my \%seen;
+
+\noindent 
+
+\noindent print "Web Checker, version 1.\textbackslash n";
+
+\noindent die "Usage: \$0 $<$starting point$>$ $<$site base$>$\textbackslash n"
+
+\noindent unless @ARGV == 2;
+
+\noindent 
+
+\noindent my (\$start, \$base) = @ARGV;
+
+\noindent \$base .= "/" unless \$base=\~{}m\textbar /\$\textbar ;
+
+\noindent 
+
+\noindent die "\$start appears not to be in \$base\textbackslash n"
+
+\noindent unless in\_our\_site(\$start);
+
+\noindent traverse(\$start);
+
+\noindent 
+
+\noindent sub traverse \{
+
+\noindent my \$url = shift;
+
+\noindent \$url =\~{} s\textbar /\$\textbar /index.html\textbar ;
+
+\noindent return if \$seen\{\$url\}++; \# Break circular links
+
+\noindent my \$page = get(\$url);
+
+\noindent if (\$page) \{
+
+\noindent print "Link OK : \$url\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Link dead : \$url\textbackslash n";
+
+\noindent return; \# Terminating condition : if dead.
+
+\noindent \}
+
+\noindent return unless in\_our\_site(\$url); \# Terminating condition : if external.
+
+\noindent my @links = extract\_links(\$page, \$url);
+
+\noindent return unless @links; \# Terminating condition : no links
+
+\noindent for my \$link (@links) \{
+
+\noindent traverse(\$link) \# Recurse
+
+\noindent \}
+
+\noindent \}
+
+\noindent 
+
+\noindent sub in\_our\_site \{
+
+\noindent my \$url = shift;
+
+\noindent return index(\$url, \$base) == 0;
+
+\noindent \}
+
+\noindent 
+
+\noindent sub get \{
+
+\noindent my \$what = shift;
+
+\noindent sleep 5; \# Be friendly
+
+\noindent return `lynx -source \$what`;
+
+\noindent \}
+
+\noindent 
+
+\noindent sub extract\_links\{
+
+\noindent my (\$page, \$url) = @\_;
+
+\noindent my \$dir = \$url;
+
+\noindent my @links;
+
+\noindent \$dir =\~{} s\textbar (.*)/.*?\$\textbar \$1\textbar ;
+
+\noindent for (@links = (\$page=\~{}/$<$A HREF=["']?([\^{}\textbackslash s"'$>$]+)["']?/gi)) \{
+
+\noindent \$\_  = \$base.\$\_  if s\textbar \^{}/\textbar \textbar ;
+
+\noindent \$\_  = \$dir."/".\$\_  if !/\^{}(ht\textbar f)tp:/;
+
+\noindent \}
+
+\noindent return @links;
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent While it isn't very polished -- it's quite primitive -- it works:
+
+\noindent 
+
+\noindent $>$ http://www.wrox.com/Default.as\textbf{p }http://www.wrox.com/
+
+\noindent Web Checker, version 1.
+
+\noindent Link OK : http://www.wrox.com/Default.asp
+
+\noindent Link OK : http://www.wrox.com/Consumer/DJ.asp
+
+\noindent Link OK : http://www.wrox.com/Consumer/Store/ListTitles.asp?By=105\&Category=Consumer
+
+\noindent Link OK : http://www.wroxconferences.com
+
+\noindent Link OK : http://www.wrox.com/Consumer/Store/ListTitles.asp?By=104\&Category=Consumer
+
+\noindent Link OK : http://www.wrox.com/Consumer/Forums/Default.asp?Category=Consumer Link OK : http://www.wrox.com/Consumer/Store/Download.asp?Category=Consumer Link OK : http://www.wrox.com/Consumer/EditDetails.asp?Category=Consumer
+
+\noindent Link OK : http://www.wrox.com/Consumer/Contacts.asp
+
+\noindent \dots 
+
+\noindent $>$
+
+\noindent Now, we'll see how it works, and then we'll see what's wrong with it.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent First, we need to know two things: the first URL we're going to start with and the base for the site, so we know when we're about to visit an external site:
+
+\noindent 
+
+\noindent die "Usage: \$0 $<$starting point$>$ $<$site base$>$\textbackslash n"
+
+\noindent unless @ARGV == 2;
+
+\noindent 
+
+\noindent my (\$start, \$base) = @ARGV;
+
+\noindent 
+
+\noindent If the base URL doesn't end with a slash, we give it one, since we depend on this fact later:
+
+\noindent 
+
+\noindent \$base .= "/" unless \$base=\~{}m\textbar /\$\textbar ;
+
+\noindent 
+
+\noindent Next, we'll check that the page we're starting from is actually part of the site. You never know\dots :
+
+\noindent 
+
+\noindent die "\$start appears not to be in \$base\textbackslash n"
+
+\noindent unless in\_our\_site(\$start);
+
+\noindent 
+
+\noindent And then we kick off the action:
+
+\noindent 
+
+\noindent traverse(\$start);
+
+\noindent 
+
+\noindent Now here's the subroutine we saw above, slightly modified:
+
+\noindent 
+
+\noindent sub traverse \{
+
+\noindent my \$url = shift;
+
+\noindent 
+
+\noindent If the URL ends in a slash, we treat it as an index page:
+
+\noindent 
+
+\noindent \$url =\~{} s\textbar /\$\textbar /index.html\textbar ;
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{This is our first problem. It's a bad assumption. Some sites have the index page as}
+
+\noindent \textbf{index.html, some as index.htm, some as Default.asp -- in fact, it could be}
+
+\noindent \textbf{anything. The only way we can tell is to look at the exact response from the server}
+
+\noindent \textbf{when we ask for a URL ending in a slash.}
+
+\noindent 
+
+\noindent 
+
+\noindent Next we need to make sure we haven't seen the page before, because web sites can have circular links
+
+\noindent and we don't want to go whizzing around forever:
+
+\noindent 
+
+\noindent return if \$seen\{\$url\}++; \# Break circular links
+
+\noindent 
+
+\noindent And we get our page. If we successfully retrieve it, we say so. If the link is dead, there's no point trying
+
+\noindent to find other links from it:
+
+\noindent 
+
+\noindent my \$page = get(\$url);
+
+\noindent if (\$page) \{
+
+\noindent print "Link OK : \$url\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Link dead : \$url\textbackslash n";
+
+\noindent return; \# Terminating condition : if dead.
+
+\noindent \}
+
+\noindent 
+
+\noindent We don't look for links in external sites:
+
+\noindent 
+
+\noindent return unless in\_our\_site(\$url); \# Terminating condition : if external.
+
+\noindent 
+
+\noindent Now we extract the links and give up if we can't find any:
+
+\noindent 
+
+\noindent my @links = extract\_links(\$page, \$url);
+
+\noindent return unless @links; \# Terminating condition : no links
+
+\noindent 
+
+\noindent Now we call ourselves on each of the links:
+
+\noindent 
+
+\noindent for my \$link (@links) \{
+
+\noindent traverse(\$link) \# Recurse
+
+\noindent \}
+
+\noindent 
+
+\noindent Imagine how this would work for our example site above: the first call to index.html would put computers.html and music.html in @links. Then we'd call ourselves first on computers.html, which would in turn call ourselves on perl.html, which would then check the external links and
+
+\noindent return. There's nothing else on computers.html, so that'd return. Then we'd move onto music.html and return, and we'd be done -- this is a depth-first search, just like in the diagram. We look at the first link we see, every time:
+
+\noindent 
+
+\noindent \}
+
+\noindent 
+
+\noindent Now we come to the helper subroutines:
+
+\noindent 
+
+\noindent sub in\_our\_site \{
+
+\noindent my \$url = shift;
+
+\noindent return index(\$url, \$base) == 0;
+
+\noindent \}
+
+\noindent 
+
+\noindent We just check that the URL we're about to look at starts with the same characters as the base. This isn't foolproof, but it's close enough. We know that \$base has to end in a slash, so the only things we allow
+
+\noindent if we're looking at http://www.mysite.org/ are things that start http://www.mysite.org/\dots  It counts out
+
+\noindent FTP, HTTPS, or any other protocol, but it'll do.
+
+\noindent 
+
+\noindent sub get \{
+
+\noindent my \$what = shift;
+
+\noindent sleep 5; \# Be friendly
+
+\noindent return `lynx -source \$what`;
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent We use lynx again to get our web pages. While we make the effort to be friendly to the web servers by
+
+\noindent not bombarding them with requests as fast as we can, we don't check that the page we get back is valid. Sometimes if we're behind a cache and we request a dud site, we'll get back a perfectly fine page -- with
+
+\noindent an error message on it! We don't do any error checking here at all! Again, the only way to be really sure
+
+\noindent is to connect to the server directly and examine the exact response.
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Thankfully, we don't have to do all that work. There's a module called LWP::Simple}
+
+\noindent \textbf{which provides a subroutine, also called get, which does the job properly. If you've}
+
+\noindent \textbf{got that installed, just add use LWP::Simple; after the use strict; line, and}
+
+\noindent \textbf{remove this subroutine. If not, we'll be looking at it and how it works in Chapter 10.}
+
+\noindent 
+
+\noindent 
+
+\noindent Now we try and extract the links from the HTML file. There are two problems here: first, finding and
+
+\noindent extracting the links, and second turning them into real URLs. In order to prepare us for the second problem, we take the URL we've just looked up, and extract the directory name from it:
+
+\noindent 
+
+\noindent my \$dir = \$url;
+
+\noindent \$dir =\~{} s\textbar (.*)/.*\$\textbar \$1\textbar ;
+
+\noindent 
+
+\noindent This'll turn http://mysite.org/pictures/index.html into http://mysite.org/pictures, or so we hope. Now we try and extract the links:
+
+\noindent for (@links = (\$page=\~{}/$<$A HREF=["']?([\^{}\textbackslash s"'$>$]+)/gi)) \{
+
+\noindent 
+
+\noindent We look for all examples of  $<$A HREF= followed  by  an  optional  double  or  single  quote  mark,  and
+
+\noindent then some text that  isn't a  space,  quote  mark,  or closing  tag  that  we  extract.  This  should  extract  all  the links, right?
+
+\noindent 
+
+\noindent I've said before that parsing HTML using regular expressions is a potentially risky operation, and I
+
+\noindent stand by it. This makes a couple of assumptions that may not always hold true:
+
+\noindent 
+
+\noindent ? HREF always follows A with a single space and no elements in between.
+
+\noindent 
+
+\noindent ? There are no spaces, greater-than signs or quotation marks in the URL. According to the standards, there won't be, but the standards aren't always adhered to.
+
+\noindent ? This piece of text won't be found inside a $<$PRE$>$ tag, a comment tag, or anything else that changes it from the usual meaning.
+
+\noindent 
+
+\noindent ? This URL doesn't contain a \#-sign to point to a spot in the middle of the page.
+
+\noindent 
+
+\noindent And so on. A lot of these assumptions are usually going to be true, but we can't rely on them. As before, the only way to be sure is to go through and check the data piece by piece, and as before there's a module that does this for us. HTML::LinkExtor is designed to extract links from HTML files, but it's pretty tricky to use. Further, it's about a hundred times slower. When you must have
+
+\noindent the right answer, use that; when 'close enough is good enough', use the above.
+
+\noindent 
+
+\noindent Now, there are two types of filename that we'll find in there. Absolute URLs include the Internet host they're coming from: for example, http://www.mysite.org/perl.html. Relative URLs, on the other hand, speak about a file on the same server as the current on: for instance, from
+
+\noindent http://www.mysite.org/perl.html, we could say /music.html to get to http://www.mysite.org/music.html.
+
+\noindent Because relative URLs only give you directions from the current page, not from anywhere on the
+
+\noindent 
+
+\noindent 
+
+\noindent Internet, we have to convert them to absolute URLs before looking them up. This is why we need to
+
+\noindent know the directory name of the file we're currently looking at. The rules for turning relative URLs into absolute ones are tricky, but we simplify them here:
+
+\noindent 
+
+\noindent ? If the URL starts with a forward slash, it should be taken as from the base of the site. (This is another dangerous assumption -- the base of the site may not be the base of the server, which
+
+\noindent is where relative URLs are really measured from.) Since we know \$base ends with a forward slash, we string the initial slash from our relative URL and glue them together.
+
+\noindent ? Otherwise, if it doesn't start with http:// or ftp://, it's a relative URL and we need to add the URL for the current directory to the beginning of it:
+
+\noindent 
+
+\noindent \$\_  = \$base.\$\_  if s\textbar \^{}/\textbar \textbar ;
+
+\noindent \$\_  = \$dir."/".\$\_  if !/\^{}(ht\textbar f)tp:/;
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Again, this may well work for some -- or maybe even most -- cases, but it's not a}
+
+\noindent \textbf{complete solution. It doesn't take into account things like the fact that saying "./"}
+
+\noindent \textbf{refers to another file in the current directory. As usual, there's a module -- URI --}
+
+\noindent \textbf{which can help us convert between relative and absolute URLs.}
+
+\noindent 
+
+\noindent 
+
+\noindent Hopefully,  I've made you  think  about  some  of  the  assumptions  that  you  can  make  in  your
+
+\noindent programming and why you  need  to  either  cover  every  case  you  can think  of  --  or  get someone  else
+
+\noindent to  cover it for you.  In Chapter  10,  we'll  be  looking  at  modules  like  the ones  mentioned  here that can  get these things right for us.
+
+\noindent 
+
+\noindent 
+
+\noindent Style Point: Writing Big Programs
+
+\noindent Subroutines give us the perfect opportunity to think about that it means to program, and how to
+
+\noindent approach the programming problem. Learning the bricks and mortar of a programming language is one thing, but learning how to put them all together into a complex program is quite another.
+
+\noindent 
+
+\noindent One approach, then, is to separate out the various components; if a program's going to be performing a variety of tasks, you're obviously going to need to write code for each one. So, stage one in building a large program:
+
+\noindent 
+
+\noindent ? Identify what the program will do.
+
+\noindent 
+
+\noindent This turns the question from 'How do I write a program which handles my business?' into 'How do I write a program which does X, Y, and Z?' We've now identified individual goals and turned a very general problem into a little more specific one. Now we've got to work out how to achieve those goals.
+
+\noindent It might be useful at this stage to break the goals into manageable chunks; this is where subroutines can be a useful mirror of the development process.
+
+\noindent 
+
+\noindent ? Break down goals into a series of ideas
+
+\noindent 
+
+\noindent Imagine you're directing a robot. You've got a chair in front of you, and a wardrobe over on one wall. On  top of the wardrobe  is a box,  and  you  want  the  robot  to  bring  you  the box.  Unfortunately,  you can't just say 'bring me the box'; that's not a primitive enough operation for the robot. So you have to consider the stages involved and write them out explicitly. So, our draft program would go:
+
+\noindent 
+
+\noindent 
+
+\noindent Put chair in front of wardrobe.
+
+\noindent Stand on chair. Pick up box.
+
+\noindent Get down off chair. Move to human.
+
+\noindent Put down box.
+
+\noindent 
+
+\noindent That'd certainly be enough for most humans, but it probably wouldn't be enough for most robots. If
+
+\noindent they don't know about "put something somewhere", you're going to have to break it down some more. This is where subroutines come in, to break down the big tasks into simpler goals:
+
+\noindent 
+
+\noindent sub "Put chair in front of wardrobe" \{ Move to chair
+
+\noindent Pick up chair
+
+\noindent Move to wardrobe
+
+\noindent Put down chair
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Incidentally, this way of interspersing English descriptions with programming}
+
+\noindent \textbf{terminology to describe the outline of a program is called "pseudocode" -- it's one}
+
+\noindent \textbf{popular way to plan out a program.}
+
+\noindent 
+
+\noindent 
+
+\noindent Of course, you may find you have to define things like 'move' and 'pick up' in terms of individual
+
+\noindent movements; this depends on the tools already  provided for you. With Perl, you've got a reasonably
+
+\noindent high-level set of tools to play with; you don't have to break up strings yourself, for  instance, as you do in some languages. Getting to the computer's level is our final stage:
+
+\noindent 
+
+\noindent ? Specify each idea in a way the computer can understand.
+
+\noindent 
+
+\noindent Easier said than done, of course, because it means you need to know exactly what the computer can and can't understand; thankfully, though, computers are more than able to tell you when they can't
+
+\noindent understand something. Effectively, though, programming is just explaining how you want a task to be
+
+\noindent performed, in simple enough stages. Subroutines give you the ability to group those stages around individual tasks.
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Subroutines are a bit of code with a name, and they allow us to do two things: chunk our program into organizational units and perform calculations and operations on pieces of data, possibly returning some more data. The basic format of a subroutine definition is:
+
+\noindent 
+
+\noindent 
+
+\noindent sub name BLOCK
+
+\noindent 
+
+\noindent We can call a subroutine by just saying name if we've had the definition beforehand. If the definition is lower down in the program,  we  can  say  name(),  and you  may  see \&name used  in  older  programs. Otherwise, we  can use a forward  definition  to  tell  Perl  that  name should  be  interpreted  as  the  name
+
+\noindent of a subroutine.
+
+\noindent 
+
+\noindent 
+
+\noindent When we pass parameters to a subroutine, they end up in the special array @\_ -- this contains aliases of
+
+\noindent the data that was passed. Prototypes allow us to specify how many parameters to accept, and they also allow us to pass references instead of aliases; this in turn allows us to pass arrays and hashes without them being flattened.
+
+\noindent 
+
+\noindent We can take references to subroutines by saying \textbackslash \&name, and use them by saying \$subref-$>$() or
+
+\noindent \&\$subref. We can get anonymous subroutines by saying sub \{ BLOCK \} with no name. Subroutine references give us callbacks and the ability to fire off a subroutine from a set of several.
+
+\noindent 
+
+\noindent Ordinary subroutines are allowed to call other subroutines; they're also allowed to call themselves, which is called recursion. Recursion needs a terminating condition, or else the subroutinr will never
+
+\noindent end. Perl takes care of where it's going, where it came from, and the parameters that have been passed
+
+\noindent at each level.
+
+\noindent 
+
+\noindent Finally, we looked at how to divide up programs into subroutines, as well as the top-down level of programming: start with the goal, then subdivide into tasks and put these tasks into subroutines. Then subdivide again if necessary, until we've got to a level that the computer can understand.
+
+\noindent 
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent 1.   Go back to the seconds1.plx program seen earlier in the chapter. Rewrite it so that it contains
+
+\noindent a second subroutine that asks the user for a number, puts it into a global variable and converts that into hours, minutes, and seconds.
+
+\noindent 
+
+\noindent 2.   Create three subroutines such that each identify themselves on screen and then calls the next
+
+\noindent in the list -- that is, sub1 calls sub2 which calls sub3  -- until 300 subroutine calls have been made in total. When that does occur, break out of the loop and identify which was the last subroutine called. First do this using a global variable....
+
+\noindent 
+
+\noindent 3.   Repeat this exercise passing the current call number and call limit around as parameters
+
+\noindent 
+
+\noindent 4.   Write a subroutine that receives by reference an array containing a series of numbers, initially
+
+\noindent (1, 1). The subroutine then calculates the sum of the two most recent references and adds another element to the array that is the sum of both. Do this ten times and then print out your array. You should get the first twelve numbers of the Fibonacci sequence
+
+\noindent 
+
+\noindent 
+
+\[1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144\] 
+ 
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

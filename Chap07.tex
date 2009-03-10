@@ -1,0 +1,2405 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent References
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Way back in Chapter 2 we learned that we couldn't get away with putting one list inside another. Perl flattens lists, and an inner list would get subsumed into whatever we try to put it inside. Similarly,
+
+\noindent hashes have a single scalar key attached to a single scalar value; there's apparently no way we can put several pieces of data in one hash key.
+
+\noindent 
+
+\noindent However, these are both things we'll want to do from time to time. For instance, we might want to represent a chessboard as eight lists of eight squares so that we can address each square by row and column. We might also want to store information about someone -- their address, phone number, and occupation -- and key it to their name.
+
+\noindent 
+
+\noindent Of course, we've seen ways we could do this already: We could store our chessboard as an array of 64
+
+\noindent squares, and write some code to convert between row-and-column co-ordinates and a number from 0 to
+
+\noindent 63. For the address book, we could just use three hashes, each using the same set of names as keys -- not
+
+\noindent a terribly elegant solution but one that does the job with the techniques we've seen so far.
+
+\noindent 
+
+\noindent However, in this chapter, we're going to be looking at a very powerful facility in Perl that lets us do this sort of thing and a whole lot more besides -- \textbf{references}.
+
+\noindent 
+
+\noindent 
+
+\noindent What Is a Reference?
+
+\noindent 
+
+\noindent Put at its very  simplest,  a  reference  is  a  piece  of  data  that  tells  us  the location  of  another  piece  of  data.
+
+\noindent If  I told you  to  "see the first paragraph  on  page  130",  I'd effectively  be  giving  you  a  reference  to  the text  in that  paragraph.  It wouldn't  be the  text  itself,  but  it  would  tell  us  where  to  find  it.  This would also  let us talk about (refer to)  the  text  right  away,  despite  the fact  that  it's  somewhere  else  in  the
+
+\noindent book.  That's why  references are  so  useful  --  we can  specify  data  once,  and they  let us  access  it  from wherever else we are.
+
+\noindent 
+
+\noindent In Perl, a reference is always a scalar, although the data it refers to may not be: our cross-reference above wasn't even a sentence, but referred to an entire paragraph. Likewise, a reference, even though it's only a scalar, can talk about the data stored in an array or hash.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent Languages like  C and C++  have  a  feature  that's  similar  to  references,  called  \textbf{pointers}.  Now  if  you're
+
+\noindent familiar with  pointers,  please  try  and  put  the  knowledge  aside  while  you're  going  through  this  chapter. They are  similar to  references  in  that  both  point  us  to  locations  in  the computer's  memory. However, pointers tend to  leave  interpretation  of what's  there  for  the  programmer  to  disentangle.  References,  on
+
+\noindent the other hand, only store memory  locations  for  specific,  clearly  defined  data  structures  --  maybe  not
+
+\noindent \textit{pre}defined,  but defined nevertheless.  They  allow  you  to  leave  the arrangement  of  computer  memory
+
+\noindent to  the  computer  itself. For me,  this  is  a  huge  relief,  as the  machine's  far better  at  that sort  of  thing than I am.
+
+\noindent 
+
+\noindent The main use we have for references is the one we discussed above -- as flat-pack storage for arrays and hashes. We can now refer \textit{unambiguously }to the contents of an array or a hash, using a single scalar, so we're now in a position to do things like putting hashes inside hashes, lists inside lists, even hashes in
+
+\noindent lists, and vice-versa. But that's not all\dots 
+
+\noindent 
+
+\noindent Anonymity
+
+\noindent 
+
+\noindent We can also use references to create \textbf{anonymous data}. Anonymous data, as you might have guessed, is data that doesn't have a variable name attached to it. Instead, it's placed at a certain memory location,
+
+\noindent and we're given a simple reference to that location. Our list (or hash or whatever) has no name to speak of, but we know exactly where to find it, should we need to use it.
+
+\noindent 
+
+\noindent \textit{This is a bit like literal data, where we had literal scalars and lists in our program, but not quite --}
+
+\noindent \textit{literal data was constant: we couldn't change it.}
+
+\noindent 
+
+\noindent 
+
+\noindent For example, instead of creating an array (1,2,3) called @array and then creating a reference to
+
+\noindent @array, we can cut out the middle man, by referencing (1,2,3) directly.
+
+\noindent 
+
+\noindent This lets us create real scalars, arrays, and hashes, containing data that we can refer to and modify, just
+
+\noindent as if it were a normal variable. This doesn't mean that we leave arrays and hashes floating about
+
+\noindent randomly in our program to be plucked out of the air whenever we need them. We know where to find this anonymous data (we have a reference that's telling us just this), and it only exists for as long as part
+
+\noindent of our program is using it.
+
+\noindent 
+
+\noindent 
+
+\noindent The Lifecycle of a Reference
+
+\noindent 
+
+\noindent To understand how we deal with references, let's look at the three areas of a reference's life cycle -- creation, use, and destruction. After that, we'll see how we can practically use references to create more complicated data structures than simple arrays and hashes.
+
+\noindent 
+
+\noindent Reference Creation
+
+\noindent 
+
+\noindent There are two ways to create a reference, one for each of the following situations:
+
+\noindent 
+
+\noindent ? You've already got the data in a variable.
+
+\noindent 
+
+\noindent ? You want to use anonymous data to go straight to a reference.
+
+\noindent 
+
+\noindent 
+
+\noindent The simple rule for the first situation where the variable is already defined is:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{You create a reference by putting a backslash in front of the variable.}
+
+\noindent 
+
+\noindent 
+
+\noindent That's it. Let's see some examples:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = (1, 2, 3, 4, 5);
+
+\noindent my \$array\_r = \textbackslash @array;
+
+\noindent 
+
+\noindent We create a perfectly normal array variable and then take a reference to it by putting a backslash
+
+\noindent before the variable's name. That's literally all there is to it. In the same way, we can create a reference
+
+\noindent to a hash:
+
+\noindent 
+
+\noindent 
+
+\noindent my \%hash = ( apple =$>$ "pomme", pear =$>$ "poire" );
+
+\noindent my \$hash\_r = \textbackslash \%hash;
+
+\noindent 
+
+\noindent or a scalar:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$scalar = 42;
+
+\noindent my \$scalar\_r = \textbackslash \$scalar;
+
+\noindent 
+
+\noindent We can treat our references just like ordinary scalars, so we can put them in an array:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$a = 3; my \$b = 4; my \$c = 5;
+
+\noindent my @refs = (\textbackslash \$a, \textbackslash \$b, \textbackslash \$c);
+
+\noindent 
+
+\noindent Or, if you don't like putting so many backslashes in your array definitions, you can declare this kind of array in a second way:
+
+\noindent 
+
+\noindent 
+
+\noindent my @refs=\textbackslash (\$a, \$b, \$c);
+
+\noindent 
+
+\noindent So, if you try referencing a list, you won't actually get a reference to the list, but rather a list of references to each element \textit{in }the list. If this isn't what you want, you can always put the data into an array. We can also put references in a hash, but only as values. Perl doesn't yet support references as hash keys. You can certainly do this, though:
+
+\noindent 
+
+\noindent my @english = qw(January February March April May June);
+
+\noindent my @french  = qw(Janvier Fevrier  Mars  Avril Mai Juin);
+
+\noindent my \%months  = ( english =$>$ \textbackslash @english, french =$>$ \textbackslash @french );
+
+\noindent 
+
+\noindent So what does this give us? We have a hash with two keys, english and french. The english key contains a reference to an array of English month names, while the french key contains a reference to
+
+\noindent an array of French month names. With these references, we can access and modify the original data,
+
+\noindent which means that, in effect, we've stored two arrays inside a single hash.
+
+\noindent 
+
+\noindent 
+
+\noindent We can use the same trick to store arrays inside arrays:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array1 = ( 10, 20, 30, 40 );
+
+\noindent my @array2=( 1, 2, \textbackslash @array1, 3, 4);
+
+\noindent 
+
+\noindent Now @array2 is made up of five scalars, and the middle one is a reference to another array. We can do this over and over again, if we want to:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array3 = (2, 4, \textbackslash @array2, 6, 8);
+
+\noindent my @array4 = (100, 200, \textbackslash @array3, 300, 400);
+
+\noindent 
+
+\noindent This gives us a very versatile way to store complex data structures. What we've just done is to store a structure that looks like this:
+
+\noindent 
+
+\noindent 
+
+\noindent @ array4
+
+\noindent 
+
+\[100\] 
+
+
+\[200\] 
+
+
+\noindent @ array3
+
+\noindent 
+
+\noindent @ array3
+
+\noindent 
+
+\[300\] 
+
+
+\[400\] 
+
+
+\[2\] 
+
+
+\[4\] 
+
+
+\noindent @ array2
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent @ array2
+
+\noindent 
+
+\[6\] 
+
+\[1\] 
+
+\[8\] 
+
+\[2\] 
+
+
+\noindent @ array1
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent @ array1
+
+\noindent 
+
+\[3\] 
+
+
+\[4\] 
+
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Anonymous References}
+
+\noindent Our next step is to do all this without having to go through the interim stages of creating the variables. Anonymous references will let us go straight from our raw data to a reference, and the rules here are
+
+\noindent just as simple:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{To get an array reference instead of an array, use square brackets [] instead of}
+
+\noindent \textbf{parentheses.}
+
+\noindent 
+
+\noindent \textbf{To get a hash reference instead of a hash, use curly braces \{\} instead of parentheses.}
+
+\noindent 
+
+\noindent 
+
+\noindent So, referring to our examples above, instead of doing this:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = (1, 2, 3, 4, 5);
+
+\noindent my \$array\_r = \textbackslash @array;
+
+\noindent 
+
+\noindent we can go straight to an array reference like this:
+
+\noindent 
+
+\noindent my \$array\_r = [1, 2, 3, 4, 5];
+
+\noindent 
+
+\noindent Likewise, to get a hash reference, instead of doing this:
+
+\noindent 
+
+\noindent 
+
+\noindent my \%hash = ( apple =$>$ "pomme", pear =$>$ "poire" );
+
+\noindent my \$hash\_r = \textbackslash \%hash;
+
+\noindent 
+
+\noindent we say:
+
+\noindent 
+
+\noindent my \$hash\_r = \{ apple =$>$ "pomme", pear =$>$ "poire" \};
+
+\noindent 
+
+\noindent We can put anonymous references inside hashes and arrays, just like references created from variables:
+
+\noindent 
+
+\noindent 
+
+\noindent my \%months  = (
+
+\noindent english =$>$ ["January", "February", "March", "April", ",May", ",June"], french  =$>$ ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin"]
+
+\noindent );
+
+\noindent 
+
+\noindent And we can put references inside references:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = ( 100,200,[ 2,4,[ 1,2,[ 10,20,30,40,50 ],3,4 ],6,8 ],300,400 );
+
+\noindent 
+
+\noindent That's exactly the same structure as we created above. Here it is again, with a lot more spacing added:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = ( 100, 200,
+
+\[[ 2, 4,\] 
+
+\[[ 1, 2,\] 
+
+\[[ 10, 20, 30, 40, 50 ],\] 
+
+\[3,4 ],\] 
+
+\[6,8 ],\] 
+
+\[300, 400 );\] 
+
+
+\noindent What about creating an anonymous scalar -- what happens if we try this? Well, as we saw above, trying
+
+\noindent to create a reference to a list gives us a list of references to the list's elements. So if we did this:
+
+\noindent 
+
+\noindent 
+
+\noindent my @refs = \textbackslash (1, 2, 3, 4);
+
+\noindent 
+
+\noindent we'd expect it to give us four references, to 1, 2, 3, and 4. Perl does in fact do this, but while it will let
+
+\noindent us  retrieve the numbers, it won't allow us to change them -- it's almost like trying to modify a literal in your variable. If we ever want to get a scalar reference, it's best to use a temporary variable.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Using References}
+
+\noindent Once we've created our references (whether to real variables or anonymous data), we're going to want
+
+\noindent to use them. So how do we access the data? The operation we use to get data back from a reference is called \textbf{dereferencing}, and once again, the rule's very simple:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{To dereference data, put the reference in curly braces wherever you would normally}
+
+\noindent \textbf{use a variable's name.}
+
+\noindent 
+
+\noindent 
+
+\noindent First, we'll see how to do this with arrays. Say we've got an array and a reference:
+
+\noindent 
+
+\noindent my @array = (1, 2, 3, 4, 5);
+
+\noindent my \$array\_r = \textbackslash @array;
+
+\noindent 
+
+\noindent We can get at the array like this:
+
+\noindent 
+
+\noindent my @array2  = @\{\$array\_r\};
+
+\noindent 
+
+\noindent We put the reference,  \$array\_r,  inside  curly  braces,  and  use that  instead  of  our original  array
+
+\noindent variable @array.  We  can use  this  dereferenced  array,  @\{\$array\_r\},  anywhere  we  might  otherwise
+
+\noindent use an array:
+
+\noindent 
+
+\noindent Try It Out : Constructing and Dereferencing
+
+\noindent 
+
+\noindent For our first attempt, we'll do something simple. We'll just create a reference to an array, then use it as
+
+\noindent we'd normally use an array:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# deref1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = (1, 2, 3, 4, 5);
+
+\noindent my \$array\_r = \textbackslash @array;
+
+\noindent 
+
+\noindent print "This is our dereferenced array: @\{\$array\_r\}\textbackslash n";
+
+\noindent for (@\{\$array\_r\}) \{
+
+\noindent print "An element: \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent print "The highest element is number \$\#\{\$array\_r\}\textbackslash n";
+
+\noindent print "This is what our reference looks like: \$array\_r\textbackslash n";
+
+\noindent 
+
+\noindent Let's run this:
+
+\noindent 
+
+\noindent $>$\textbf{perl deref1.plx}
+
+\noindent This is our dereferenced array: 1 2 3 4 5
+
+\noindent An element: 1
+
+\noindent An element: 2
+
+\noindent An element: 3
+
+\noindent An element: 4
+
+\noindent An element: 5
+
+\noindent The highest element is number 4
+
+\noindent This is what our reference looks like: ARRAY(0xa063fbc)
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent We've seen a few examples of creating references now, so you should be familiar with this syntax. First, we define an array variable and its contents and then backslash it to create a reference to it.
+
+\noindent 
+
+\noindent my @array = (1, 2, 3, 4, 5);
+
+\noindent my \$array\_r = \textbackslash @array;
+
+\noindent 
+
+\noindent Now we can use @\{\$array\_r\} instead of @array. Both refer to exactly the same data, and both do exactly the same things. For instance, @\{\$array\_r\} will interpolate inside double quotes:
+
+\noindent 
+
+\noindent print "This is our dereferenced array: @\{\$array\_r\}\textbackslash n";
+
+\noindent 
+
+\noindent Just as if we'd used the original @array, our dereferenced array prints out the contents of the array, separated by spaces:
+
+\noindent 
+
+\noindent This is our dereferenced array: 1 2 3 4 5
+
+\noindent 
+
+\noindent In the same way, we can use the array in a for loop, with no surprises:
+
+\noindent 
+
+\noindent for (@\{\$array\_r\}) \{
+
+\noindent print "An element: \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Finally, we can also get the highest element number in the array, just as if we'd said \$\#array, like this:
+
+\noindent 
+
+\noindent print "The highest element is number \$\#\{\$array\_r\}\textbackslash n";
+
+\noindent 
+
+\noindent Now, we take a look at what our reference actually looks like itself. After all, it's a scalar, so it must have
+
+\noindent a value that we can print out and look at. It does, and this is what we get if we print out the reference:
+
+\noindent 
+
+\noindent This is what our reference looks like: ARRAY(0xa063fbc)
+
+\noindent 
+
+\noindent Well, the ARRAY part obviously tells us that we have an array reference, but what about the part in brackets? Well, we know that a reference is a memory location, telling us where the data is stored in the computer's memory. We generally don't need to worry about this actual value, as we can't do that much with it. Note also that it's unlikely that you'll get exactly the same value as I have here. It will simply depend on what hardware your system has, what other software you're running, and what perl is doing.
+
+\noindent 
+
+\noindent \textit{There is one way you might want to make use of this value directly: to see if two references refer to}
+
+\noindent \textit{the same piece of data, you can compare them as numbers using ==.}
+
+\noindent 
+
+\noindent If we try and manipulate it, it ceases to be a reference and becomes an ordinary number -- the value of the hexadecimal above. We can see that if we run the following program:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# noref.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$ref = [1, 2, 3];
+
+\noindent print "Before: \$ref\textbackslash n";
+
+\noindent print "@\{\$ref\}\textbackslash n";
+
+\noindent \$ref++;
+
+\noindent print "After: \$ref\textbackslash n";
+
+\noindent print "@\{\$ref\}\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent will give us something like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl noref.plx}
+
+\noindent Before: ARRAY(0xa041160)
+
+\[1 2 3 \] 
+After: 168038753
+
+\noindent Can't use string ("168038753") as an ARRAY ref while "strict refs" in use at noref.plx line 11.
+
+\noindent $>$
+
+\noindent 
+
+\noindent When we tried to modify our reference, it degenerated to the ordinary number 168038752, which is
+
+\noindent the 0xa041160 mentioned above. Adding one to that gave us the number above, which is an ordinary string, rather than a reference. Perl then complains if we try and use it as a reference.
+
+\noindent 
+
+\noindent This is why we can't use references as hash keys -- these can only be strings, so our references will get
+
+\noindent 'stringified' to something like the form above. Once that happens, we're not able to use them as references again.
+
+\noindent 
+
+\noindent \textit{Array Elements}
+
+\noindent What about the individual elements in an array? How do we access these? Well, the rule is pretty much the same as for the array as a whole; just use the reference in curly braces in the same way you would
+
+\noindent the array name:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# deref2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @band = qw(Crosby Stills Nash Young);
+
+\noindent my \$ref  = \textbackslash @band;
+
+\noindent for (0..3) \{
+
+\noindent print "Array : ", \$band[\$\_]  , "\textbackslash n";
+
+\noindent print "Reference: ", \$\{\$ref\}[\$\_], "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent As you can see, these refer to the same thing:
+
+\noindent 
+
+\noindent $>$\textbf{perl deref2.plx}
+
+\noindent Array : Crosby
+
+\noindent Reference : Crosby Array : Stills Reference : Stills Array : Nash Reference : Nash Array : Young Reference : Young
+
+\noindent $>$
+
+\noindent 
+
+\noindent The  important thing to  note here  is  that  these  are  not  two  different  arrays  --  they  are two  ways
+
+\noindent of referring  to  the  \textit{same  }piece of  data.  This  is very  important  to  remember  when  we  start modifying references.
+
+\noindent 
+
+\noindent 
+
+\noindent Reference Modification
+
+\noindent 
+
+\noindent If we want to modify the data referred to by a reference, the same rule applies as before. Replace the name of the array with the reference in curly brackets. However, when we do this, the data in the original array will change, too:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# modify1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @band = qw(Crosby Stills Nash Young);
+
+\noindent my \$ref  = \textbackslash @band;
+
+\noindent print "Band members before: @band\textbackslash n";
+
+\noindent pop @\{\$ref\};
+
+\noindent print "Band members after: @band\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl modify1.plx}
+
+\noindent Band members before: Crosby Stills Nash Young
+
+\noindent Band members after: Crosby Stills Nash
+
+\noindent $>$
+
+\noindent 
+
+\noindent We can still use push, pop, shift, unshift (and so on) to manipulate the array. However, in doing so, we'll also be changing what's stored in @band.
+
+\noindent 
+
+\noindent It's quite possible to have multiple references to the same data. Just as before, if you use one to change the data, you change it for the others, too. This will give the same results as before:
+
+\noindent 
+
+\noindent my @band = qw(Crosby Stills Nash Young);
+
+\noindent my \$ref1 = \textbackslash @band;
+
+\noindent my \$ref2 = \textbackslash @band;
+
+\noindent print "Band members before: @band\textbackslash n";
+
+\noindent pop @\{\$ref1\};
+
+\noindent print "Band members after: @\{\$ref2\}\textbackslash n";
+
+\noindent 
+
+\noindent The same goes for anonymous references:
+
+\noindent 
+
+\noindent my \$ref1 = [qw(Crosby Stills Nash Young)];
+
+\noindent my \$ref2 = \$ref1;
+
+\noindent print "Band members before: @\{\$ref2\}\textbackslash n";
+
+\noindent pop @\{\$ref1\};
+
+\noindent print "Band members after: @\{\$ref2\}\textbackslash n";
+
+\noindent 
+
+\noindent Notice here that we're using [qw(\dots )], which is the same as saying
+
+\noindent 
+
+\noindent [('Crosby', 'Stills', 'Nash', 'Young')]
+
+\noindent 
+
+\noindent and the brackets inside get removed, just like when we said ((1,2,3)) back in Chapter 3. Because anonymous references give us a reference straight away, it's possible to say things like:
+
+\noindent 
+
+\noindent @\{[ 1, 2, 3 ]\}
+
+\noindent 
+
+\noindent 
+
+\noindent This little bit of trickery (thanks to Randal Schwartz) will, of course, give us the list 1, 2, 3. However, it's
+
+\noindent less useless than it seems. An array dereference will interpolate just like an ordinary array, so you can use this to make functions interpolate inside strings. For example:
+
+\noindent 
+
+\noindent print "The time is @\{[scalar localtime]\} according to my clock";
+
+\noindent 
+
+\noindent will display just the same as:
+
+\noindent 
+
+\noindent print "The time is ", scalar localtime, " according to my clock";
+
+\noindent 
+
+\noindent You can also modify individual elements, using the syntax \$\{\$reference\}[\$element]:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# modelem.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = (68, 101, 114, 111, 117);
+
+\noindent my \$ref = \textbackslash @array;
+
+\noindent \$\{\$ref\}[0] = 100;
+
+\noindent print "Array is now : @array\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl modelem.plx}
+
+\noindent Array is now 100 101 114 111 117
+
+\noindent $>$
+
+\noindent 
+
+\noindent And again, you can do the same with anonymous data:
+
+\noindent 
+
+\noindent my \$ref = [68, 101, 114, 111, 117];
+
+\noindent \$\{\$ref\}[0] = 100;
+
+\noindent print "Array is now : @\{\$ref\}\textbackslash n";
+
+\noindent 
+
+\noindent \textit{Hash References}
+
+\noindent For references to hashes, the rule is exactly the same. So, to access the hash that a reference points to, you use \%\{\$hash\_r\}. If you want to get at a hash entry \$hash\{green\}, you say
+
+\noindent \$\{hash\_r\}\{green\}:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# hash.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \%hash = (
+
+\noindent 1 =$>$ "January", 2 =$>$ "February", 3 =$>$ "March", 4 =$>$ "April",
+
+\noindent 5 =$>$ "May", 6 =$>$ "June", 7 =$>$ "July", 8 =$>$ "August",
+
+\noindent 9 =$>$ "September", 10 =$>$ "October", 11 =$>$ "November", 12 =$>$ "December"
+
+\noindent );
+
+\noindent 
+
+\noindent my \$href = \textbackslash \%hash;
+
+\noindent for (keys \%\{\$href\}) \{
+
+\noindent print "Key: ", \$\_, "\textbackslash t";
+
+\noindent print "Hash: ",\$hash\{\$\_\}, "\textbackslash t";
+
+\noindent print "Ref: ",\$\{\$href\}\{\$\_\}, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent As expected, we get the same data when using the hash as when using the reference:
+
+\noindent 
+
+\noindent $>$\textbf{perl hash.plx}
+
+\noindent Key: 1 Hash: January Ref: January
+
+\noindent Key: 2 Hash: February Ref: February Key: 3 Hash: March Ref: March Key: 10   Hash: October Ref: October
+
+\begin{tabular}{|p{0.6in}|p{0.8in}|p{0.7in}|} \hline 
+Key: 4 & Hash: April & Ref: April \\ \hline 
+Key: 11 & Hash: November & Ref: November \\ \hline 
+Key: 5 & Hash: May & Ref: May \\ \hline 
+Key: 12 & Hash: December & Ref: December \\ \hline 
+Key: 6 & Hash: June & Ref: June \\ \hline 
+Key: 7 & Hash: July & Ref: July \\ \hline 
+Key: 8 & Hash: August & Ref: August \\ \hline 
+Key: 9 & Hash: September & Ref: September \\ \hline 
+$>$ &  &  \\ \hline 
+\end{tabular}
+
+
+
+\noindent This should also help to remind you that Perl's hashes aren't ordered as you might expect!
+
+\noindent 
+
+\noindent \textit{Notation Shorthands}
+
+\noindent There are two more rules, but they're not essential for understanding and using references. They just make it easier for us to write programs manipulating references:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{You don't have to write the curly brackets.}
+
+\noindent 
+
+\noindent 
+
+\noindent You may find that it makes your code a little clearer if you omit the curly brackets around the reference.
+
+\noindent For example, we could rewrite our original dereferencing example deref1.plx like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# dref1alt.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my @array = (1, 2, 3, 4, 5);
+
+\noindent my \$array\_r = \textbackslash @array;
+
+\noindent 
+
+\noindent print "This is our dereferenced array: @\$array\_r\textbackslash n";
+
+\noindent for (@\$array\_r) \{
+
+\noindent print "An element: \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent print "The highest element is number \$\#\$array\_r\textbackslash n";
+
+\noindent print "This is what our reference looks like: \$array\_r\textbackslash n";
+
+\noindent 
+
+\noindent Our hash example hash.plx would then look like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# hashalt.plx use warnings; use strict;
+
+\noindent 
+
+\noindent 
+
+\noindent my \%hash = (
+
+\noindent 1 =$>$ "January", 2 =$>$ "February", 3 =$>$ "March", 4 =$>$ "April",
+
+\noindent 5 =$>$ "May", 6 =$>$ "June", 7 =$>$ "July", 8 =$>$ "August",
+
+\noindent 9 =$>$ "September", 10 =$>$ "October", 11 =$>$ "November", 12 =$>$ "December"
+
+\noindent );
+
+\noindent 
+
+\noindent my \$href = \textbackslash \%hash;
+
+\noindent for (keys \%\$href) \{
+
+\noindent print "Key: ", \$\_," ";
+
+\noindent print "Hash: ",\$hash\{\$\_\}," ";
+
+\noindent print "Ref: ",\$\$href\{\$\_\}," ";
+
+\noindent print "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent However, it may sometimes be clearer to leave the curly brackets in. Consider these three assignments:
+
+\noindent 
+
+\noindent 
+
+\noindent \$\$hashref\{KEY\} = "VALUE"; \# 1
+
+\noindent \$\{\$hashref\}\{KEY\} = "VALUE"; \# 2
+
+\noindent \$\{\$hashref\{KEY\}\} = "VALUE"; \# 3
+
+\noindent 
+
+\noindent Case 1 is the same as case 2, whereas case 3 dereferences the scalar reference stored in
+
+\noindent \$hashref\{KEY\}.
+
+\noindent 
+
+\noindent You can also run into problems when you have one reference stored inside another. If we have the following array reference:
+
+\noindent 
+
+\noindent 
+
+\noindent \$ref=[ 1, 2,[ 10, 20] ];
+
+\noindent 
+
+\noindent we can get at the internal array reference by saying \$\{\$ref[2]\}. But say we want to get at the second element of that array -- the one containing the value 20. Well, we could store the reference inside
+
+\noindent another scalar and then dereference it, like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \$inside  = \$\{\$ref\}[2];
+
+\noindent \$element = \$\{\$inside\}[1];
+
+\noindent 
+
+\noindent Or we could get the element directly, by repeatedly substituting references for array names:
+
+\noindent 
+
+\noindent 
+
+\noindent \$element = \$\{\$\{ref\}[2]\}[1];
+
+\noindent 
+
+\noindent This gets very ugly, very quickly, especially if you're dealing with hash references, where it becomes hard to tell if the curly braces surround a reference or a hash key.
+
+\noindent 
+
+\noindent So, to help us clear it up again, we introduce another rule:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Instead of \$\{\$ref\}, we can say \$ref-$>$}
+
+\noindent 
+
+\noindent 
+
+\noindent Let's demonstrate this, by taking one of our previous examples, modelem.plx, and incorporating this
+
+\noindent into the code. Here's the relevant piece of the original:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = (68, 101, 114, 111, 117);
+
+\noindent my \$ref = \textbackslash @array;
+
+\noindent \$\{\$ref\}[0] = 100;
+
+\noindent print "Array is now : @array\textbackslash n";
+
+\noindent 
+
+\noindent and here it is rewritten:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = (68, 101, 114, 111, 117);
+
+\noindent my \$ref = \textbackslash @array;
+
+\noindent \$ref-$>$[0] = 100;
+
+\noindent print "Array is now : @array\textbackslash n";
+
+\noindent 
+
+\noindent Likewise for hashes, we can use this arrow notation to make things a bit clearer for ourselves. Recall
+
+\noindent hash.plx from a little while ago:
+
+\noindent 
+
+\noindent 
+
+\noindent for (keys \%\{\$href\}) \{
+
+\noindent print "Key: ", \$\_," ";
+
+\noindent print "Hash: ",\$hash\{\$\_\}," "; print "Ref: ",\$\{\$href\}\{\$\_\}," "; print "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Instead of that, we can write:
+
+\noindent 
+
+\noindent 
+
+\noindent for (keys \%\{\$href\}) \{
+
+\noindent print "Key: ", \$\_," ";
+
+\noindent print "Hash: ",\$hash\{\$\_\}," ";
+
+\noindent print "Ref: ",\$href-$>$\{\$\_\}," ";
+
+\noindent print "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Now we can get at our array-in-an-array like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \$ref=[ 1, 2,[ 10, 20] ];
+
+\noindent \$element = \{\$ref-$>$[2]\}-$>$[1];
+
+\noindent 
+
+\noindent or more simply:
+
+\noindent 
+
+\noindent 
+
+\noindent \$element = \$ref-$>$[2]-$>$[1];
+
+\noindent 
+
+\noindent However, we've got one more sub-rule that can simplify this even further:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Between sets of brackets, the arrow is optional.}
+
+\noindent 
+
+\noindent 
+
+\noindent We can therefore rewrite the above as:
+
+\noindent 
+
+\noindent \$element = \$ref-$>$[2][1];
+
+\noindent 
+
+\noindent 
+
+\noindent Personally, I never omit the arrow in this way -- it's far too easy to confuse \$ref-$>$[0][1] with
+
+\noindent \$ref[0][1], which perl will interpret as   a dereference of the first element in the ordinary array @ref.
+
+\noindent 
+
+\noindent Reference Counting and Destruction
+
+\noindent 
+
+\noindent We've now seen all the ways you can create and use references. So when and how are references destroyed? Well, every piece of data in Perl has something called a \textbf{reference count }attached to it. This keeps track of the number of instances of the executing code accessing that exact chunk of data.
+
+\noindent 
+
+\noindent When we create a reference to some data, the data's reference count goes up by one. When we stop referring to it -- we reassign the reference variable or 'break' it (as we saw above, when we tried to modify its value) -- the reference count goes down. When nobody's using the data, and the reference count gets down to zero, the data is removed. Consider the following example:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# refcount.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$ref;
+
+\noindent \{
+
+\noindent my @array = (1, 2, 3);
+
+\noindent \$ref = \textbackslash @array;
+
+\noindent my \$ref2 = \textbackslash @array;
+
+\noindent \$ref2 = "Hello!";
+
+\noindent \}
+
+\noindent undef \$ref;
+
+\noindent 
+
+\noindent Now, let's look at the references to the array (1, 2, 3) as we go through the program. To start with, the array is created, and the data (1, 2, 3) has one reference, which is in use by the array @array:
+
+\noindent 
+
+\noindent my \$ref;
+
+\noindent \{
+
+\noindent my @array = (1, 2, 3);
+
+\noindent 
+
+\noindent Now we've created another reference to it, and the reference count increases to two:
+
+\noindent 
+
+\noindent 
+
+\noindent \$ref = \textbackslash @array;
+
+\noindent 
+
+\noindent Once again we create a reference, and the count goes up to three:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$ref2 = \textbackslash @array;
+
+\noindent 
+
+\noindent However, we've now changed that reference to be an ordinary string -- it's not pointing at our array any more, so the reference count on (1, 2, 3) goes back down to two. Note that changing \$ref2 doesn't affect the original array. That only happens when we dereference:
+
+\noindent 
+
+\noindent \$ref2 = "Hello!";
+
+\noindent 
+
+\noindent 
+
+\noindent Now a block ends, and all the lexical variables -- the my variables -- inside that block go out of scope.
+
+\noindent That means that \$ref2 and @array are destroyed. The reference count of the data (1, 2, 3) goes down again because @array is no longer using it. However, \$ref still has a reference to it, so the reference count is still one, and the data itself is not removed from the system. \$ref still refers to (1,
+
+\noindent 2, 3) and can access and change this data as before, that is, of course, until we get rid of it:
+
+\noindent 
+
+\noindent 
+
+\noindent \}
+
+\noindent 
+
+\noindent Now the final reference to the data (1, 2, 3) is removed, that array is finally freed:
+
+\noindent 
+
+\noindent 
+
+\noindent undef \$ref;
+
+\noindent 
+
+\noindent \textit{Counting Anonymous References}
+
+\noindent Anonymous data works in the same way. However, it doesn't get its initial reference count from being attached to a variable, but rather from when its first explicit reference is created:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$ref = [1, 2, 3];
+
+\noindent 
+
+\noindent This data therefore has a reference count of one, rather than:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = (1, 2, 3);
+
+\noindent my \$ref = \textbackslash @array;
+
+\noindent 
+
+\noindent which has a count of two.
+
+\noindent 
+
+\noindent 
+
+\noindent Using References for Complex Data Structures
+
+\noindent 
+
+\noindent Now that we've looked at what references are, you might be asking: why on earth would we want to use them? Well, as we mentioned in the introduction, we often want to create data structures that are more complex than simple arrays or hashes. We may need to store arrays inside arrays, or hashes inside
+
+\noindent hashes, and References help us do this.
+
+\noindent 
+
+\noindent So let's now take a look at a few of the complex data structures we can create with references.It won't be exhaustive by any means, but it should serve to give you ideas as to how complex data structures look
+
+\noindent and work in Perl, and it should also help you to understand the most common data structures.
+
+\noindent 
+
+\noindent Matrices
+
+\noindent 
+
+\noindent What is a matrix? No, not the thing that Keanu Reeves wants out of. A matrix is simply an array of
+
+\noindent arrays. You can refer to any single element with a combination of two subscripts, which you might want
+
+\noindent to think of as a row number and a column number. It's harking back to the chessboard example we mentioned in the introduction to this chapter.
+
+\noindent 
+
+\noindent If you use the arrow syntax, matrices are very easy to use. You get at an element by saying:
+
+\noindent 
+
+\noindent \$array[\$row]-$>$[\$column]
+
+\noindent 
+
+\noindent 
+
+\noindent \$array[\$row] is an array reference, and we're derefencing the \$column'th element in it. With a
+
+\noindent chessboard example, it would look like this:
+
+\noindent 
+
+\noindent 
+
+\begin{tabular}{|p{1.2in}|p{0.3in}|} \hline 
+7 &  \\ \hline 
+ &  \\ \hline 
+6 &  \\ \hline 
+ &  \\ \hline 
+5 &  \\ \hline 
+ &  \\ \hline 
+4 &  \\ \hline 
+ &  \\ \hline 
+3 &  \\ \hline 
+ &  \\ \hline 
+2 &  \\ \hline 
+ &  \\ \hline 
+1 &  \\ \hline 
+ &  \\ \hline 
+0 &  \\ \hline 
+ &  \\ \hline 
+\end{tabular}
+
+
+
+\noindent 
+
+\noindent So, \$array[0]-$>$[0] would be the bottom left hand corner of our chessboard, and \$array[7]-
+
+\noindent $>$[7] would be the top right.
+
+\noindent 
+
+\noindent Autovivification
+
+\noindent 
+
+\noindent Now, there's one last thing we need to know about references before we go on. If we assign values to a reference, perl will automatically create all appropriate references necessary to make it work. So, if we say this:
+
+\noindent 
+
+\noindent my \$ref;
+
+\noindent \$ref-$>$\{UK\}-$>$\{England\}-$>$\{Oxford\}-$>$[1999]-$>$\{Population\} = 500000;
+
+\noindent 
+
+\noindent perl will automatically know that we need \$ref to be a hash reference. So, it'll make us a nice new anonymous hash:
+
+\noindent 
+
+\noindent 
+
+\noindent \$ref = \{\};
+
+\noindent 
+
+\noindent Then we need \$ref-$>$\{UK\} to be a hash reference, because we're looking for the hash key England;
+
+\noindent that hash entry needs to be an array reference, and so on. Perl effectively does this:
+
+\noindent 
+
+\noindent 
+
+\noindent \$ref = \{\};
+
+\noindent \$ref-$>$\{UK\} = \{\};
+
+\noindent \$ref-$>$\{UK\}-$>$\{England\} = \{\};
+
+\noindent \$ref-$>$\{UK\}-$>$\{England\}-$>$\{Oxford\} = [];
+
+\noindent \$ref-$>$\{UK\}-$>$\{England\}-$>$\{Oxford\}-$>$[1999] = \{\};
+
+\noindent \$ref-$>$\{UK\}-$>$\{England\}-$>$\{Oxford\}-$>$[1999]-$>$\{Population\} = 500000;
+
+\noindent 
+
+\noindent What this means is that we don't have to worry about creating all the entries ourselves. So we can just write:
+
+\noindent 
+
+\noindent my @chessboard;
+
+\noindent \$chessboard[0]-$>$[0] = "WR";
+
+\noindent 
+
+\noindent 
+
+\noindent This is called \textbf{autovivification }-- things springing into existence. We can use it to greatly simplify the way
+
+\noindent we use references:
+
+\noindent 
+
+\noindent Try It Out : A Chess Game
+
+\noindent 
+
+\noindent Now that we can represent our chessboard, let's set up a chess game. This will consist of two stages:
+
+\noindent setting up the board, and making moves. The computer will have no idea of the rules, but will simply function as a board, allowing us to move pieces around. Here's our program:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# chess.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @chessboard;
+
+\noindent my @back = qw(RNBQKNB R);
+
+\noindent for (0..7) \{
+
+\noindent \$chessboard[0]-$>$[\$\_] = "W" . \$back[\$\_]; \# White Back Row
+
+\noindent \$chessboard[1]-$>$[\$\_] = "WP"; \# White Pawns
+
+\noindent \$chessboard[6]-$>$[\$\_] = "BP"; \# Black Pawns
+
+\noindent \$chessboard[7]-$>$[\$\_] = "B" . \$back[\$\_]; \# Black Back Row
+
+\noindent \}
+
+\noindent 
+
+\noindent while \{
+
+\noindent \# Print board
+
+\noindent for my \$i (reverse (0..7))\{\# Row
+
+\noindent for my \$j (0..7) \{ \# Column
+
+\noindent if (defined \$chessboard[\$i]-$>$[\$j]) \{
+
+\noindent print \$chessboard[\$i]-$>$[\$j];
+
+\noindent \} elsif ( (\$i \%2) == (\$j \%2) ) \{
+
+\noindent print "..";
+
+\noindent \} else \{
+
+\noindent print "  ";
+
+\noindent \}
+
+\noindent print " ";  \# End of cell
+
+\noindent \}
+
+\noindent print "\textbackslash n"; \# End of row
+
+\noindent \}
+
+\noindent 
+
+\noindent print "\textbackslash nStarting square [x,y]: ";
+
+\noindent my \$move = $<$$>$;
+
+\noindent last unless (\$move =\~{} /\^{}\textbackslash s*([1-8]),([1-8])/);
+
+\noindent my \$startx = \$1-1; my \$starty = \$2-1;
+
+\noindent 
+
+\noindent unless (defined \$chessboard[\$starty]-$>$[\$startx]) \{
+
+\noindent print "There's nothing on that square!\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent print "\textbackslash nEnding square [x,y]: ";
+
+\noindent \$move = $<$$>$;
+
+\noindent last unless (\$move =\~{} /([1-8]),([1-8])/);
+
+\noindent my \$endx = \$1-1; my \$endy = \$2-1;
+
+\noindent 
+
+\noindent \# Put starting square on ending square.
+
+\noindent \$chessboard[\$endy]-$>$[\$endx] = \$chessboard[\$starty]-$>$[\$startx];
+
+\noindent \# Remove from old square
+
+\noindent undef \$chessboard[\$starty]-$>$[\$startx];
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Now let's see the first part of a game in progress:
+
+\noindent 
+
+\noindent $>$ \textbf{perl chess.plx}
+
+\begin{tabular}{|p{0.4in}|p{0.3in}|p{0.7in}|p{0.1in}|} \hline 
+BR & BN  BB & BQ  BK  BN  BB & BR \\ \hline 
+BP & BP  BP & BP  BP  BP  BP & BP \\ \hline 
+ & .. & .. .. & .. \\ \hline 
+\end{tabular}
+
+.. .. .. ..
+
+\noindent .. .. .. ..
+
+\noindent .. .. .. ..
+
+\noindent WP  WP WP WP WP WP WP WP WR  WN WB WQ WK WN WB WR
+
+\noindent 
+
+\noindent Starting square [x,y]: \textbf{4,2}
+
+\noindent 
+
+\noindent Ending square [x,y]: \textbf{4,4}
+
+\begin{tabular}{|p{0.4in}|p{0.3in}|p{0.7in}|p{0.1in}|} \hline 
+BR & BN  BB & BQ  BK  BN  BB & BR \\ \hline 
+BP & BP  BP & BP  BP  BP  BP & BP \\ \hline 
+ & .. & .. .. & .. \\ \hline 
+\end{tabular}
+
+.. .. .. ..
+
+\noindent .. WP .. ..
+
+\noindent .. .. .. ..
+
+\noindent WP  WP WP .. WP WP WP WP WR  WN WB WQ WK WN WB WR
+
+\noindent 
+
+\noindent Starting square [x,y]: \textbf{4,7}
+
+\noindent 
+
+\noindent Ending square [x,y]: \textbf{4,5}
+
+\noindent BR   BN  BB  BQ  BK  BN  BB  BR
+
+\begin{tabular}{|p{0.4in}|p{0.2in}|p{0.2in}|p{0.2in}|p{0.2in}|p{0.2in}|p{0.2in}|p{0.1in}|} \hline 
+BP & BP & BP & . & BP & BP & BP & BP \\ \hline 
+ & .. &  & .. &  & .. &  & .. \\ \hline 
+.. &  & .. & BP & .. &  & .. &  \\ \hline 
+ & .. &  & WP &  & .. &  & .. \\ \hline 
+.. &  & .. &  & .. &  & .. &  \\ \hline 
+\end{tabular}
+
+WP  WP WP .. WP WP WP WP WR  WN WB WQ WK WN WB WR
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Our first task is to set up the chessboard, with the pieces in their initial positions. Remember that we're assigning \$chessboard[\$row]-$>$[\$column] = \$thing. First, we set up an array of pieces on the
+
+\noindent 'back row'. We'll use this to make it easier to put each piece in its appropriate column:
+
+\noindent 
+
+\noindent my @back = qw(RNBQKNB R);
+
+\noindent 
+
+\noindent Now we'll go over each column:
+
+\noindent 
+
+\noindent for (0..7) \{
+
+\noindent 
+
+\noindent In  row  zero,  the back row  for  white,  we want  to  place  the  appropriate  piece  from  the array  in each square:
+
+\noindent 
+
+\noindent \$chessboard[0]-$>$[\$\_] = "W" . \$back[\$\_]; \# White Back Row
+
+\noindent 
+
+\noindent 
+
+\noindent In row one of each column, we want a white pawn, WP:
+
+\noindent 
+
+\noindent \$chessboard[1]-$>$[\$\_] = "WP"; \# White Pawns
+
+\noindent 
+
+\noindent Now we do the same again for black's pieces on rows 6 and 7:
+
+\noindent 
+
+\noindent 
+
+\noindent \$chessboard[6]-$>$[\$\_] = "BP"; \# Black Pawns
+
+\noindent \$chessboard[7]-$>$[\$\_] = "B" . \$back[\$\_]; \# Black Back Row
+
+\noindent \}
+
+\noindent 
+
+\noindent What about the rest of the squares on board? Well, they don't exist right now, but will spring into
+
+\noindent existence when we try and read from them.
+
+\noindent 
+
+\noindent Next we go into our main loop, printing out the board and moving the pieces. To print the board, we obviously want to look at each piece. So we loop through each row and each column:
+
+\noindent 
+
+\noindent for my \$i (reverse (0..7))\{\# Row
+
+\noindent for my \$j (0..7) \{ \# Column
+
+\noindent 
+
+\noindent If the element is defined, it's because we've put a piece there, so we print it out:
+
+\noindent 
+
+\noindent 
+
+\noindent if (defined \$chessboard[\$i]-$>$[\$j]) \{
+
+\noindent print \$chessboard[\$i]-$>$[\$j];
+
+\noindent 
+
+\noindent Note that at this point, we're accessing all 64 squares. this means any square that didn't exist before will
+
+\noindent do from now on. This next piece of prettiness prints out the "checkered" effect. On a checkerboard,
+
+\noindent dark squares come on odd rows in odd columns and even rows in even columns. \$x \% 2 tests whether
+
+\noindent \$x divides equally by two -- whether it is odd or even. If the 'oddness' (or 'evenness') of the row and column is the same, we print a dark square:
+
+\noindent 
+
+\noindent 
+
+\noindent \} elsif ( (\$i \%2) == (\$j \%2) ) \{
+
+\noindent print "..";
+
+\noindent 
+
+\noindent Otherwise, we print a blank square consisting of two spaces:
+
+\noindent 
+
+\noindent 
+
+\noindent \} else \{
+
+\noindent print "  ";
+
+\noindent \}
+
+\noindent 
+
+\noindent To separate the cells, we use a single space:
+
+\noindent 
+
+\noindent print " ";  \# End of cell
+
+\noindent \}
+
+\noindent 
+
+\noindent And at the end of each row, we print a new line:
+
+\noindent 
+
+\noindent print "\textbackslash n"; \# End of row
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Now we ask for a square to move from:
+
+\noindent 
+
+\noindent 
+
+\noindent print "\textbackslash nStarting square [x,y]: ";
+
+\noindent my \$move = $<$$>$;
+
+\noindent 
+
+\noindent We're looking for two digits with a comma in the middle:
+
+\noindent 
+
+\noindent 
+
+\noindent last unless (\$move =\~{} /([1-8]),([1-8])/);
+
+\noindent 
+
+\noindent Now we convert human-style coordinates (1 to 8) into computer-style coordinates (0 to 7):
+
+\noindent 
+
+\noindent 
+
+\noindent my \$startx = \$1-1; my \$starty = \$2-1;
+
+\noindent 
+
+\noindent Next, check if there's actually a piece there. Note that a y coordinate is a row, so it goes first -- look back
+
+\noindent at the diagram if you're not sure how this works:
+
+\noindent 
+
+\noindent 
+
+\noindent unless (defined \$chessboard[\$starty]-$>$[\$startx]) \{
+
+\noindent print "There's nothing on that square!\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent 
+
+\noindent We do the same for the ending square, and then move the piece. We copy the piece to the new square:
+
+\noindent 
+
+\noindent 
+
+\noindent \$chessboard[\$endy]-$>$[\$endx] = \$chessboard[\$starty]-$>$[\$startx];
+
+\noindent 
+
+\noindent And then we delete the old square:
+
+\noindent 
+
+\noindent undef \$chessboard[\$starty]-$>$[\$startx];
+
+\noindent 
+
+\noindent We've now used a matrix, a two-dimensional array. The nice thing about perl's auto vivification is that we didn't need to say explicitly that we were dealing with references. Perl takes care of all that behind the scenes, and we just assigned the relevant values to the right places. However, if we were to look at
+
+\noindent the contents of the @chessboard array, we'd see eight array references.
+
+\noindent 
+
+\noindent Trees
+
+\noindent 
+
+\noindent We're now going to build on the principle of matrices, by introducing \textbf{tree}-like data structures, in which we use hashes as well as arrays. The classic example of one of these structures is an address book.
+
+\noindent Suppose we want to keep someone's address and phone number in a hash. We could say this:
+
+\noindent 
+
+\noindent \%paddy = (
+
+\noindent address =$>$ "23, Blue Jay Way", phone =$>$ "404-6599"
+
+\noindent );
+
+\noindent 
+
+\noindent That's all very well, and it makes sense. The only problem is, you have to create a separate hash for each person in your address book and put each one in a separate variable. This isn't easy at all at run time, and is very messy to write. So instead, you use references.
+
+\noindent 
+
+\noindent 
+
+\noindent What we do is create a main 'address book' hash, referenced as \$addressbook, with everyone else's
+
+\noindent hashes as values off that:
+
+\noindent 
+
+\noindent 
+
+\noindent \$addressbook\{"Paddy Malone"\} = \{ address =$>$ "23, Blue Jay Way", phone =$>$ "404-6599"
+
+\noindent \};
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Note that if you've included the use strict; pragma, you'll have to declare this}
+
+\noindent \textbf{hash explicitly as my \%addressbook; before using it.}
+
+\noindent 
+
+\noindent 
+
+\noindent It's now very easy to take new entries from the user and add them to our address book:
+
+\noindent 
+
+\noindent 
+
+\noindent print "Give me a name:"; chomp \$name =$<$$>$; print "Address:"; chomp \$address=$<$$>$; print "Phone number:"; chomp \$phone  =$<$$>$;
+
+\noindent \$addressbook\{\$name\} = \{
+
+\noindent address =$>$ \$address, phone =$>$ \$phone
+
+\noindent \};
+
+\noindent 
+
+\noindent To print out a single person, we'd use this:
+
+\noindent 
+
+\noindent if (exists \$addressbook\{\$who\}) \{
+
+\noindent print "\$who\textbackslash n";
+
+\noindent print "Address:  ", \$addressbook\{\$who\}-$>$\{address\}, "\textbackslash n";
+
+\noindent print "Phone no: ", \$addressbook\{\$who\}-$>$\{phone\}, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent To print every address, we'd use this:
+
+\noindent 
+
+\noindent for \$who (keys \%addressbook) \{
+
+\noindent print "\$who\textbackslash n";
+
+\noindent print "Address:  ", \$addressbook\{\$who\}-$>$\{address\}, "\textbackslash n";
+
+\noindent print "Phone no: ", \$addressbook\{\$who\}-$>$\{phone\}, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Deleting an address is very simple:
+
+\noindent 
+
+\noindent delete \$addressbook\{\$who\};
+
+\noindent 
+
+\noindent How about adding another level to our tree. Can we have an array of 'friends' for each person? No problem. We just use an anonymous array:
+
+\noindent 
+
+\noindent \$addressbook\{"Paddy Malone"\} = \{ address =$>$ "23, Blue Jay Way", phone =$>$ "404-6599",
+
+\noindent friends =$>$ [ "Baba O'Reilly", "Mick Flaherty" ]
+
+\noindent \};
+
+\noindent 
+
+\noindent 
+
+\noindent We can get at each person's friends by saying \$addressbook\{\$who\}-$>$\{friends\}. That will give us
+
+\noindent an anonymous array. We can then dereference that to a real array and print it out:
+
+\noindent 
+
+\noindent 
+
+\noindent for \$who (keys \%addressbook) \{
+
+\noindent print "\$who\textbackslash n";
+
+\noindent print "Address:  ", \$addressbook\{\$who\}-$>$\{address\}, "\textbackslash n";
+
+\noindent print "Phone no: ", \$addressbook\{\$who\}-$>$\{phone\}, "\textbackslash n";
+
+\noindent my @friends = @\{\$addressbook\{\$who\}-$>$\{friends\}\};
+
+\noindent print "Friends:\textbackslash n";
+
+\noindent for (@friends) \{
+
+\noindent print "\textbackslash t\$\_\textbackslash n";
+
+\noindent \}
+
+\noindent \}
+
+\noindent 
+
+\noindent This would now give us something like:
+
+\noindent 
+
+\noindent Paddy Malone
+
+\noindent Address:  23, Blue Jay Way
+
+\noindent Phone no: 404-6599
+
+\noindent Friends:
+
+\noindent Baba O'Reilly
+
+\noindent Mick Flaherty
+
+\noindent 
+
+\noindent What we now have is one hash (address book), containing another hash (peoples' details), in turn containing an array (each person's friends).
+
+\noindent 
+
+\noindent We can quite easily \textbf{traverse }the tree structure, that is, move from person to person by following links. We do this by visiting a link, then adding all of that person's friends onto a 'to do' array. We must be very careful here not to get stuck in a loop. If one person links to another, and the other links back
+
+\noindent again, we need to avoid bouncing about between them indefinitely. One simple way to keep track of the
+
+\noindent links we've already processed is to use a hash. Here's how we can do it:
+
+\noindent 
+
+\noindent 
+
+\noindent \$, = "\textbackslash t" \# Set output field separator for tabulated display my @todo = ("Paddy Malone"); \# Start point
+
+\noindent my \%seen;
+
+\noindent while (@todo) \{
+
+\noindent my \$who = shift @todo; \# Get person from the end
+
+\noindent \$seen\{\$who\}++; \# Mark them as seen.
+
+\noindent my @friends = @\{\$addressbook\{\$who\}-$>$\{friends\}\};
+
+\noindent print "\$who has friends: ", @friends, "\textbackslash n";
+
+\noindent for (@friends) \{
+
+\noindent \# Visit unless they're already visited push @todo, \$\_  unless exists \$seen\{\$\_\};
+
+\noindent \}
+
+\noindent \}
+
+\noindent 
+
+\noindent The reference \$seen is used to build up a hash table of everyone whose name has been held in the
+
+\noindent variable \$who. The for loop at the bottom only adds names to the @todo list if they're not defined in that hash, That is, if they've not been displayed already. Given a fairly closed community, we could see something like this:
+
+\noindent 
+
+\noindent 
+
+\noindent Paddy Malone has friends Baba O'Reilly Mick Flaherty
+
+\noindent Baba O'Reilly has friends Bob McDowell Mick Flaherty Andy Donahue
+
+\noindent Mick Flaherty has friends Paddy Malone Timothy O'Leary Bob McDowell has friends Andy Donahue Baba O'Reilly Andy Donahue has friends Jimmy Callahan Mick Flaherty
+
+\noindent Timothy O'Leary has friends Bob McDowell Mick Flaherty Paddy Malone
+
+\noindent Jimmy Callahan has friends Andy Donahue Baba O'Reilly Mick Flaherty
+
+\noindent 
+
+\noindent Linked Lists
+
+\noindent 
+
+\noindent The last thing we're going to look at is creating \textbf{linked lists}. These actually cover quite a broad range of data structures, but all have one common feature:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{One part of each record in the list refers to at least one other record in the list.}
+
+\noindent 
+
+\noindent 
+
+\noindent Just as any good page on the web will link to at least one other page, each record in a linked list will
+
+\noindent include a reference to another record in the list, and possibly several. That's all well and good, but
+
+\noindent what improvement does this give us on the structures we've seen already? We know how to use a value held in one record to reference another -- rather handy, but not exactly earth-shattering.
+
+\noindent 
+
+\noindent The fact is, while this is how linked lists hang together, it's not quite the full story. The examples we've seen so far have been passing references to and from records in a single root data structure: the addressbook hash reference. We take the name of a friend and use that as a key in the hash to access
+
+\noindent that friend's details.
+
+\noindent 
+
+\noindent Now, what if I have a bunch of friends at work, where there's already a data structure in place containing just this sort of information. Now, I want to include colleagues in my list of friends, but it's not practical to copy all the data from one to the other. What's more, while the work system uses a similar structure to the addressbook one, \$work (the root reference -- equivalent to \$addressbook)
+
+\noindent uses ID numbers as \textbf{indices in an array}. For example, my friend Dan is registered as employee 4109, so
+
+\noindent his details are referenced by \$work[4108] -- yes, array indices start at 0. Anyway, it seems I can't have "Dan Maharry" as one of my friends.
+
+\noindent 
+
+\noindent Maybe I could just put '4109' in as his name. What the heck, I'll know who it is. No, of course we'd still be trying to access the addressbook hash reference, and "4109" isn't in there.
+
+\noindent 
+
+\noindent What  if we get the program to  check  \textit{both  }root  references  for  a  suitable  match?  That  works  fine, until I'm sending out  Christmas  mail  (automatically,  of course. It's  what perl  does  best!),  and  he gets one starting:
+
+\noindent 
+
+\noindent Dear 4109,
+
+\noindent Let me tell you all about this new book I've written\dots .
+
+\noindent 
+
+\noindent Hmm. Not really ideal. What we really need is to have our 'friends' key reference a hash table (instead
+
+\noindent of a list), with the key "Dan Maharry" assigned the value of the appropriate reference. So, instead of:
+
+\noindent 
+
+\noindent friends =$>$ [ "Baba O'Reilly", "Mick Flaherty" ]
+
+\noindent 
+
+\noindent 
+
+\noindent we put:
+
+\noindent 
+
+\noindent 
+
+\noindent friends =$>$ \{ "Baba O'Reilly" =$>$ \$addressbook("Baba O'Reilly"), "Mick Flaherty" =$>$ \$addressbook("Mick Flaherty"),
+
+\noindent "Dan Maharry" =$>$ \$work[4109]
+
+\noindent \}
+
+\noindent 
+
+\noindent The power and versatility (and some would say beauty) of a linked list derives from a very simple fact:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{The internal structure of any record in a linked list can be independent of all others.}
+
+\noindent 
+
+\noindent 
+
+\noindent In the simplest case, all our references were \textit{from }addressbook entries \textit{to }addressbook entries. This belies
+
+\noindent the fact that each of them could actually refer to \textbf{any }data structure at all. As we saw though, the flexibility of Perl references allows us to link up all sorts of different structures.
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent We've looked at references, a way to put one type of data structure inside another. References work because they allow us to refer to another piece of data. They tell us where Perl stores it and give us a way to get at it. Because references are always scalars, you can think of them as flat-pack storage for arrays and hashes.
+
+\noindent 
+
+\noindent We can create a reference explicitly by putting a backslash in front of a variable's name: \textbackslash \%hash or
+
+\noindent \textbackslash @array, for example. Alternatively, we can create an anonymous reference by using \{\} instead of ()
+
+\noindent for a hash and [] instead of () for an array. Finally, we can create a reference by creating a need for one. If a reference needs to exist for what we're doing, Perl will spring one into existence by autovivification.
+
+\noindent 
+
+\noindent We can use a reference by placing it in curly brackets where a variable name should go. @\{\$array\_r\}
+
+\noindent can replace @array everywhere and we don't even need the brackets if it's clear what we mean. We can then access elements of array or hash references using the arrow notation: \$array\_ref-
+
+\noindent $>$[\$element] for an array and \$hash\_ref-$>$\{\$key\} for a hash.
+
+\noindent 
+
+\noindent We've  also  seen a few  complex  data  structures:  matrices,  which  are arrays  of  arrays;  trees,  which may  contain hashes or arrays;  and  linked  lists,  which  contain  references  to  other  parts  of  the  data structure,  or even other data structures.  For  more  information  on  these  kinds  of  data structure, consult the Perl 'Data Structures  Cookbook'  documentation  (perldsc)  or  the Perl  'List of  Lists' documentation.  (perllol)
+
+\noindent 
+
+\noindent If you're really interested in data structures from a computer science point of view, \textit{Mastering Algorithms}
+
+\noindent \textit{in Perl }by Orwant et al. (\textit{O'Reilly -- ISBN 1-56592-398-7}) has some chapters on these kinds of structure, primarily, trees and tree traversal. The ultimate guide to data structures is still '\textit{The Art Of Computer Programming, Volume 1}', by Donald Knuth (\textit{Addison Wesley -- ISBN 0201896834}) -- affectionately known as
+
+\noindent 'The Bible'.
+
+\noindent 
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent 1.   Construct an array of arrays to form a multiplication table covering from one times one to six times six but as words. Then ask the user to query it and return the result in words only.
+
+\noindent 
+
+\noindent 2.   Take the chess program and revise it so it checks for the validity of the knight's moves.
+
+\noindent Remember that the knight cannot move off the board or take one of its own pieces. The knight moves in an L-shape -- two squares horizontally or vertically and then one square at ninety degrees to that.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

@@ -1,0 +1,3207 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+\section{Working with Simple Values}
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent The essence of programming is computation -- we want the computer to do some work with the input (the data we give it). Very rarely do we write programs that tell us something we already know. Even more rarely do we write programs that do nothing interesting with our data at all. So, if we're going to write programs that do more than say "hello" to us, we're going to need to know how to perform computations, or operations, on our data. The things that perform these operations are called \textbf{operators}, and the second part of this chapter will be dedicated to looking at some common operators in Perl.
+
+\noindent 
+
+\noindent Variables are another key topic we'll introduce in this chapter. Variables give us somewhere to store a value while we're doing calculations on it, allowing us to do long computations with intermediary stages. As their name suggests, they also allow us to change their contents at will. Variables are the basis for all serious programming, so we need to meet them sooner rather than later.
+
+\noindent 
+
+\noindent Finally in the chapter, we'll see one way of getting data from the user, and we'll use that to build our first 'useful' program.
+
+\noindent 
+
+\noindent 
+
+\noindent Types of Data
+
+\noindent 
+
+\noindent A lot of programming jargon is about familiar words in an unfamiliar context. We've already seen a string, which was a series of characters. We could also describe that string as a \textbf{scalar literal constant}. What does that mean?
+
+\noindent 
+
+\noindent It's a \textbf{literal}, because it's something that means what it says, as opposed to a variable. A variable is more like a pigeonhole for data; the important thing is to look inside it and see what it contains. A variable, such as \$fish, is probably not going to stand for the word 'fish' preceded by a dollar sign, it's more likely to contain 'trout', 42, or --10. A literal, on the other hand, such as the string "Hello, world" is the piece of paper that goes into a pigeonhole -- it doesn't stand for something else. It represents literally
+
+\noindent those twelve characters.
+
+\noindent 
+
+\noindent It's also a \textbf{constant}, because it can't change. Variables, as their name implies, may change their contents, but constants are written into the text of your program once and for all, and the program can't change that. Another way of expressing this is that the data is \textbf{hard-coded }into the program. We will see later how it's almost always better to avoid hard-coding information.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent By calling a variable a \textbf{scalar}, we're describing the type of data it contains. If you remember your math (and even if you don't) a \textbf{scalar }is a plain, simple, one-dimensional value. In math, the word is used to distinguish it from a vector, which is expressed as several numbers. Velocity, for example, has a pair of co-ordinates (speed and direction), and so must be a vector. In Perl, a scalar is the fundamental, basic unit of data of which there are two kinds -- numbers and strings.
+
+\noindent 
+
+\noindent \textit{We use the term 'scalar' to distinguish it from aggregates, like }\textbf{\textit{lists }}\textit{or }\textbf{\textit{hashes}}\textit{, which are single}
+
+\noindent \textit{entities made up of several scalars. We'll look at what we can do with these two data types and how}
+
+\noindent \textit{to manipulate them in the next chapter.}
+
+\noindent 
+
+\noindent 
+
+\noindent Numbers
+
+\noindent 
+
+\noindent Numbers are\dots well, they're numbers. Now there are two types of number that we're interested in as Perl programmers: integers and floating-point numbers. The latter we'll come to in a minute, but let's work with integers right now. \textbf{Integers }are whole numbers with no numbers after the decimal point like 42, -1, or 10. The following program prints a couple of integer literals in Perl.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#number1.plx
+
+\noindent use warnings;
+
+\noindent print 25, -4;
+
+\noindent 
+
+\noindent $>$ \textbf{perl number1.plx}
+
+\noindent 25-4$>$
+
+\noindent 
+
+\noindent Well, that's what you see, but it's not exactly what we want. Our program has a bug. Fortunately, this is a pretty easy bug to understand and fix. First, we didn't tell perl to separate the numbers with a space, and second, we didn't tell it to insert  a new line at the end. Let's change the program so it does that:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#number2.plx
+
+\noindent use warnings;
+
+\noindent print 25, " ", -4, "\textbackslash n";
+
+\noindent 
+
+\noindent This will do what we were thinking of:
+
+\noindent 
+
+\noindent $>$ \textbf{perl number2.plx}
+
+\[25 -4\] 
+$>$
+
+\noindent 
+
+\noindent For very large integers, we might find it easier to split the number up. So when we write out ten million, we're likely to split up the thousands with commas, like this: 10,000,000. We can also do this in Perl, but with an underscore (\_) instead of a comma. Note that this is only to help us make our code clearer -- perl ignores it. Change your program to look like the following, and then save it.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#number3.plx
+
+\noindent use warnings;
+
+\noindent print 25\_000\_000, " ", -4, "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Notice, that those underscores don't appear in the output:
+
+\noindent 
+
+\noindent $>$ \textbf{perl number3.plx}
+
+\[25000000 --4\] 
+$>$
+
+\noindent 
+
+\noindent As well as integers, there's another class of number -- \textbf{floating-point numbers}. These contain everything else, like 0.5, -0.01333, and 1.1. Now, floating-point numbers have a big problem. Take what happens when you divide 1 by 7, you get a number that starts off 0.14285714285714\dots  and keeps going. It's an infinite sequence, and you can't possibly write out all of it. You have to stop somewhere, and this means you lose accuracy.
+
+\noindent 
+
+\noindent We've  seen that computers  represent  numbers  internally  in  binary  form,  and  this  is  true for  fractional numbers too.  0.1  is equivalent  to  a  1/2,  or what  we would  call  0.5 in  decimal;  0.01  is  1/4,  or  0.25 in decimal;  0.001  is  1/8,  and so  on.  The  upshot  of all  this  is  that  numbers  we  can express  perfectly accurately  in decimal,  such as  one-fifth,  cannot  be  accurately  expressed  by  a  computer, as its binary representation is 0.001100110011\dots .  Because  of  this,  you  need  to  be  careful  when  working  with floating-point numbers.  While  perl  does  try  to  provide  sensible looking  answers  whenever  possible, you  may get the odd occasion  where  you  end  up  with  a  number  like  24.999999999999,  instead  of  25, which is what you  should see.  There's  an old  programming  adage  that  goes  'don't  compare  floating- point numbers solely for equality'  --  allow  for  a  bit  of 'fudge  factor'.  We'll  see how  this  is  done when we get to comparisons.
+
+\noindent 
+
+\noindent The other potential inaccuracy is that Perl, by default, only uses a set number of bits to store each of your numbers in. To see how much storage your computer allows, change your program again to this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#number4.plx
+
+\noindent use warnings;
+
+\noindent print 25\_000\_000, " ", 3.141592653589793238462643383279, "\textbackslash n";
+
+\noindent 
+
+\noindent Here's what happens on my computer:
+
+\noindent 
+
+\noindent $>$ \textbf{perl number4.plx}
+
+\[25000000 3.14159265358979\] 
+$>$
+
+\noindent 
+
+\noindent As you can see, what we put in is only good to 14 decimal places. Some computers may have more than that, but those that don't may emulate arbitrarily long storage with the core Math::BigFloat module. Integers are also limited by the computer's storage, the maximum available size for storing a single  integer is typically 32 bits, or 4294967295, and everything above that gets stored as a floating-point number. There's also a Math::BigInt module, included in the standard Perl distribution, for allowing larger integers than this. We will see more of modules in Chapter 10.
+
+\noindent 
+
+\noindent \textit{Binary, Hexadecimal, and Octal Numbers}
+
+\noindent As we saw in the previous chapter, we can express numbers as binary, hexadecimal, or octal numbers in our programs. We can mix the various representations in our program at will.
+
+\noindent 
+
+\noindent 
+
+\noindent Try it out -- Number systems
+
+\noindent Here we'll create a simple program to demonstrate how we use the various number systems. Type in the following code, and save it as goodnums.plx:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#goodnums.plx
+
+\noindent use warnings;
+
+\noindent print 255, "\textbackslash n";
+
+\noindent print 0377, "\textbackslash n";
+
+\noindent print 0b11111111, "\textbackslash n";
+
+\noindent print 0xFF, "\textbackslash n";
+
+\noindent 
+
+\noindent All of these are representations of the number 255, and accordingly, we get the following output:
+
+\noindent 
+
+\noindent $>$ \textbf{perl goodnums.plx}
+
+\[255\] 
+
+\[255\] 
+
+\[255\] 
+
+\[255\] 
+$>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent When perl reads your program, it reads and understands numbers in any of the allowed number systems: 0 for octal, 0b for binary, and 0x for hex.
+
+\noindent 
+
+\noindent What happens, you might ask, if you specify a number in the wrong system? Well, let's try it out. Edit
+
+\noindent goodnums.plx to give you a new program badnums.plx that looks like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#badnums.plx use warnings;
+
+\noindent print 255, "\textbackslash n";
+
+\noindent print 0378, "\textbackslash n";
+
+\noindent print 0b11111112, "\textbackslash n";
+
+\noindent print 0xFG, "\textbackslash n";
+
+\noindent 
+
+\noindent Since octal digits only run from 0 to 7, binary digits from 0 to 1, and hex digits from 0 to F, none of the last three lines make any sense. Let's see what perl makes of it:
+
+\noindent 
+
+\noindent $>$ \textbf{perl badnums.plx}
+
+\noindent Illegal octal digit '8' at badnums.plx line 5, at end of line
+
+\noindent Illegal binary digit '2' at badnums.plx line 6, at end of line
+
+\noindent Bareword found where operator expected at badnums.plx line 7, near "0xFG" (Missing operator before G?)
+
+\noindent syntax error at badnums.plx line 7, near "0xFG"
+
+\noindent Execution of badnums.plx aborted due to compilation errors.
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Now, let's match those errors up with the relevant lines:
+
+\noindent 
+
+\noindent Illegal octal digit '8' at badnums.plx line 5, at end of line
+
+\noindent 
+
+\noindent And line 5 is:
+
+\noindent 
+
+\noindent 
+
+\noindent print 0378, "\textbackslash n";
+
+\noindent 
+
+\noindent As you can see, perl thought it was dealing with an octal number, but then along came an 8, which stopped it from making sense, so perl quite rightly complained. The same thing happened on the next line:
+
+\noindent 
+
+\noindent Illegal binary digit '2' at badnums.plx line 6, at end of line
+
+\noindent 
+
+\noindent And line 4 is:
+
+\noindent 
+
+\noindent print 0b11111112, "\textbackslash n";
+
+\noindent 
+
+\noindent The problem with the next line is even bigger:
+
+\noindent 
+
+\noindent Bareword found where operator expected at badnums.plx line 7, near "0xFG" (Missing operator before G?) syntax error at badnums.plx line 7, near "0xFG"
+
+\noindent 
+
+\noindent 'What's a bareword?' I hear you asking. A \textbf{bareword }is a series of characters outside of a string that perl doesn't recognize. The word could mean a number of things, and Perl can usually understand what you mean. In this case, the bareword was 'G': perl had understood 0xF, but couldn't see how the 'G' fitted in. We might have wanted an operator do something with it, but there was no operator there. In the end, perl gave us a 'syntax error', which is the equivalent of it giving up in disgust saying, 'How do you expect me to understand this?'
+
+\noindent 
+
+\noindent Strings
+
+\noindent 
+
+\noindent The other type of scalar available to us is the string, and we've already seen a few examples of them. In the last chapter, we met the string "Hello, world\textbackslash n" and I mentioned that a string was a series of characters surrounded by some sort of quotation marks. Strings can contain ASCII (or Unicode) data and escape sequences such as the \textbackslash n of our example, and there is no maximum length restriction on a string imposed by Perl. Practically speaking, there is a limit imposed by the amount of memory in your computer, but it's quite hard to hit.
+
+\noindent 
+
+\noindent \textit{Single- vs Double-Quoted Strings}
+
+\noindent The quotation marks you choose for your string are significant. So far we've only seen \textbf{double-quoted} strings, like this: "Hello, world\textbackslash n". There is another type of string -- one which has been \textbf{single-} \textbf{quoted}. Predictably, they are surrounded by single quotes: ''. The important difference is that no processing is done within single quoted strings, except on \textbackslash \textbackslash  and \textbackslash ' . We'll also see later that variable names inside double-quoted strings are replaced by their contents, whereas single-quoted strings treat them as ordinary text. We call both these types of processing \textbf{interpolation}, and say that single-quoted strings are not interpolated.
+
+\noindent 
+
+\noindent 
+
+\noindent Consider the following program, bearing in mind that \textbackslash t is the escape sequence that represents a tab.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#quotes.plx
+
+\noindent use warnings;
+
+\noindent print'\textbackslash tThis is a single quoted string.\textbackslash n';
+
+\noindent print "\textbackslash tThis is a double quoted string.\textbackslash n";
+
+\noindent 
+
+\noindent The double-quoted string will have its escape sequences processed, and the single-quoted string will not. The output we get is:
+
+\noindent 
+
+\noindent $>$ \textbf{perl quotes.plx}
+
+\noindent \textbackslash tThis is a single quoted string.\textbackslash n This is a double quoted string.
+
+\noindent $>$
+
+\noindent 
+
+\noindent What do we do if we want to have a backslash in a string? This is a common concern for Windows users, as a Windows path looks something like this: C:\textbackslash WINNT\textbackslash Profiles\textbackslash \dots . In a double-quoted string, a backslash will start an escape sequence, which is not what we want it to do.
+
+\noindent 
+
+\noindent Well, there is, of course, more than one way to do it. We can either use a single-quoted string, as above,
+
+\noindent or we can \textbf{escape }the backslash. One principle that we'll see often in Perl, and especially when we get to regular expressions, is that we can use a backslash to turn off any special effect a character may have.
+
+\noindent For example, a full stop in a regular expression denotes 'any character'. If you escape the full stop by placing a backslash in front of it, like so \textbackslash . you get the ordinary meaning of 'a full stop'. This operation is called escaping, or more commonly, \textbf{backwhacking}.
+
+\noindent 
+
+\noindent In this case, we want to turn off the special effect a backslash has, and so we escape it:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#quotes2.plx
+
+\noindent use warnings;
+
+\noindent print"C:\textbackslash \textbackslash WINNT\textbackslash \textbackslash Profiles\textbackslash \textbackslash \textbackslash n";
+
+\noindent print 'C:\textbackslash WINNT\textbackslash Profiles\textbackslash  ', "\textbackslash n";
+
+\noindent 
+
+\noindent This prints:
+
+\noindent 
+
+\noindent $>$ \textbf{perl quotes2.plx }C:\textbackslash WINNT\textbackslash Profiles\textbackslash  C:\textbackslash WINNT\textbackslash Profiles\textbackslash 
+
+\noindent $>$
+
+\noindent 
+
+\noindent Aha! Some of you may have got this message instead:
+
+\noindent 
+
+\noindent Can't find string terminator " ' " anywhere before EOF at quotes2.plx line 5.
+
+\noindent 
+
+\noindent The reason for this is that you have probably left out the space character in line 5 before the second single quote. Remember that  \textbackslash ' tells perl to escape the single quote, and so it merrily heads off to look for the next quote, which of course is not there. Try this program to see how perl treats these special cases:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#aside1.plx
+
+\noindent use warnings;
+
+\noindent print 'ex\textbackslash \textbackslash  er\textbackslash \textbackslash ' , ' ci\textbackslash ' se\textbackslash '' , "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent The output you get this time is:
+
+\noindent 
+
+\noindent $>$ \textbf{perl aside1.plx}
+
+\noindent ex\textbackslash  er\textbackslash  ci' se'
+
+\noindent $>$
+
+\noindent 
+
+\noindent Can you see how perl did this? Well, we simply escaped the backslashes and single quotes. It will help you to sort out what is happening if you look at each element individually. Remember, there are three arguments in this example. Don't let all the quotes confuse you.
+
+\noindent 
+
+\noindent Actually, there's an altogether sneakier way of doing it. Internally, Windows allows you to separate paths in the Unix style with a forward slash, instead of a backslash. If you're referring to directories in Perl on Windows, you may find it easier to say C:/WINNT/Profiles/ instead. This allows you to get the variable interpolation of double-quoted strings without the 'Leaning Toothpick Syndrome' of multiple backslashes.
+
+\noindent 
+
+\noindent So much for backslashes, what about quotation marks? The trick is making sure perl knows where the end of the string is. Naturally, there's no problem with putting single quotes inside a double-quoted string, or vice versa:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#quotes3.plx
+
+\noindent use warnings;
+
+\noindent print"It's as easy as that.\textbackslash n";
+
+\noindent print '"Stop," he cried.', "\textbackslash n";
+
+\noindent 
+
+\noindent This will produce the quotation marks in the right places:
+
+\noindent 
+
+\noindent $>$ \textbf{perl quotes3.plx }It's as easy as that. "Stop," he cried.
+
+\noindent $>$
+
+\noindent 
+
+\noindent The trick comes when we want to have double quotes inside a double-quoted string or single quotes inside a single-quoted string. As you might have guessed, though, the solution is to escape the quotes on the inside. Suppose we want to print out the following quote, including both sets of quotation marks:
+
+\noindent 
+
+\noindent '"Hi," said Jack. "Have you read Slashdot today?"'
+
+\noindent 
+
+\noindent Here's a way of doing it with a double-quoted string:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#quotes4.plx
+
+\noindent use warnings;
+
+\noindent print"'\textbackslash "Hi,\textbackslash " said Jack. \textbackslash "Have you read Slashdot today?\textbackslash "'\textbackslash n";
+
+\noindent 
+
+\noindent Now see if you can modify this to make it a single-quoted string -- don't forget that \textbackslash n needs to go in separate double quotes to make it interpolate.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Alternative Delimiters}
+
+\noindent Of course, it would be nicer if you could select a completely different set of quotes so that there would be no ambiguity and no need to escape any quotes inside the text. The first operators we're going to meet are the \textbf{quote-like operators }that do this for us. They're written as q// and qq//, the first acting like a single-quoted string and the second, like a double-quoted string. Now instead of the above, we can write:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#quotes5.plx
+
+\noindent use warnings;
+
+\noindent print qq/'"Hi," said Jack. "Have you read Slashdot today?"'\textbackslash n/;
+
+\noindent 
+
+\noindent That's all very well, of course, until we want a / in the string. Suppose we want to replace 'Slashdot' with '/.' -- now we're back where we started, having to escape things again. Thankfully, Perl allows us to choose our own delimiters so we don't have to stick with //. Any non-alphanumeric (that is, non- alphabetic and non-numeric) character can be used as a delimiter, provided it's the same on both sides  of the text. Furthermore, you can use \{\}, [], () and $<$$>$ as left and right delimiters. Here are a few ways of doing the above, all of which have the same effect:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#quotes6.plx
+
+\noindent use warnings;
+
+\noindent print qq\textbar '"Hi," said Jack. "Have you read /. today?"'\textbackslash n\textbar ;
+
+\noindent print qq\#'"Hi," said Jack. "Have you read /. today?"'\textbackslash n\#;
+
+\noindent print qq('"Hi," said Jack. "Have you read /. today?"'\textbackslash n);
+
+\noindent print qq$<$'"Hi," said Jack. "Have you read /. today?"'\textbackslash n$>$;
+
+\noindent 
+
+\noindent We'll see more of these alternative delimiters when we start working with regular expressions.
+
+\noindent 
+
+\noindent Here-Documents
+
+\noindent 
+
+\noindent There's one final way of  specifying  a  string  --  by using  a  \textbf{here-document}.  This  idea  was  taken
+
+\noindent from the Unix  shell,  and works  on  any  platform.  Effectively,  it  means  that  you  can  write  a  large amount of text within  your program,  and  it  will  be  treated  as  a  string  provided  it  is  identified correctly.  Here's an example.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#heredoc.plx
+
+\noindent use warnings;
+
+\noindent print$<$$<$EOF;
+
+\noindent 
+
+\noindent This is a here-document. It starts on the line after the two arrows,
+
+\noindent and it ends when the text following the arrows is found at the beginning
+
+\noindent of a line, like this:
+
+\noindent 
+
+\noindent EOF
+
+\noindent 
+
+\noindent A here-document must start with $<$$<$ and then a label. The label can be anything you choose, but is traditionally EOF (End Of File). The label must follow directly after the arrows with no spaces between, unless the same number of spaces precedes the end marker. It ends when the label is found at the beginning of
+
+\noindent a line. In our case, the semicolon does not form part of the label, because it marks the end of the
+
+\noindent print statement.
+
+\noindent 
+
+\noindent 
+
+\noindent By default, a here-document works like a double-quoted string. In order for it to work like a single-
+
+\noindent quoted string, surround the label in single quotes. This will become important when variable interpolation comes into play, as we'll see later on.
+
+\noindent 
+
+\noindent Converting between Numbers and Strings
+
+\noindent 
+
+\noindent The perl interpreter treats numbers and strings on an equal footing, and where necessary, perl converts between strings, integers, and floating-point numbers behind the scenes. This means that you don't have
+
+\noindent to worry about making the conversions yourself, like you do in other languages. If you have a string
+
+\noindent literal "0.25", and multiply it by four, perl treats it as a number and gives you the expected answer, 1.
+
+\noindent 
+
+\noindent There is, however, one area where this doesn't take place. Octal, hex, and binary numbers in string literals or strings stored in variables don't get converted automatically:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#octhex1.plx
+
+\noindent use warnings;
+
+\noindent print"0x30\textbackslash n";
+
+\noindent print "030\textbackslash n";
+
+\noindent 
+
+\noindent gives you
+
+\noindent 
+
+\noindent $>$ \textbf{perl octhex1.plx}
+
+\noindent 0x30
+
+\[030\] 
+$>$
+
+\noindent 
+
+\noindent If you ever find yourself with a string containing a hex or octal value that you need to convert into a number, you can use the hex() or oct() functions accordingly:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#octhex2.plx
+
+\noindent use warnings;
+
+\noindent print hex("0x30"), "\textbackslash n";
+
+\noindent print oct("030"), "\textbackslash n";
+
+\noindent 
+
+\noindent This will now produce the expected answers, 48 and 24. Note that for hex() or oct(), the prefix 0x
+
+\noindent or 0, respectively, is not required. If you know that what you have is definitely supposed to be a hex or oct number, then hex and oct will produce the results above. As you can see from that, the
+
+\noindent string "30" and the number 30 are treated as the same.
+
+\noindent 
+
+\noindent Furthermore, these functions will stop reading when they get to a digit that doesn't make sense in that number system:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#octhex3.plx
+
+\noindent use warnings;
+
+\noindent print hex("FFG"), "\textbackslash n";
+
+\noindent print oct("178"), "\textbackslash n";
+
+\noindent 
+
+\noindent These will stop at FF and 17, respectively, and convert to 255 and 15.
+
+\noindent 
+
+\noindent 
+
+\noindent What about binary numbers? Well, there's no corresponding bin() function, but there is actually a
+
+\noindent little trick here. If you have the correct prefix in place for any of the number systems, (0, 0b, or 0x) you can use oct() to convert it to decimal. For example print oct("0b11010") prints 26.
+
+\noindent 
+
+\noindent 
+
+\noindent Operators
+
+\noindent 
+
+\noindent Now we know how to specify our strings and numbers, let's see what we can do with them. The majority
+
+\noindent of the things we'll be looking at here are numeric operators (operators that act on and produce numbers) like plus and minus, which take two numbers as 'arguments' and add or subtract them. There aren't as many string operators, but there are plenty of string functions. Perl doesn't draw a very strong
+
+\noindent distinction between functions and operators, but the main difference between the two is that operators
+
+\noindent tend to go in the middle of their arguments -- for example: 2 + 2. Functions go before their arguments and have them separated by commas. Both of them take arguments, do something with them, and produce a new value. We generally say they \textbf{return }a value. Let's take a look:
+
+\noindent 
+
+\noindent Numeric Operators
+
+\noindent 
+
+\noindent The numeric operators take at least one number as an argument and return another number. Of course, because perl automatically converts between strings and numbers, the arguments may appear as string literals or come from strings in variables. We'll group these operators into three types: ordinary
+
+\noindent arithmetic operators, bitwise operators, and logic operators.
+
+\noindent 
+
+\noindent \textit{Arithmetic Operators}
+
+\noindent The arithmetic operators are those that deal with basic mathematics like adding, subtracting, multiplying, dividing, and so on. To add two numbers together, we would write something like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop1.plx
+
+\noindent use warnings;
+
+\noindent print 69 + 118;
+
+\noindent 
+
+\noindent And, of course, we would see the answer 187. Subtracting numbers is easy, too, and we can subtract at the same time:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop2.plx
+
+\noindent use warnings;
+
+\noindent print "21 from 25 is: ", 25 - 21, "\textbackslash n";
+
+\noindent print "4 + 13-7 is: ",4+ 13- 7, "\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl arithop2.plx}
+
+\noindent 21 from 25 is: 4
+
+\noindent 4 + 13 - 7 is: 10
+
+\noindent $>$
+
+\noindent 
+
+\noindent Our next set of operators (multiplying and dividing) is where it gets interesting. We use the * and /
+
+\noindent operators to multiply and divide, respectively.
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop3.plx
+
+\noindent use warnings;
+
+\noindent print"7 times 15 is ", 7 * 15, "\textbackslash n";
+
+\noindent print "249 over 3 is ", 249 / 3, "\textbackslash n";
+
+\noindent 
+
+\noindent The fun comes when you want to multiply something and then add something, or add then divide. Here's an example of the problem:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop4.plx
+
+\noindent use warnings;
+
+\noindent print3+7* 15, "\textbackslash n";
+
+\noindent 
+
+\noindent Now this could mean one of two things: either perl must add the three and the seven and then multiply
+
+\noindent by fifteen, or it must multiply seven and fifteen first, then add. Which does Perl do? Try it and see.
+
+\noindent 
+
+\noindent So, perl should have given you 108, as it did the multiplication first. The order in which perl performs operations is called \textbf{precedence}. Multiply and divide have a higher precedence than add and subtract, and so they get performed first. We can start to draw up a table of precedence as follows:
+
+\noindent 
+
+\noindent * /
+
+\noindent 
+
+\noindent + -
+
+\noindent 
+
+\noindent To force perl to perform an operation of lower precedence first, we need to use brackets, like so:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop5.plx
+
+\noindent use warnings;
+
+\noindent print(3 + 7) * 15;
+
+\noindent 
+
+\noindent Unfortunately, if you run that, you'll get a warning and 10 is returned. What happened? The problem is that print is itself an operator as well, and the precedence of operators like print is highest of all.
+
+\noindent 
+
+\noindent print as an operator takes a list of arguments and performs an operation (printing them to the screen).
+
+\noindent It returns a 1 if it succeeds or no value if it does not. Perl calculated 3 plus 7, printed the result, and then multiplied the result of the returned value by 15, throwing away the final result of 15.
+
+\noindent 
+
+\noindent To get what we actually want then, we need another set of brackets:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop6.plx
+
+\noindent use warnings;
+
+\noindent print((3 + 7) * 15);
+
+\noindent 
+
+\noindent This now gives us the correct answer, 150, and we can put another entry in our table of precedence:
+
+\noindent 
+
+\noindent List operators
+
+\noindent 
+
+\noindent * /
+
+\noindent 
+
+\noindent + -
+
+\noindent 
+
+\noindent 
+
+\noindent Next we have the exponentiation operator, **, which simply raises one number to the power of another
+
+\noindent -- squaring, cubing, and so on. Here's an example of some exponentiation:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop7.plx
+
+\noindent use warnings;
+
+\noindent print 2**4, " ", 3**5, " ", -2**4, "\textbackslash n";
+
+\noindent 
+
+\noindent That's 2*2*2*2, 3*3*3*3*3, and -2*-2*-2*-2. Or is it? The output we get is:
+
+\noindent $>$\textbf{perl arithop7.plx}
+
+\[16 243 -16\] 
+$>$
+
+\noindent 
+
+\noindent Hmm, the first two look OK, but the last one's a bit wrong. --2 to the 4th   power should be positive. Again, it's a precedence issue. Turning a number into a negative number requires an operator, the
+
+\noindent 'unary minus' operator. It's called 'unary' because unlike the ordinary minus operator, it only takes one argument. Although unary minus has a higher precedence than times and divide, it has a lower precedence than exponentiation. What's actually happening, then, is --(2**4) instead of (-2)**4.
+
+\noindent Let's put these two operators in the table as well:
+
+\noindent 
+
+\noindent 
+
+\noindent List operators
+
+\noindent 
+
+\noindent **
+
+\noindent 
+
+\noindent Unary minus
+
+\noindent 
+
+\noindent * /
+
+\noindent 
+
+\noindent + -
+
+\noindent 
+
+\noindent 
+
+\noindent The last arithmetic operator is \%, the remainder, or 'modulo' operator. This calculates the remainder
+
+\noindent when one number divides another. For example, six divides into fifteen twice, with a remainder of three, as our next program will confirm:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#arithop8.plx
+
+\noindent use warnings;
+
+\noindent print"15 divided by 6 is exactly ", 15 / 6, "\textbackslash n";
+
+\noindent print "That's a remainder of ", 15 \% 6, "\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl arithop8.plx}
+
+\noindent 15 divided by 6 is exactly 2.5
+
+\noindent That's a remainder of 3
+
+\noindent $>$
+
+\noindent 
+
+\noindent The modulo operator has the same precedence as multiply and divide.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Bitwise Operators}
+
+\noindent Those operators worked on numbers in the way we think of them. However, as we already know, computers don't see numbers the same as we do; they see them as a string of bits. These next few operators perform operations on numbers one bit at a time -- that's why we call them bitwise. These aren't used quite so much in Perl as in other languages, but we'll see them when dealing with things like low-level file access.
+
+\noindent 
+
+\noindent First, let's have a look at the kind of numbers we're going to use in this section, just so we get used
+
+\noindent to them:
+
+\noindent 
+
+\noindent 0 in binary is 0, but let's write it as 8 bits: 00000000
+
+\noindent 
+
+\noindent 51 in binary is 00110011
+
+\noindent 
+
+\noindent 85 in binary is 01010101
+
+\noindent 
+
+\noindent 170 in binary is 10101010
+
+\noindent 
+
+\noindent 204 in binary is 11001100
+
+\noindent 
+
+\noindent 255 in binary is 11111111
+
+\noindent 
+
+\noindent Does it surprise you that 10101010 is twice as much as 01010101 ? It shouldn't, when we
+
+\noindent multiply a number by 10 in base 10, all we do is slap a zero on the end, so 21 becomes 210. Similarly, to multiply a number by 2 in base 2, we do exactly the same.
+
+\noindent 
+
+\noindent Bitwise operators work from right to left. The rightmost bit is called the 'least significant bit', and the leftmost is called the 'most significant bit'.
+
+\noindent 
+
+\noindent \textit{The 'and' Operator}
+
+\noindent The easiest operator to fathom is called the 'and' operator and is written \&. This compares pairs of bits
+
+\noindent as follows:
+
+\noindent 
+
+\noindent 1 and 1 gives 1
+
+\noindent 
+
+\noindent 1 and 0 gives 0
+
+\noindent 
+
+\noindent 0 and 1 gives 0
+
+\noindent 
+
+\noindent 0 and 0 gives 0
+
+\noindent 
+
+\noindent 
+
+\noindent For example, 51 \& 85 looks like this:
+
+\noindent 
+
+\[51 00110011\] 
+
+\[85 01010101\] 
+
+\[17 00010001\] 
+
+
+\noindent Sure enough, if we ask Perl:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bitop1.plx
+
+\noindent use warnings;
+
+\noindent print"51 ANDed with 85 gives us", 51 \& 85, "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent It'll tell us the answer is 17. Notice that since we're comparing one pair of bits at a time, it doesn't really
+
+\noindent matter which way around the arguments go, 51 \& 85 is exactly the same as 85 \& 51. Operators with this property are called associative operators.
+
+\noindent 
+
+\noindent Here's another example, look at the bits, and see what you get:
+
+\noindent 
+
+\[51 00110011\] 
+
+\[170   10101010\] 
+
+\[34 00100010\] 
+
+
+\noindent \textit{The 'or' Operator}
+
+\noindent As well as checking whether the first and the second bits are 1, we can check whether one or another is
+
+\noindent 1. The '\textbf{or}' operator in Perl is \textbar , and this is how we would calculate 204 \textbar  85
+
+\noindent 
+
+\[204   11001100\] 
+
+\[85     01010101\] 
+
+\[221   11011101\] 
+
+
+\noindent Now we produce zeros only if both the bits are zero, if either or both are one, we produce a one. As a
+
+\noindent quick rule of thumb, X \& Y will always be smaller or equal to the smallest value of X and Y, and X \textbar  Y
+
+\noindent will be bigger than or equal to the largest value of X or Y.
+
+\noindent 
+
+\noindent \textit{The 'exclusive or' Operator}
+
+\noindent What if you really want to know if one or the other, but not both, are set to one? For this, you need the
+
+\noindent '\textbf{exclusive or}' operator, written as the \^{} operator:
+
+\noindent 
+
+\[204   11001100\] 
+
+\[170   10101010\] 
+
+\[102   01100110\] 
+
+
+\noindent \textit{The 'not' Operator}
+
+\noindent Finally, you can flip the number completely, and replace all the ones by zeros and vice versa. This is done with the '\textbf{not}', or \~{} operator:
+
+\noindent 
+
+\[85     01010101\] 
+
+\[170   10101010\] 
+
+
+\noindent Let's see, however, what happens when we try this in Perl:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bitop2.plx
+
+\noindent use warnings;
+
+\noindent print"NOT 85 is", \~{}85, "\textbackslash n";
+
+\noindent 
+
+\noindent On my computer, I get:
+
+\noindent 
+
+\noindent NOT 85 is 4294967210
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Your answer might be different, and I'll explain why in a second.
+
+\noindent 
+
+\noindent Why is  it so  big? Well,  let's  look  at  that  number  in  binary  to  see if  we  can find  a  clue  as to what's going on:
+
+\noindent 
+
+\[4294697210    11111111111111111111111110101010\] 
+
+
+\noindent Aha! The last part is right, but it's a lot wider than we're used to. That's because in the examples, I've
+
+\noindent only used 8 bits across, whereas my computer stores integers as 32 bits across, what's actually happened
+
+\noindent is this:
+
+\noindent 
+
+\[85     00000000000000000000000001010101\] 
+
+\[4294697210    11111111111111111111111110101010\] 
+
+
+\noindent If you get a much bigger number, it's because your computer represents numbers internally with 64 bits instead of 32, and Perl has been configured to take advantage of this.
+
+\noindent 
+
+\noindent \textit{Truth and Falsehood}
+
+\noindent "What is truth?" If we had asked that of a Perl programmer, we could be sure that he would have
+
+\noindent replied something like this: "Truth is anything that is not zero, an empty string, an undefined value, or an empty list."
+
+\noindent 
+
+\noindent Later, we will want to perform actions based on whether something is true or false, for example if one number is bigger than another, or, unless a problem has occurred, or, while there is data left to
+
+\noindent examine. We will use \textbf{comparison operators }to evaluate whether these things are true or false so that we
+
+\noindent can make decisions based on them.
+
+\noindent 
+
+\noindent It's customary to represent false as 0 and true as 1. This allows us to use operators very similar to those bitwise operators we've just met to combine our comparisons, to say 'if this \textit{or }this is true', 'if this is \textit{not}
+
+\noindent true', and so on. The idea of combining values that represent truth and falsehood is called \textbf{Boolean logic},
+
+\noindent after George Boole, who invented the concept in 1847, and we call the operators that do the combining
+
+\noindent '\textbf{Boolean operators}'.
+
+\noindent 
+
+\noindent \textit{Comparing Numbers for Equality}
+
+\noindent The first simple comparison operator is ==. Two equals signs tells perl to 'return true if the two numeric arguments are equal.' If they're not equal, return false. Boolean values of truth and falsehood aren't very exciting to look at, but let's see them anyway:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bool1.plx
+
+\noindent use warnings;
+
+\noindent print"Is two equal to four? ", 2 == 4, "\textbackslash n";
+
+\noindent print "OK, then, is six equal to six? ", 6 == 6, "\textbackslash n";
+
+\noindent 
+
+\noindent This will produce:
+
+\noindent 
+
+\noindent $>$\textbf{perl bool1.plx}
+
+\noindent Is two equal to four?
+
+\noindent OK, then, is six equal to six? 1
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent The second line is definitely true, and as we'd expect, we get a one back from the operator. But what
+
+\noindent happened in the first line? Well, there's a special value in Perl that is conspicuous by its absence. Can you guess what it is? You might have noticed before that I mentioned "\dots  an undefined value or an empty list." This next paragraph will help you work it out.
+
+\noindent 
+
+\noindent The undefined value isn't simply a string with nothing in it -- it's nothing at all. In a very Zen-like way, a string with no characters is still a string. The undefined value isn't zero either, although it gets converted
+
+\noindent to zero if you use it as a number in the same way that an empty string does. The undefined value
+
+\noindent represents nothing, empty, void.
+
+\noindent 
+
+\noindent The obvious counterpart to test whether things are equal is to test whether they're not equal. The way
+
+\noindent we do this is with the != operator. Note that there's only one = this time. We'll find out later why there had to be two before.
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bool2.plx
+
+\noindent use warnings;
+
+\noindent print"So, two isn't equal to four? ", 2 != 4, "\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl bool2.plx}
+
+\noindent So, two isn't equal to four? 1
+
+\noindent $>$
+
+\noindent 
+
+\noindent There you have it -- irrefutable proof that two actually isn't four. Good.
+
+\noindent 
+
+\noindent \textit{Comparing Numbers for Inequality}
+
+\noindent So much for equality, let's check if one thing is bigger than another. Just like in mathematics, we use the greater-than and less-than signs to do this: $<$ and $>$.
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bool3.plx
+
+\noindent use warnings;
+
+\noindent print"Five is more than six? ", 5 $>$  6, "\textbackslash n";
+
+\noindent print "Seven is less than sixteen? ", 7 $<$ 16, "\textbackslash n";
+
+\noindent print "Two is equal to two? ", 2 == 2, "\textbackslash n";
+
+\noindent print "One is more than one? ", 1 $>$  1, "\textbackslash n";
+
+\noindent print "Six is not equal to seven? ",  6 != 7, "\textbackslash n";
+
+\noindent 
+
+\noindent The results should hopefully not be very new to you:
+
+\noindent 
+
+\noindent $>$\textbf{perl bool3.plx}
+
+\noindent Five is more than six?
+
+\noindent Seven is less than sixteen? 1 
+
+\noindent Two is equal to two? 1
+
+\noindent One is more than one?
+
+\noindent Six is not equal to seven? 1
+
+\noindent $>$
+
+\noindent 
+
+\noindent Let's have a look at one last pair of comparisons. We can check greater-than-or-equal-to and less-than-
+
+\noindent or-equal-to with the $>$= and $<$= operators, respectively.
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bool4.plx
+
+\noindent use warnings;
+
+\noindent print"Seven is less than or equal to sixteen? ", 7 $<$= 16, "\textbackslash n";
+
+\noindent print "Two is more than or equal to two? ", 2 $>$= 2,  "\textbackslash n";
+
+\noindent 
+
+\noindent As expected, perl faithfully prints out:
+
+\noindent 
+
+\noindent $>$\textbf{perl bool4.plx}
+
+\noindent Seven is less than or equal to sixteen? 1
+
+\noindent Two is more than or equal to two? 1 
+
+\noindent $>$
+
+\noindent 
+
+\noindent There's also a special operator that isn't really a Boolean comparison because it doesn't give us a true-or- false value. Instead it returns 0 if the two are equal, -1 if the right hand side is bigger, and 1 if the left-
+
+\noindent hand side is bigger. It is denoted by $<$=$>$. Think of it as a balance, pointing towards the lower number:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bool5.plx
+
+\noindent use warnings;
+
+\noindent print"Compare six and nine? ", 6 $<$=$>$ 9, "\textbackslash n";
+
+\noindent print "Compare seven and seven? ",7 $<$=$>$ 7, "\textbackslash n";
+
+\noindent print "Compare eight and four? ", 8 $<$=$>$ 4, "\textbackslash n";
+
+\noindent 
+
+\noindent Gives us:
+
+\noindent 
+
+\noindent $>$\textbf{perl bool5.plx}
+
+\noindent Compare six and nine? -1
+
+\noindent Compare seven and seven? 0
+
+\noindent Compare eight and four? 1
+
+\noindent $>$
+
+\noindent 
+
+\noindent We'll see this in more detail when we look at sorting things, where we have to know whether something goes before, after, or in the same place as something else.
+
+\noindent 
+
+\noindent \textit{Boolean Operators}
+
+\noindent As well as being able to evaluate the truth and falsehood of some statements, we can also combine such statements. For example, we may want to do something if one number is bigger than another and
+
+\noindent another two numbers are the same. The combining is done in a very similar manner to the bitwise
+
+\noindent operators we saw earlier. We can ask if one value and another value are both true, or if one value or
+
+\noindent another value are true, and so on.
+
+\noindent 
+
+\noindent The operators even resemble the bitwise operators. To ask if both truth-values are true, we would use
+
+\noindent \&\& instead of   \&.
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{In many cases, \& and the other bitwise operators will work just fine, if you are sure}
+
+\noindent \textbf{that the values are either one or zero. But as we know, truth is anything that is not}
+
+\noindent \textbf{zero, an empty string, an undefined value, or an empty list, rather than just one or}
+
+\noindent \textbf{zero. For example, -2 is a true value. However, \~{}-2 is also a true value. When testing}
+
+\noindent \textbf{truths, always use the Boolean rather than the bitwise operators.}
+
+\noindent 
+
+\noindent 
+
+\noindent So, to test whether six is more than three and twelve is more than four, we can write:
+
+\noindent 
+
+\noindent 
+
+\noindent 6$>$3 \&\& 12$>$4 
+
+\noindent 
+
+\noindent To test if nine is more than seven or eight is less than six, we use the doubled form of the \textbar  operator, \textbar \textbar :
+
+\noindent 
+
+\noindent 
+
+\noindent 9$>$7 \textbar \textbar 6$>$8 
+
+\noindent 
+
+\noindent To  negate  the  sense of a test,  however,  use  the  slightly  different  operator  !.  This has  a  higher precedence than the comparison operators, so use brackets. For example, this tests whether two is not more than three,
+
+\noindent 
+
+\noindent 
+
+\noindent !(2$>$3)
+
+\noindent 
+
+\noindent while this one tests whether !2 is more than three:
+
+\noindent 
+
+\noindent 
+
+\noindent !2$>$3
+
+\noindent 
+
+\noindent 2 is a true value. !2 is therefore a false value, the undefined value, which gets converted to zero when we do a numeric comparison. We're actually testing if zero is more than three, which has the opposite effect to what we wanted.
+
+\noindent 
+
+\noindent Instead of those forms, \&\&, \textbar \textbar , and !, we can also use the slightly easier-to-read versions, and, or, and not. There's also xor, for exclusive or (one or the other but not both are true) which doesn't have a symbolic form. However, you need to be careful about precedence again:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#bool6.plx
+
+\noindent use warnings;
+
+\noindent print"Test one: ",6$>$3 \&\&3$>$ 4, "\textbackslash n";
+
+\noindent print "Test two: ",6$>$3 and3$>$ 4, "\textbackslash n";
+
+\noindent 
+
+\noindent This prints, somewhat surprisingly:
+
+\noindent 
+
+\noindent $>$ \textbf{perl bool6.plx}
+
+\noindent Test one: Test two: 1$>$
+
+\noindent 
+
+\noindent Well, we can tell from the position of the prompt (or least Unix users can -- Windows users need to be a
+
+\noindent bit more alert) that something is amiss because the second newline did not get printed. The trouble is that and has a lower precedence than \&\&. What has actually happened is this:
+
+\noindent 
+
+\noindent print ("Test two: ",6$>$ 3) and3$>$ 4, "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Now, six is more than three, so that returned 1, print then returned one, and the rest was irrelevant.
+
+\noindent However, we can use this fact to our advantage.
+
+\noindent 
+
+\noindent Perl uses a technique called lazy  evaluation. As soon as it knows the answer to the question, it stops working. If you ask if \textit{x }and \textit{y }are both true, and it finds that \textit{x }isn't, it doesn't need to look at \textit{y}. No
+
+\noindent matter whether \textit{y }is true or not, it can't make them both true, so there's no point testing. Similarly, if you ask whether \textit{x }or \textit{y }is true, you can stop if you find that \textit{x }is true. Whether \textit{y }is true or not will not affect matters at all. So, we can write something like this:
+
+\noindent 
+
+\noindent 
+
+\noindent 4 $>$= 2 and print "Four is more than or equal to two\textbackslash n";
+
+\noindent 
+
+\noindent If the first test is true, perl has to check if the other side is true as well, and that means printing our message. If the first test is false, there's no need to check, so the message doesn't get printed. It's a crude way of saving time if a condition is met. We won't use that for the moment, until we've seen a less crude way to do it.
+
+\noindent 
+
+\noindent String Operators
+
+\noindent 
+
+\noindent After that lot, there are surprisingly few string operators. Actually, for the moment, we're only going to look at two.
+
+\noindent 
+
+\noindent The first one is the \textbf{concatenation operator}, which glues two strings together into one. Instead of saying:
+
+\noindent 
+
+\noindent 
+
+\noindent print "Print ", "several ", "strings ", "here", "\textbackslash n";
+
+\noindent 
+
+\noindent we could say:
+
+\noindent 
+
+\noindent 
+
+\noindent print "Print " . "one ". "string " . "here" . "\textbackslash n";
+
+\noindent 
+
+\noindent As it happens, printing several strings is slightly more efficient, but there will be times you really do need to combine strings together, especially if you're putting them into variables.
+
+\noindent 
+
+\noindent What happens if we try and join a number to a string? The number is evaluated and then converted:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#string1.plx
+
+\noindent use warnings;
+
+\noindent print"Four sevens are ". 4*7 ."\textbackslash n";
+
+\noindent 
+
+\noindent which tells us, reassuringly, that:
+
+\noindent 
+
+\noindent $>$  \textbf{perl string1.plx}
+
+\noindent Four sevens are 28
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent The other string operator is the \textbf{repetition operator}, marked with an x. This repeats a string a given
+
+\noindent number of times:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#string2.plx
+
+\noindent use warnings;
+
+\noindent print "GO! "x3, "\textbackslash n";
+
+\noindent 
+
+\noindent will print:
+
+\noindent 
+
+\noindent $>$ \textbf{perl string2.plx}
+
+\noindent GO! GO! GO!
+
+\noindent $>$
+
+\noindent 
+
+\noindent We can, of course, use it in conjunction with concatenation. Its precedence is higher than the concatenation operator's, as we can easily see for ourselves:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#string3.plx
+
+\noindent use warnings;
+
+\noindent print "Ba". "na"x4 ,"\textbackslash n";
+
+\noindent 
+
+\noindent On running this, we'll get:
+
+\noindent 
+
+\noindent $>$ \textbf{perl string3.plx}
+
+\noindent Banananana
+
+\noindent $>$
+
+\noindent 
+
+\noindent In this case, the repetition is done first ("nananana") and is then concatenated with the "Ba". The precedence of the repetition operator is the same as the arithmetic operators, so if you're working out how many times to repeat something, you're going to need brackets:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#string4.plx
+
+\noindent use warnings;
+
+\noindent print"Ba". "na"x4*3 ,"\textbackslash n";
+
+\noindent print "Ba". "na"x(4*3) ,"\textbackslash n";
+
+\noindent 
+
+\noindent Compare:
+
+\noindent 
+
+\noindent $>$\textbf{perl string4.plx}
+
+\noindent Ba0
+
+\noindent Banananananananananananana
+
+\noindent $>$
+
+\noindent 
+
+\noindent Why was the first one Ba0? Well, think what happened. The first thing was the repetition, giving us "nananana". Then the multiplication -- What's nananana times three? When perl converts a string to a number, it takes any spaces, an optional minus sign, and then as many digits as it can from the
+
+\noindent beginning of the string, and ignores everything else. Since there were no digits here, the number value
+
+\noindent of nananana was zero.
+
+\noindent 
+
+\noindent That zero was then multiplied by three, to give zero. Finally, the zero was turned back into a string to be concatenated onto the Ba.
+
+\noindent 
+
+\noindent 
+
+\noindent Try it out -- Converting Strings to Numbers
+
+\noindent You can see how other strings convert to numbers by adding zero to them:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#str2num.plx
+
+\noindent use warnings;
+
+\noindent print"12 monkeys" + 0,  "\textbackslash n";
+
+\noindent print "Eleven to fly" + 0,  "\textbackslash n";
+
+\begin{tabular}{|p{1.3in}|p{0.4in}|p{2.5in}|} \hline 
+print "UB40" & + 0, & "\textbackslash n"; \\ \hline 
+print "-20 10" & + 0, & "\textbackslash n"; \\ \hline 
+print "0x30" & + 0, & "\textbackslash n"; \\ \hline 
+\end{tabular}
+
+
+
+\noindent You get a warning for each line saying that the strings aren't 'numeric in addition (+)', but what can be
+
+\noindent converted is. Ignoring the warnings then, here's what they come out as:
+
+\noindent 
+
+\noindent $>$\textbf{perl str2num.plx}
+
+\[12\] 
+
+\[0\] 
+
+\[0\] 
+
+\[-20\] 
+
+\[0\] 
+$>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Our first string, "12 monkeys", did pretty well. Perl understood the 12 and stopped after that. The
+
+\noindent next one was not handled so well -- English words don't get converted to numbers. Our third string was also a non-starter, as perl only looks for a number at the beginning of the string. If something other than
+
+\noindent a number is there, it's evaluated as a zero. Similarly, perl only looks for the first number in the string.
+
+\noindent Any numbers after that are discarded. Finally, perl doesn't convert binary, hex. or octal to decimal when it's stringifying a number, so you have to use the hex() or oct() functions to do that. On our last effort, perl stopped at the x, returning 0. If we had an octal number, such as 030, that would be treated as the decimal number 30.
+
+\noindent 
+
+\noindent \textit{String Comparison}
+
+\noindent As well as comparing the value of numbers, we can compare the value of strings. By this, I don't mean
+
+\noindent we convert a string to a number, although if you say something like "12" $>$ "30", perl will convert to numbers for you. What I mean is, we can compare the strings alphabetically: "Bravo" comes after
+
+\noindent "Alpha" but before "Charlie", for instance.
+
+\noindent 
+
+\noindent In fact, it's more than alphabetical order: The computer is using either ASCII or Unicode internally to represent the string and has converted it to a series of numbers in the relevant sequence. This means, for example, "Fowl" comes before "fish", because a capital F has a smaller ASCII value than a lower
+
+\noindent case f. See Appendix F for the full ASCII table.
+
+\noindent 
+
+\noindent We can find the character's value by using the ord() function, which tells us where in the (ASCII)
+
+\noindent order it comes. Let's see which comes first, a \# or a *?
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#ascii.plx
+
+\noindent use warnings;
+
+\noindent print"A \# has ASCII value ", ord("\#"),"\textbackslash n";
+
+\noindent print "A * has ASCII value ", ord("*"),"\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent This should say:
+
+\noindent 
+
+\noindent $>$\textbf{perl ascii.plx}
+
+\noindent A \# has ASCII value 35
+
+\noindent A * has ASCII value 42
+
+\noindent $>$
+
+\noindent 
+
+\noindent I suppose if we're only concerned with one character at a time we can compare the return values of
+
+\noindent ord() using the $<$ and $>$ operators. However, when comparing entire strings, it may get a bit tedious. If the first character of each string is the same, you would move onto the next character in each string, and then the next, and so on.
+
+\noindent 
+
+\noindent Instead, there are string comparison operators that do this all for us. Whereas the comparison operators for numbers were mathematical symbols, the operators for strings are abbreviations. To test whether
+
+\noindent one string is less than another, use lt. 'Greater than' becomes gt, 'equal to' becomes eq, and 'not equal'
+
+\noindent becomes ne. There's also ge and le for 'greater than or equal to' and 'less than and equal to'. The three-way-comparison becomes cmp.
+
+\noindent 
+
+\noindent Here are a few examples of these:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#strcomp1.plx
+
+\noindent use warnings;
+
+\noindent print"Which came first, the chicken or the egg? ";
+
+\noindent print "chicken" cmp "egg", "\textbackslash n";
+
+\noindent print "Are dogs greater than cats? ";
+
+\noindent print "dog" gt "cat", "\textbackslash n";
+
+\noindent print "Is \^{} less than+? ";
+
+\noindent print "\^{}" lt "+", "\textbackslash n";
+
+\noindent 
+
+\noindent And the results:
+
+\noindent 
+
+\noindent $>$\textbf{perl strcomp1.plx}
+
+\noindent Which came first, the chicken or the egg? -1
+
+\noindent Are dogs greater than cats? 1
+
+\noindent Is \^{} less than + ?
+
+\noindent $>$
+
+\noindent 
+
+\noindent But watch this carefully:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#strcomp2.plx
+
+\noindent use warnings;
+
+\noindent print "Test one: ", "four" eq "six", "\textbackslash n";
+
+\noindent print "Test two: ", "four" == "six", "\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl strcomp2.plx}
+
+\noindent Test one: Test two: 1
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Is the second line really claiming that four is equal to six? No, but if you compare them as numbers,
+
+\noindent they get converted to numbers. "four" converts to 0, and "six" converts to 0. The 0s are equal, so our test returns true and we get a couple of warnings telling us that they were not numbers to begin with. The moral of this story is, compare strings with string comparison operators, and compare
+
+\noindent numbers with numeric comparison operators. Otherwise, your results may not be what you anticipate.
+
+\noindent 
+
+\noindent 
+
+\noindent Operators To Be Seen Later
+
+\noindent 
+
+\noindent There are a few operators left that we are not going to go into in detail right now. Don't worry, we'll come across the more important ones again in time.
+
+\noindent 
+
+\noindent ? The ternary hook operator looks like this: a?b:c. It returns b if a is true, and c if it is false.
+
+\noindent 
+
+\noindent ? The range operators, ... and ..., make a range of values.
+
+\noindent 
+
+\noindent ? We've seen the comma for separating arguments to functions like print. In fact, the comma
+
+\noindent is an operator that builds a list, and print works on a list of arguments. The operator =$>$
+
+\noindent works like a comma with certain additional properties.
+
+\noindent 
+
+\noindent ? The =\~{} and !\~{} operators are used to 'apply' a regular expression to a string.
+
+\noindent 
+
+\noindent ? As well as providing an escape sequence and backwhacking special characters, \textbackslash  is used to take a reference to a variable, to examine the variable itself rather than its contents.
+
+\noindent 
+
+\noindent ? The $>$$>$ and $<$$<$ operators 'shift' a binary number right and left a given number of bits.
+
+\noindent 
+
+\noindent ? -$>$ is hairy voodoo. We will get to it later on.
+
+\noindent 
+
+\noindent 
+
+\noindent Operator Precedence
+
+\noindent 
+
+\noindent Here, finally, is a full table of precedence for all the operators we've seen so far, listed in descending order of precedence.
+
+\noindent 
+
+\noindent Remember that if you need to get things done in a different order, you will need to use brackets. Also remember that you can use brackets even when they're not strictly necessary, and you should certainly
+
+\noindent do so to help keep things readable. While perl knows full well what order to do 7+3*2/6-3+5/2\&3 in, you may find it easier on yourself to spell it out, because next week you may not remember everything
+
+\noindent you have just written.
+
+\noindent 
+
+\noindent 
+
+\noindent List Operators
+
+\noindent 
+
+\noindent -$>$
+
+\noindent **
+
+\noindent ! \~{} \textbackslash 
+
+\noindent =\~{} !\~{}
+
+\noindent * / \% x
+
+\noindent + - .
+
+\noindent $<$$<$ $>$$>$
+
+\noindent $<$ $>$ $<$= $>$= lt gt le ge
+
+\noindent == != $<$=$>$ eq ne cmp
+
+\noindent \&
+
+\noindent \textbar  \^{}
+
+\noindent \&\&
+
+\noindent \textbar \textbar 
+
+\noindent .. ...
+
+\noindent ?:
+
+\noindent , =$>$ not and
+
+\noindent or xor
+
+\noindent 
+
+\noindent 
+
+\noindent Variables
+
+\noindent 
+
+\noindent Variables! We've talked about them all the time, but what are they? As I've explained, a variable is storage for your scalars. Once you've calculated 42*7, it's gone. If you want to know what it was, you must do the calculation again. Instead of being able to use the result as a halfway point in more complicated calculations, you've got to spell it all out in full. That's no fun.
+
+\noindent 
+
+\noindent What we need to be able to do, and what variables allow us to do, is store a scalar away and refer to it again later. As previously mentioned, there are three types of data: \textbf{scalars}, \textbf{lists}, and \textbf{hashes}. There are also three types of variable to put them in: scalar variables, arrays, and hashes. We'll look at the latter
+
+\noindent two in chapters to come and just concentrate on scalar variables for now.
+
+\noindent 
+
+\noindent A scalar variable starts with a dollar sign. Here's a simple scalar variable: \$name. We can put certain
+
+\noindent types of data into it. Scalar variables can hold either numbers or strings and are only limited by the size
+
+\noindent of your computer's memory. To put data into our scalar, we assign the data to it, with the assignment operator =. (Incidentally, this is why numeric comparison is ==, because = was taken to mean the assignation operator.)
+
+\noindent 
+
+\noindent What we're going to do here is tell Perl that our scalar contains the string "fred". Now we can get at that data by simply using the variable's name:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#vars1.plx
+
+\noindent use warnings;
+
+\noindent \$name = "fred";
+
+\noindent print "My name is ", \$name, "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Lo and behold, our computer announces to us that:
+
+\noindent 
+
+\noindent $>$\textbf{perl vars1.plx}
+
+\noindent My name is fred
+
+\noindent $>$
+
+\noindent 
+
+\noindent Now we're cut free at last from the problem of once-off data. We've got somewhere to store our data, and some way to get it back again. The next logical step is to be able to change it.
+
+\noindent 
+
+\noindent Modifying a Variable
+
+\noindent 
+
+\noindent Modifying the contents of a variable is easy, just assign something different to it. We can say:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#vars2.plx
+
+\noindent use warnings;
+
+\noindent \$name = "fred";
+
+\noindent print "My name is ", \$name, "\textbackslash n";
+
+\noindent print "It's still ", \$name, "\textbackslash n";
+
+\noindent \$name = "bill";
+
+\noindent print "Well, actually, it's ", \$name, "\textbackslash n";
+
+\noindent \$name = "fred";
+
+\noindent print "No, really, it's ", \$name, "\textbackslash n";
+
+\noindent 
+
+\noindent And watch our computer have an identity crisis:
+
+\noindent 
+
+\noindent $>$\textbf{perl vars2.plx }My name is fred It's still fred
+
+\noindent Well, actually, it's bill
+
+\noindent No, really, it's fred
+
+\noindent $>$
+
+\noindent 
+
+\noindent We can also do a calculation in several stages:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#vars3.plx
+
+\noindent use warnings;
+
+\noindent \$a = 6*9;
+
+\noindent print "Six nines are ", \$a, "\textbackslash n";
+
+\noindent \$b= \$a+ 3;
+
+\noindent print "Plus three is ", \$b, "\textbackslash n";
+
+\noindent \$c= \$b/ 3;
+
+\noindent print "All over three is ", \$c, "\textbackslash n";
+
+\noindent \$d= \$c+ 1;
+
+\noindent print "Add one is ", \$d, "\textbackslash n";
+
+\noindent print "\textbackslash nThose stages again: ", \$a, " ", \$b, " ", \$c, " ", \$d, "\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl vars3.plx}
+
+\noindent Six nines are 54
+
+\noindent Plus three is 57
+
+\noindent All over three is 19
+
+\noindent Add one is 20
+
+\noindent 
+
+\noindent 
+
+\noindent Those stages again: 54 57 19 20
+
+\noindent $>$
+
+\noindent 
+
+\noindent While this works perfectly fine, it's often easier to stick with one variable and modify its value, if you don't need to know the stages you went through at the end:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#vars4.plx
+
+\noindent use warnings;
+
+\noindent \$a=6* 9;
+
+\noindent print "Six nines are ", \$a, "\textbackslash n";
+
+\noindent \$a= \$a+ 3;
+
+\noindent print "Plus three is ", \$a, "\textbackslash n";
+
+\noindent \$a= \$a/ 3;
+
+\noindent print "All over three is ", \$a, "\textbackslash n";
+
+\noindent \$a= \$a+ 1;
+
+\noindent print "Add one is ", \$a, "\textbackslash n";
+
+\noindent 
+
+\noindent The assignment operator =, has very low precedence. This means that perl will do the calculations on the right hand side of it, including fetching the current value, before assigning the new value. To
+
+\noindent illustrate this, take a look at the sixth line of our example. perl takes the current value of \$a, adds three
+
+\noindent to it, and then stores it back in \$a.
+
+\noindent 
+
+\noindent \textit{Operating and Assigning at Once}
+
+\noindent Operations, like fetching a value, modifying it, or storing it, are very common, so there's a special syntax for them. Generally:
+
+\noindent 
+
+\noindent 
+
+\noindent \$a = \$a $<$some operator$>$ \$b;
+
+\noindent 
+
+\noindent can be written as
+
+\noindent 
+
+\noindent 
+
+\noindent \$a $<$some operator$>$= \$b;
+
+\noindent 
+
+\noindent For instance, we could rewrite the example above as follows:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#vars5.plx
+
+\noindent use warnings;
+
+\noindent \$a=6* 9;
+
+\noindent print "Six nines are ", \$a, "\textbackslash n";
+
+\noindent \$a += 3;
+
+\noindent print "Plus three is ", \$a, "\textbackslash n";
+
+\noindent \$a /= 3;
+
+\noindent print "All over three is ", \$a, "\textbackslash n";
+
+\noindent \$a += 1;
+
+\noindent print "Add one is ", \$a, "\textbackslash n";
+
+\noindent 
+
+\noindent This works for **=, *=, +=, -=, /=, .=, \%=, \&=, \textbar =, \^{}=, $<$$<$=, $>$$>$=, \&\&= and \textbar \textbar =. These all have the same precedence as the assignment operator =.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Autoincrement and Autodecrement}
+
+\noindent There are two more operators, ++ and --. They add and subtract one from the variable, but their precedence is a little strange. When they precede a variable, they act before everything else. If they come afterwards, they act after everything else. Let's examine these:
+
+\noindent 
+
+\noindent Try it out -- The autoincrement and autodecrement operators
+
+\noindent Type in and run the following code:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#auto1.plx
+
+\noindent use warnings;
+
+\noindent \$a=4;
+
+\noindent \$b=10;
+
+\noindent print "Our variables are ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent \$b=\$a++;
+
+\noindent print "After incrementing, we have ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent \$b=++\$a*2;
+
+\noindent print "Now, we have ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent \$a=--\$b+4;
+
+\noindent print "Finally, we have ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent 
+
+\noindent You should see the following output:
+
+\noindent 
+
+\noindent $>$\textbf{perl auto1.plx}
+
+\noindent Our variables are 4 and 10
+
+\noindent After incrementing, we have 5 and 4
+
+\noindent Now, we have 6 and 12
+
+\noindent Finally, we have 15 and 11
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Let's work this through a piece at a time. First we set up our variables, giving the values 4 and 10 to \$a
+
+\noindent and \$b, respectively. :
+
+\noindent 
+
+\noindent 
+
+\noindent \$a=4;
+
+\noindent \$b=10;
+
+\noindent print "Our variables are ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent 
+
+\noindent Now in the following line, the assignment happens before the increment. So \$b is set to \$a's current value, 4 and then \$a is autoincremented, becoming 5.
+
+\noindent 
+
+\noindent 
+
+\noindent \$b=\$a++;
+
+\noindent print "After incrementing, we have ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent 
+
+\noindent This time, however, the incrementing takes place first. \$a is now 6, and \$b is set to twice that, 12.
+
+\noindent 
+
+\noindent 
+
+\noindent \$b=++\$a*2;
+
+\noindent print "Now, we have ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Finally, \$b is decremented first and becomes 11. \$a is set to \$b plus 4, which is 15.
+
+\noindent 
+
+\noindent \$a=--\$b+4;
+
+\noindent print "Finally, we have ", \$a, " and ", \$b, "\textbackslash n";
+
+\noindent 
+
+\noindent The autoincrement operator actually does something interesting if the variable contains a string of only alphabetic characters, followed optionally by numeric characters. Instead of converting to a number,
+
+\noindent perl 'advances' the variable along the ranges a-z, A-Z, and 0-9. This is more easily understood from a
+
+\noindent few examples:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#auto2.plx
+
+\noindent use warnings;
+
+\noindent \$a = "A9"; print ++\$a, "\textbackslash n";
+
+\noindent \$a = "bz"; print ++\$a, "\textbackslash n";
+
+\noindent \$a = "Zz"; print ++\$a, "\textbackslash n";
+
+\noindent \$a = "z9"; print ++\$a, "\textbackslash n";
+
+\noindent \$a = "9z"; print ++\$a, "\textbackslash n";
+
+\noindent 
+
+\noindent Should produce:
+
+\noindent 
+
+\noindent $>$\textbf{perl auto2.plx}
+
+\noindent B0
+
+\noindent ca AAa aa0
+
+\[10\] 
+$>$
+
+\noindent 
+
+\noindent This shows that a 9 turns into a 0 and increments the next digit left. A 'z' turns into an 'a' and increments the next digit left. If there are no more digits to the left, either an 'a' or an 'A' is created, depending on the case of the current leftmost digit.
+
+\noindent 
+
+\noindent \textit{Multiple Assignments}
+
+\noindent We've said that = is an operator, but does that mean it returns a value? Well, actually it does. It returns whatever was assigned. This allows us to set up several variables at once. Here's a simple example of
+
+\noindent this (read it from right to left):
+
+\noindent 
+
+\noindent \$d= \$c= \$b= \$a= 1;
+
+\noindent 
+
+\noindent First we set \$a to 1, and the result of this is 1. \$b is set with that, the result of which is 1. And so it goes.
+
+\noindent 
+
+\noindent A slightly more complicated version occurs when you operate on the return value of the assignment. As usual, we need to pay attention to precedence. This won't work:
+
+\noindent 
+
+\noindent \$b=4+ \$a= 1;
+
+\noindent 
+
+\noindent which is just as well, because it's horribly confusing. Perl complains that it 'Can't modify addition (+)
+
+\noindent in scalar assignment'.  That is  to  say,  it's  trying  to  assign  1 to  4+\$a,  and you  can  only  assign  to  a variable, not to an addition. We say that addition is not a legal \textbf{lvalue}. It is not allowed on the left-hand side of an assignment.
+
+\noindent 
+
+\noindent 
+
+\noindent If you wanted to do this, you'd have to say:
+
+\noindent 
+
+\noindent 
+
+\noindent \$b=4+ (\$a= 1);
+
+\noindent 
+
+\noindent This sets \$a to 1 and \$b to 5 as expected, but it's considered a bit messy. The reason for this is that
+
+\noindent setting various different variables with different values in one go is complicated to read and just the sort
+
+\noindent of thing that gives Perl a bad name.
+
+\noindent 
+
+\noindent Scoping
+
+\noindent 
+
+\noindent All the variables we've seen so far in our programs have been \textbf{global }variables, that is, they can be seen and changed from anywhere in the program. For the moment, that's not too much of a problem, since
+
+\noindent our programs are very small, and we can easily understand where things get assigned and used. However, when we start writing larger programs, this becomes a problem.
+
+\noindent 
+
+\noindent Why is this? Well, suppose one part of your program uses a variable, \$counter. If another part of your program wants a counter, it can't call it \$counter as well for fear of clobbering the old value. This becomes more of an issue when we get into \textbf{subroutines}, which are little sections of code we can temporarily call upon to accomplish something for us before returning to what we were previously
+
+\noindent doing. Currently, we'd have to make sure all the variables in our program had different names, and with
+
+\noindent a large program, that's not desirable. It would be easier to restrict the life of a variable to a certain area
+
+\noindent of the program. Let's see how this is done.
+
+\noindent 
+
+\noindent Try it out -- Lexical variables
+
+\noindent To achieve this, Perl provides another type of variable, called \textbf{lexical }variables. These are constrained to the enclosing block and all blocks inside it. If they're not currently inside a block, they are constrained
+
+\noindent to the current file. To tell perl that a variable is lexical, we say 'my \$variable;'. This creates a brand-
+
+\noindent new lexical variable for the current block and sets it to the undefined value. Here's an example:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#scope1.plx
+
+\noindent use warnings;
+
+\noindent \$record = 4;
+
+\noindent print "We're at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent \{
+
+\noindent my \$record;
+
+\noindent \$record = 7;
+
+\noindent print "Inside the block, we're at record ", \$record, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent print "We're still at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent And this should tell you:
+
+\noindent 
+
+\noindent $>$\textbf{perl scope1.plx}
+
+\noindent We're at record 4
+
+\noindent Inside the block, we're at record 7
+
+\noindent We're still at record 4
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Firstly, we set our global variable \$record to 4.
+
+\noindent 
+
+\noindent 
+
+\noindent \$record = 4;
+
+\noindent print "We're at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent Now we enter a new block and create a new lexical variable. Important! This is completely and utterly unrelated to the global variable \$record as my creates a new lexical variable. This exists for the duration of the block only, and has the undefined value.
+
+\noindent 
+
+\noindent 
+
+\noindent \{
+
+\noindent my \$record;
+
+\noindent 
+
+\noindent Next, the lexical varable is set to 7 and printed out. The global is unchanged.
+
+\noindent 
+
+\noindent 
+
+\noindent \$record = 7;
+
+\noindent print "Inside the block, we're at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent Finally, the block ends, and the lexical ends with it. We say that it has gone 'out of scope'. The global remains, however, and so \$record has the value 4.
+
+\noindent 
+
+\noindent \}
+
+\noindent 
+
+\noindent print "We're still at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent In order to make us think clearly about our programming, we will ask Perl to be strict about our variable use. The statement 'use strict;' checks that, among other things, we've declared all our variables. We declare lexicals with my, and we can also declare globals in the same way with our. Here's what happens if we change our program to 'use strict' format:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#scope2.plx
+
+\noindent use strict;
+
+\noindent use warnings;
+
+\noindent \$record = 4;
+
+\noindent print "We're at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent \{
+
+\noindent my \$record;
+
+\noindent \$record = 7;
+
+\noindent print "Inside the block, we're at record ", \$record, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent print "We're still at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent Now, the global \$record is not declared. So sure enough, perl complains about it, telling us that:
+
+\noindent 
+
+\noindent Global symbol "\$record" requires explicit package name.
+
+\noindent 
+
+\noindent 
+
+\noindent We'll see exactly what this means in later chapters, but for now it suffices to declare \$record as either
+
+\noindent a global or a lexical. Normally, we'd try and avoid globals as much as possible, but let's make it a global this once:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#scope3.plx use strict; use warnings;
+
+\noindent our \$record;
+
+\noindent \$record = 4;
+
+\noindent print "We're at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent \{
+
+\noindent my \$record;
+
+\noindent \$record = 7;
+
+\noindent print "Inside the block, we're at record ", \$record, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent print "We're still at record ", \$record, "\textbackslash n";
+
+\noindent 
+
+\noindent Now perl is happy, and we get the same output as before. You should almost always start your programs with those two lines -- turn on warnings, and then turn on strictness. Of course nobody's going to force
+
+\noindent you to use them, but they will help you avoid a lot of mistakes and will certainly give other people who have to look at your code more confidence in it.
+
+\noindent 
+
+\noindent Variable Names
+
+\noindent 
+
+\noindent We've not really examined yet what the rules are regarding what we can call our variables. We know
+
+\noindent that scalar variables have to start with a dollar sign, but what next? The next character must be a letter (uppercase or lowercase) or an underscore. After that, any combination of numbers, letters, and underscores is permissible, up to a total of 251 characters.
+
+\noindent 
+
+\noindent Be aware that Perl's variables are case-sensitive so \$user is different from \$User, and both are different from \$USER.
+
+\noindent 
+
+\noindent The following are legal variable names: \$I\_am\_a\_long\_variable\_name, \$simple, \$box56,
+
+\noindent \$\_\_hidden, \$B1
+
+\noindent 
+
+\noindent The following are not legal variable names: \$10c (doesn't start with letter or underscore), \$mail- alias (- is not allowed), \$your name (spaces not allowed).
+
+\noindent 
+
+\noindent \textit{The Special Variable \$\_}
+
+\noindent There are certain variables, which Perl provides internally, that you either are not allowed to, or do not want to, overwrite. One which is allowed by the naming conventions above is \$\_, a very special
+
+\noindent variable indeed. \$\_ is the 'default variable' that a lot of functions read from and write to if no other
+
+\noindent variable is given. We'll see plenty of examples of it throughout the book. For your reference, Appendix
+
+\noindent B lists all the special variables that perl uses and what they do.
+
+\noindent 
+
+\noindent Apart from the prefix, the same restrictions apply to arrays and hashes. Scalar variables are prefixed by
+
+\noindent a dollar sign (\$), arrays begin with an at sign (@), and hashes begin with a percent sign (\%).
+
+\noindent 
+
+\noindent Variable Interpolation
+
+\noindent 
+
+\noindent We said earlier that double-quoted strings interpolate variables. What does this mean? Well, if you mention a variable, sa,y \$name in the middle of a double-quoted string, you get the value of the
+
+\noindent variable, rather than the actual characters. Interpolation happens for scalar variables and arrays but not
+
+\noindent for hashes. As an example, see what perl does to this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#varint1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent my \$name = "fred";
+
+\noindent print "My name is \$name\textbackslash n";
+
+\noindent 
+
+\noindent This is what comes out:
+
+\noindent 
+
+\noindent $>$\textbf{perl varint1.plx}
+
+\noindent My name is fred
+
+\noindent $>$
+
+\noindent 
+
+\noindent Perl interpolates the value of \$name into the string. Note that this doesn't happen with single-quoted strings, just like escape sequence interpolation:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#varint2.plx use warnings; use strict;
+
+\noindent my \$name = "fred";
+
+\noindent print 'My name is \$name\textbackslash n';
+
+\noindent 
+
+\noindent Here we get:
+
+\noindent 
+
+\noindent $>$\textbf{perl varint2.plx}
+
+\noindent My name is \$name\textbackslash n
+
+\noindent $>$
+
+\noindent 
+
+\noindent This doesn't just happen in things we print, it happens every time we construct a string:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#varint3.plx use warnings; use strict;
+
+\noindent my \$name = "fred";
+
+\noindent my \$salutation = "Dear \$name,";
+
+\noindent print \$salutation, "\textbackslash n";
+
+\noindent 
+
+\noindent This gives us:
+
+\noindent 
+
+\noindent $>$\textbf{perl varint3.plx}
+
+\noindent Dear fred,
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent This has exactly the same effect as:
+
+\noindent 
+
+\noindent my \$salutation = "Dear ". \$name. ",";
+
+\noindent 
+
+\noindent but is more concise and easier to understand.
+
+\noindent 
+
+\noindent If you need to place text immediately after the variable, you can use braces to delimit the name of the variable. Take this example:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#varint4.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent my \$times = 8;
+
+\noindent print "This is the \$timesth time.\textbackslash n";
+
+\noindent 
+
+\noindent This won't work, because perl looks for a variable \$timesth that hasn't been declared. In this case, we have to change the last line to this:
+
+\noindent 
+
+\noindent print "This is the \$\{times\}th time.\textbackslash n";
+
+\noindent 
+
+\noindent Now we get the right thing:
+
+\noindent 
+
+\noindent $>$\textbf{perl varint4.plx}
+
+\noindent This is the 8th time.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Currency Converter
+
+\noindent 
+
+\noindent Let's begin to wind up this chapter with a real example -- a program to convert between currencies. This
+
+\noindent is our very first version, so we won't make it do anything too complex. As we get more and more advanced, we'll be able to hone and refine it.
+
+\noindent 
+
+\noindent Try it out -- Currency Converter
+
+\noindent 
+
+\noindent Open your editor, and type in the following program:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#currency1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent my \$yen = 180;
+
+\noindent print "49518 Yen is ", (49\_518/\$yen), " pounds\textbackslash n";
+
+\noindent print "360 Yen is ", ( 360/\$yen), " pounds\textbackslash n";
+
+\noindent print "30510 Yen is ", (30\_510/\$yen), " pounds\textbackslash n";
+
+\noindent 
+
+\noindent Save this, and run it through perl. This is what you should see:
+
+\noindent 
+
+\noindent $>$ \textbf{perl currency1.plx}
+
+\noindent 49518 Yen is 275.1 pounds
+
+\noindent 360 Yen is 2 pounds
+
+\noindent 30510 Yen is 169.5 pounds
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent First, we start our program in the usual way:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use warnings; use strict;
+
+\noindent 
+
+\noindent Next, we declare the exchange rate to be a lexical variable and set it to 180. (At the time I wrote this, there were roughly 180 Yen to the Pound.)
+
+\noindent 
+
+\noindent my \$yen = 180;
+
+\noindent 
+
+\noindent Notice that we can declare and assign a variable at the same time. Now we do some calculations based on that exchange rate:
+
+\noindent 
+
+\noindent print "49518 Yen is ", (49\_518/\$yen), " pounds\textbackslash n"; print "360 Yen is ", ( 360/\$yen), " pounds\textbackslash n"; print "30510 Yen is ", (30\_510/\$yen), " pounds\textbackslash n";
+
+\noindent 
+
+\noindent And amazingly, the calculations come out to roughly round numbers!
+
+\noindent 
+
+\noindent Of course, this is currently of limited use, because the exchange rate fluctuate, and we might want to change some different amounts at times. To do either of these things, we need to be able to ask the user for additional data when we run the program.
+
+\noindent 
+
+\noindent \textit{Introducing $<$STDIN$>$}
+
+\noindent The way we do this is with the construct $<$STDIN$>$. We'll explain it in detail when we look at file
+
+\noindent handling in Chapter 6, but it reads a line from the file called \textbf{standard input}. Usually, the standard input
+
+\noindent is not really a file, but the user's keyboard. Similarly, the print function by default writes to the file called \textbf{standard output}, which is usually the user's screen.
+
+\noindent 
+
+\noindent So, in order to ask the user for a line of text, we say something like:
+
+\noindent 
+
+\noindent print "Please enter something interesting\textbackslash n";
+
+\noindent \$comment = $<$STDIN$>$;
+
+\noindent 
+
+\noindent This will read one line from the user and assign the string that was read to the variable \$comment. Let's use this to get the exchange rate from the user when the program is run.
+
+\noindent 
+
+\noindent Try it out - Currency Converter, Mark 2
+
+\noindent 
+
+\noindent Using your editor, change the file currency1.plx to currency2.plx as follows:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#currency2.plx use warnings; use strict;
+
+\noindent print "Currency converter\textbackslash n\textbackslash nPlease enter the exchange rate: ";
+
+\noindent my \$yen = $<$STDIN$>$;
+
+\noindent print "49518 Yen is ", (49\_518/\$yen), " pounds\textbackslash n";
+
+\noindent print "360 Yen is ", ( 360/\$yen), " pounds\textbackslash n";
+
+\noindent print "30510 Yen is ", (30\_510/\$yen), " pounds\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Now when you run the program, you'll be asked for the exchange rate. The currency values will be
+
+\noindent calculated using the rate you entered:
+
+\noindent 
+
+\noindent $>$ \textbf{perl currency2.plx}
+
+\noindent Currency converter
+
+\noindent 
+
+\noindent Please enter the exchange rate: \textbf{100}
+
+\noindent 49518 Yen is 495.18 pounds
+
+\noindent 360 Yen is 3.6 pounds
+
+\noindent 30510 Yen is 305.1 pounds
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textbf{\textit{How It Works}}
+
+\noindent This time we read the exchange rate from the user's keyboard, and perl converts the string to a number
+
+\noindent in order to perform the calculation.
+
+\noindent 
+
+\noindent So far, we haven't done any checking to make sure that the exchange rate given makes sense; This is something we'll need to think about in future.
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Perl has three main data types -- scalars, lists, and hashes. Lists and hashes are made up of scalars, which are in turn made up of integers, floating-point numbers, and strings. Perl converts between these three automatically, so we don't need to distinguish between them.
+
+\noindent 
+
+\noindent Double- and single-quoted strings differ in the way they process the text inside them. Single-quoted strings do little to no processing at all, whereas double-quoted strings interpolate escape sequences and
+
+\noindent variables. We can use alternative delimiters and here-documents as alternative ways of entering strings.
+
+\noindent 
+
+\noindent We can operate on these scalars in a number of ways -- ordinary arithmetic, bitwise arithmetic, string manipulation, and logical comparison. We can also combine logical comparisons with Boolean
+
+\noindent operators. These operators vary in precedence, which is to say that some take effect before others, and
+
+\noindent as a result we must use brackets to enforce the precedence we want.
+
+\noindent 
+
+\noindent Scalar variables are a way of storing scalars so that we can get at them and change them. Scalar variables begin with a dollar sign (\$) and are followed by one or more alphanumeric characters or
+
+\noindent underscores. There are two types of variables -- lexical and global. Globals exist all the way through the
+
+\noindent program and so can be troublesome if we don't keep very good track of where they are being used. Lexicals have a life span of the current block, so we can use them safely without worrying about clobbering similarly named variables somewhere else in the program.
+
+\noindent 
+
+\noindent Finally, we've seen a way of getting input from the user, storing it into a variable, and acting upon it. Try the exercises that follow. They are a good indication of how much you have learned.
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent 1.   Change the currency conversion program so that it asks for an exchange rate and three prices
+
+\noindent to convert.
+
+\noindent 
+
+\noindent 2.   Write a program that asks for a hexadecimal number and converts it to decimal. Then change
+
+\noindent it to convert an octal number to decimal.
+
+\noindent 
+
+\noindent 3.   Write a program that asks for a decimal number less than 256 and converts it to binary. (Hint: You may want to use the bitwise and operator, 8 times.)
+
+\noindent 
+
+\noindent 4.   Without the aid of the computer, work out the order in which each of the following
+
+\noindent expressions would be computed and their value. Put the appropriate parentheses in to reflect the normal precedence:
+
+\noindent 
+
+\noindent 
+
+\noindent ? 2+6/4-3*5+1
+
+\noindent ? 17+-3**3/2
+
+\noindent ? 26+3\^{}4*2
+
+\noindent ? 4+3$>$=7\textbar \textbar 2\&4*2$<$4
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+

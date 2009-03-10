@@ -1,0 +1,3463 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\chapter{Lists and Hashes}
+\paragraph{}
+As we saw from the previous chapter, there are three types of data: scalars, lists, and hashes. So far we've only been working with scalars -- single numbers or strings. We've joined two single strings together to make one, converted one currency only, and held one number in a variable.
+
+There are times, when we'll want to group together information or express correspondences between information. Just like the ingredients in a recipe or the pieces in a jigsaw, some things belong together in a natural sequence, for example, individual lines in a file, or the names of players in a squash ladder. In Perl, we represent these relationships in lists -- series of scalars. They can be stored in another type of variable called an \textbf{array}, and we call each piece of data in the list an \textbf{element}.
+
+Alternatively, some things are better expressed as a set of one-to-one correspondences. A phone book, for example, is a set of correspondences between addresses and phone numbers. In Perl, structures like the phone book are represented as a \textbf{hash}. Some people call them 'associative arrays' because they look a bit like arrays where each element is associated with another value. Most Perl programmers find that a bit too long-winded and just call them hashes.
+
+In this chapter, we'll see how we build up lists and hashes and what we can do with them when we've got them. We'll also begin to look at some control structures, which will enable us to step through lists and arrays. As well as all this, we'll learn how to process data more than once without having to write out the relevant sections of our program again and again.
+
+\section{Lists}
+\paragraph{}
+We're all familiar with lists from everyday life. Think about a shopping list, what properties does it have? First of all, it's a single thing, one piece of paper. Secondly, it's made up of a number of values. In the case of a shopping list, you might want to say that these values are actually strings -- "ketchup", "peanut butter", "ice cream", and so on. Finally, it's also ordered, which means that there's a first item and a last item.
+
+Lists in Perl aren't actually that much different: They're counted as a single thing, but they're made up of a number of values. In Perl, these values are scalars, rather than purely strings. They're also stored in the order they were created.
+
+We'll specify lists in our program code as literals, just like we did with strings and numbers. We'll also be able to perform certain operations on them. Let's begin by looking at a few simple lists and how we create them.
+
+\subsection{Simple Lists}
+
+\noindent 
+
+\noindent The simplest shopping list is one where you have nothing to buy. Similarly, the simplest list in Perl has no elements in it. Here's what it looks like:
+
+\noindent 
+
+\noindent 
+
+\noindent ()
+
+\noindent 
+
+\noindent A simple pair of parentheses -- that's how we denote a list. However, it's not very interesting. Let's try putting in some values:
+
+\begin{verbatim}
+("cheese") 
+\end{verbatim}
+
+
+\noindent 
+
+\noindent As you can see, we have created two lists, one containing a number, and one containing a string -- so far
+
+\noindent so good. Now, remember that I said print was a list operator? The magic about operators like print
+
+\noindent is that you can omit the brackets. Saying print "cheese" is just the same as saying print("cheese"). So what we give to print is really a list. We're allowed to leave out the parentheses if we wish.
+
+\noindent 
+
+\noindent From this, we should be able to work out how to put multiple values into a list. When we said:
+
+\noindent 
+
+\noindent 
+
+\noindent print("Hello, ", "world", "\textbackslash n");
+
+\noindent 
+
+\noindent we were actually passing the following list to the print operator:
+
+\noindent 
+
+\noindent 
+
+\noindent ("Hello ", "world", "\textbackslash n")
+
+\noindent 
+
+\noindent As you can see, this is a three-element list, and the elements are separated with commas. Computers and computer people start counting from zero, so here's your chance to practise. The zeroth element is
+
+\noindent "Hello ", the first is "world", and the second is "\textbackslash n". Now, let's do that again with numbers instead
+
+\noindent of strings:
+
+\noindent 
+
+\noindent 
+
+\[(123, 456, 789)\] 
+
+
+\noindent This is exactly the same as before, and if we were to print this new list, this is what would happen:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# numberlist.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent print (123, 456, 789);
+
+\noindent 
+
+\noindent $>$\textbf{perl numberlist.plx}
+
+\noindent 123456789$>$
+
+\noindent 
+
+\noindent 
+
+\noindent As before, perl doesn't automatically put spaces between list elements for us when it prints them out, it
+
+\noindent just prints them as it sees them. Similarly, it doesn't put a new line on the end for us. If we want to add spaces and new lines, then we need to put them into the list ourselves.
+
+\noindent 
+
+\noindent More Complex Lists
+
+\noindent 
+
+\noindent We can also mix strings, numbers, and variables in our lists. Let's see an example of a list with several different types of data in it:
+
+\noindent 
+
+\noindent Try It Out -- Mixed Lists
+
+\noindent 
+
+\noindent Although this isn't very different from what we were doing with print in the last chapter, this example
+
+\noindent reinforces the point that lists can contain any scalar literals and scalar variables. So, type this in, and save it as mixedlist.plx.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# mixedlist.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$test = 30;
+
+\noindent print
+
+\noindent "Here is a list containing strings, (this one) ",
+
+\noindent "numbers (",
+
+\[3.6,\] 
+") and variables: ",
+
+\noindent \$test,
+
+\noindent "\textbackslash n"
+
+\noindent ;
+
+\noindent 
+
+\noindent When you run that, here's what you should see:
+
+\noindent 
+
+\noindent $>$ \textbf{perl mixedlist.plx}
+
+\noindent Here is a list containing strings, (this one) numbers and variables: 30
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent This is how we're going to start programs from now on, in order to make sure that we have both warnings and extra checks turned on. Remember that if you're using a version of Perl less than 5.6
+
+\noindent you'll need to say \#!/usr/bin/perl --w for the first line to turn on warnings, and also leave out the
+
+\noindent use warnings; line:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# mixedlist.plx use warnings; use strict;
+
+\noindent 
+
+\noindent Next, we initialize our variable. Note that we can declare the variable and give it a value on the same statement. It's exactly the same as doing this:
+
+\noindent 
+
+\noindent my \$test = 30;
+
+\noindent 
+
+\noindent 
+
+\noindent but is just as clear and saves a line, so it's a common thing to do -- it's one of Perl's many idioms:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$test;
+
+\noindent \$test = 30;
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Perl is more like a human language than most programming languages. Perl was}
+
+\noindent \textbf{designed to be easy for humans to write, not for computers to read. Just like human}
+
+\noindent \textbf{languages, Perl has shortcuts and idioms. Perl programmers do tend to use a lot of}
+
+\noindent \textbf{these idioms in their code, and you may come across them if you're reading other}
+
+\noindent \textbf{people's programs. As a result of this, we're not going to shy away from those idioms,}
+
+\noindent \textbf{even if they can be slightly confusing at times. Instead, we'll try taking them apart to}
+
+\noindent \textbf{see how they work.}
+
+\noindent 
+
+\noindent 
+
+\noindent Finally, we have our list. It's a list of six elements, including literal strings, literal numbers, and a scalar
+
+\noindent variable for good measure:
+
+\noindent 
+
+\noindent 
+
+\noindent print
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent ;
+
+\noindent 
+
+\noindent "Here is a list containing strings, (this one) ", "numbers (",
+
+\[3.6,\] 
+") and variables: ",
+
+\noindent \$test, "\textbackslash n"
+
+\noindent 
+
+\noindent Since variables interpolate in double-quoted strings inside lists just as well as at any other time, we could
+
+\noindent have done that all as one long single-element list:
+
+\noindent 
+
+\noindent 
+
+\noindent print ("Here is a list containing strings, (this one) numbers and variables:
+
+\noindent \$test\textbackslash n");
+
+\noindent 
+
+\noindent There is a disadvantage of writing your code this way. New lines in your string literals will turn into new lines in your output. So, if you keep the maximum length of the lines in your source code to about 80 columns (it's a good idea to keep your programs readable), one long string will wrap over, and you'll see this sort of thing:
+
+\noindent 
+
+\noindent $>$ \textbf{perl mixedlist.plx}
+
+\noindent Here is a list containing strings, (this one) numbers and
+
+\noindent variables: 30
+
+\noindent $>$
+
+\noindent 
+
+\noindent So if you're ever printing long strings, consider splitting it up into a list of smaller strings on separate lines as we've done above.
+
+\noindent 
+
+\noindent In the same way, single-quoted strings act no differently when they're list elements: ('A number:',
+
+\noindent '\$test') will actually give you two strings, and if you print out that list, you will see this:
+
+\noindent 
+
+\noindent A number:\$test
+
+\noindent 
+
+\noindent 
+
+\noindent Similarly, q// and qq// can be used to delimit strings when you're using them as list elements. There's
+
+\noindent absolutely no difference between the previous example and (q/A number:/, q/\$test/)
+
+\noindent 
+
+\noindent However, there's another trick. When your lists are made up purely from single words, you can specify them with the qw// operator. Just like the q// and qq// operators, you can choose any paired
+
+\noindent brackets or non-word characters as your delimiters. The following lists are all identical:
+
+\noindent 
+
+\noindent 
+
+\noindent ('one', 'two', 'three', 'four')
+
+\noindent qw/one two three four/ qw(one two three four) qw$<$one two three four$>$ qw\{one two three four\} qw[one two three four] qw\textbar one two three four\textbar 
+
+\noindent 
+
+\noindent You shouldn't separate your words with commas inside qw//. In fact, if you do, perl will complain, especially since we always have warnings turned on! For example, if we ran this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# badlist.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent print qw(one,two,three,four);
+
+\noindent 
+
+\noindent we would quickly see
+
+\noindent 
+
+\noindent $>$ \textbf{perl badlist.plx}
+
+\noindent Possible attempt to separate words with commas at badlist.plx line 5.
+
+\noindent Possible attempt to separate words with commas at badlist.plx line 5. Possible attempt to separate words with commas at badlist.plx line 5. one,two,three,four$>$
+
+\noindent 
+
+\noindent You can use any white space, tabs, or new lines to separate your elements. The same list as above
+
+\noindent ('one', 'two', 'three', 'four') can also be written like this:
+
+\noindent 
+
+\noindent 
+
+\noindent qw(
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent )
+
+\noindent 
+
+\noindent one two three four
+
+\noindent 
+
+\noindent One last thing to note is that perl automatically \textbf{flattens }lists. That is, if you try putting a list inside
+
+\noindent another list, the internal list loses its identity. In effect, perl removes all the brackets apart from the outermost pair. There's no difference at all between any of these three lists:
+
+\noindent 
+
+\[(3, 8, 5, 15)\] 
+
+\[((3, 8), (5, 15)) (3, (8, 5), 15)\] 
+
+
+\noindent 
+
+\noindent Similarly, perl sees each of these lists as exactly the same as the others:
+
+\noindent 
+
+\noindent 
+
+\noindent ('one', 'two', 'three', 'four') (('one', 'two', 'three', 'four')) (qw(one two three), 'four') (qw(one two), q(three), 'four') (qw(one two three four))
+
+\noindent 
+
+\noindent This  doesn't mean that  you  can't  store  a  list  inside  another  list  and  keep  the structure  of  the  first list intact.  For the moment we can't  do  it,  but  we'll see  how  it's  done  when  we  look at  references in Chapter 7.
+
+\noindent 
+
+\noindent Accessing List Values
+
+\noindent 
+
+\noindent We've now seen most of the ways of building up lists in Perl, and we can throw lists at list operators like
+
+\noindent print. But another thing we need to be able to do with lists is access a specific element or set of
+
+\noindent elements within it. The way to do this is to place the number of the elements we want in square brackets after the list, like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# access.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent print (('salt', 'vinegar', 'mustard', 'pepper')[2]);
+
+\noindent print "\textbackslash n";
+
+\noindent 
+
+\noindent Before you run this, though, see if you can work out which word will be printed.
+
+\noindent 
+
+\noindent $>$\textbf{perl access.plx}
+
+\noindent mustard
+
+\noindent $>$
+
+\noindent Did you think it was going to be 'vinegar'? Don't forget that computers start counting things from zero! You should also notice that we had to put brackets around the whole thing. This is because the
+
+\noindent precedence of print is extremely high. Without the brackets, perl groups the statement in two parts
+
+\noindent like this:
+
+\noindent 
+
+\noindent 
+
+\noindent print('salt', 'vinegar', 'mustard', 'pepper') [2];
+
+\noindent 
+
+\noindent This means the whole of the list is passed to print, after which perl attempts to retrieve the second element of print. The problem is, you can only take an element from a list, and as we already know, print isn't a list.
+
+\noindent 
+
+\noindent So, since print needs to be passed a list, we make a list out of the element we want:
+
+\noindent 
+
+\noindent print (
+
+\noindent ('salt', 'vinegar', 'mustard', 'pepper')[2]
+
+\noindent );
+
+\noindent 
+
+\noindent 
+
+\noindent The element you want doesn't have to be given as a literal -- variables work just as well. Here's an
+
+\noindent example we'll draw on later:
+
+\noindent 
+
+\noindent Try It Out -- Months Of The Year
+
+\noindent We'll create a list of the months of the year, and then use a variable to access them. Save this file as
+
+\noindent months.plx:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# months.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$month = 3;
+
+\noindent print qw(
+
+\begin{tabular}{|p{1.1in}|p{0.6in}|p{2.5in}|} \hline 
+January & February & March \\ \hline 
+April & May & June \\ \hline 
+July & August & September \\ \hline 
+October & November & December \\ \hline 
+\end{tabular}
+
+)[\$month];
+
+\noindent 
+
+\noindent When this is run, you should now be expecting it to give you 'April', and it does:
+
+\noindent 
+
+\noindent $>$\textbf{perl months.plx}
+
+\noindent April$>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The key piece of code for this example is the last statement:
+
+\noindent 
+
+\noindent 
+
+\noindent print qw(
+
+\begin{tabular}{|p{1.1in}|p{0.6in}|p{0.5in}|} \hline 
+January & February & March \\ \hline 
+April & May & June \\ \hline 
+July & August & September \\ \hline 
+October & November & December \\ \hline 
+\end{tabular}
+
+)[\$month];
+
+\noindent 
+
+\noindent We have \$month as 3, and so we are telling perl to print out the third element of the list, starting from zero. Because we're using qw// we can use arbitrary whitespace, tabs, and new lines to separate each
+
+\noindent list element, which allows us to present the months in a neat table.
+
+\noindent 
+
+\noindent This is exactly the sort of situation that qw// was created for. We have a list comprised completely of single words, and we want a way to represent that to perl in a tidy way in our source code. It's far easier
+
+\noindent to read than spelling the list out longhand, even though these statements are equivalent:
+
+\noindent 
+
+\noindent print (('January','February', 'March', 'April', 'May', 'June', 'July', 'August',
+
+\noindent 'September', 'October', 'November', 'December')[\$month]);
+
+\noindent 
+
+\noindent What do you think would happen if we chose a non-integer value for our element? Let's use a value with a fractional part. Change the above file so that line 5 reads:
+
+\noindent 
+
+\noindent my \$month = 2.2;
+
+\noindent 
+
+\noindent 
+
+\noindent Perl will round the number in this case, and you should get the answer March. In fact, perl always
+
+\noindent rounds towards zero, so anything between 2 and 3 will get you March.
+
+\noindent 
+
+\noindent What about negative numbers? Actually, something interesting happens here -- perl starts counting backwards from the end of the list. So element -1 is the last one, -2 the second before last, and so on.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# backwards.plx use warnings; use strict;
+
+\noindent 
+
+\noindent print qw(
+
+\begin{tabular}{|p{1.0in}|p{0.6in}|p{2.5in}|} \hline 
+January & February & March \\ \hline 
+April & May & June \\ \hline 
+July & August & September \\ \hline 
+October & November & December \\ \hline 
+\end{tabular}
+
+
+
+\[)[-1];\] 
+
+\noindent And, true to form, we'll get the last element of the array when we run the program.
+
+\noindent 
+
+\noindent $>$\textbf{perl backwards.plx}
+
+\noindent December$>$
+
+\noindent 
+
+\noindent \textit{List Slices}
+
+\noindent So much for getting a single element out of a list. What if we want to get several? Well, instead of putting a number or a scalar variable inside those square brackets, you can actually put a list there instead. For example, this:
+
+\noindent 
+
+\[(19, 68, 47, 60, 53, 51, 58, 55, 47)[(4, 5, 6)]\] 
+
+
+\noindent returns another list consisting of elements four, five, and six: (53, 51, 58). Actually, inside the square brackets, we don't need the additional set of parentheses, so you might as well say:
+
+\noindent 
+
+\[(19, 68, 47, 60, 53, 51, 58, 55, 47)[4, 5, 6]\] 
+
+
+\noindent We call this getting a \textbf{list slice, }and the same methods work with lists of strings:
+
+\noindent 
+
+\noindent Try It Out -- Multiple Elements Of A List
+
+\noindent 
+
+\noindent This program is called multilist.plx. Just like the above examples, we're taking several elements
+
+\noindent from a list:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# multilist.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$mone; my \$mtwo;
+
+\noindent (\$mone, \$mtwo) = (1, 3);
+
+\noindent 
+
+\noindent print (("heads ", "shoulders ", "knees ", "toes ")[\$mone, \$mtwo]);
+
+\noindent print "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Try and think what it's going to produce before you run it. Here's what happens:
+
+\noindent 
+
+\noindent $>$ perl multilist.plx shoulders toes
+
+\noindent $>$
+
+\noindent 
+
+\noindent As you may have realized, we simply printed out the first and the third elements from the list, if you start counting from zero.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent There are two key tricks in this example. The first is on line seven:
+
+\noindent 
+
+\noindent 
+
+\noindent (\$mone, \$mtwo) = (1, 3);
+
+\noindent 
+
+\noindent You might be able to see what this line does, from how the rest of the program runs. The value of
+
+\noindent \$mone is set to 1, and \$mtwo to 3. But how does this work?
+
+\noindent 
+
+\noindent Perl allows lists on the left-hand side of an assignment operator -- we say that lists are legal \textbf{lvalues}.
+
+\noindent When we assign one list to another, the right-hand list is built up first. Then perl assigns each element in turn, from the right hand side of the statement to the left. So 1 is assigned to \$mone, and then 3 is
+
+\noindent assigned to \$mtwo.
+
+\noindent 
+
+\noindent If you're okay with that, then now's a good time for a quick quiz. Suppose we've done the above: \$mone
+
+\noindent is 1 and \$mtwo is 3. What do you think would happen if we said this:
+
+\noindent 
+
+\noindent 
+
+\noindent (\$mone, \$mtwo) = (\$mtwo, \$mone);
+
+\noindent 
+
+\noindent Well, the right-hand list is built up first, so perl looks at the values of the variables and constructs the list (3, 1). Then the 3 is assigned to \$mone, and the 1 assigned to \$mtwo. In effect, we've swapped the values of the variables around -- a handy trick to learn and remember. Chances are that it's something you'll need to do again and again over time.
+
+\noindent 
+
+\noindent Back to our example! Once we've set \$mone to 1 and \$mtwo to 3, we can pick out these elements from
+
+\noindent a list. There's nothing that says that we have to use literals to pick out the elements we want. This:
+
+\noindent 
+
+\noindent 
+
+\noindent print (("heads ", "shoulders ", "knees ", "toes ")[\$mone, \$mtwo]);
+
+\noindent 
+
+\noindent is interpreted by perl just the same as this:
+
+\noindent 
+
+\noindent 
+
+\noindent print (("heads ", "shoulders ", "knees ", "toes ")[1, 3]);
+
+\noindent 
+
+\noindent Indeed, both statements equate to the same thing -- picking out a list consisting of the first and third elements of our original list and printing them. In effect, we call:
+
+\noindent 
+
+\noindent 
+
+\noindent print ("shoulders ", "toes ");
+
+\noindent 
+
+\noindent which is indeed what happens.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Ranges}
+
+\noindent Often our lists will be a lot simpler than a group of different values. We'll want to talk about "the
+
+\noindent numbers 1 to 10" or "the letters a to z." Rather than write them out longhand, Perl gives us the ability to specify a range of numbers or letters. Suppose we say:
+
+\noindent 
+
+\[(1 .. 6)\] 
+
+
+\noindent This will give us a list of 6 elements from 1 to 6, exactly the same as if we had said (1, 2, 3, 4, 5,
+
+\noindent 6). This can really save time when you're dealing with a few hundred elements, but note that this only works for integers. If you'll recall our efforts to use lists to get at elements of another list, the fractional values in the list were rounded towards zero. Exactly the same thing happens here:
+
+\noindent 
+
+\[(1.4 .. 6.9)\] 
+
+
+\noindent would produce (1, 2, 3, 4, 5, 6) again. There's no problems with using negative numbers in you ranges, though. For example:
+
+\noindent 
+
+\[(-6 .. 3)\] 
+
+
+\noindent produces the list (-6, -5, -4, -3, -2, -1, 0, 1, 2, 3)
+
+\noindent 
+
+\noindent The right-hand number must, however, be higher than the left-hand one, so we can't use this technique
+
+\noindent to count down. Instead, you can reverse any list using the reverse operator, as we'll see very shortly. We can do the same for letters as well:
+
+\noindent ('a'..'k')
+
+\noindent 
+
+\noindent This will give us an 11-element list, consisting of each letter from 'a' to 'k' inclusive. Note that we can't mix letters and numbers within a range. If we try, perl will interpret the string as a number, and treat it
+
+\noindent as zero:
+
+\noindent 
+
+\noindent Try It Out -- Counting Up And Down
+
+\noindent 
+
+\noindent 
+
+\noindent Here's a demonstration of all the things we can do with ranges:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# ranges.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent print "Counting up: ", (1 .. 6), "\textbackslash n";
+
+\noindent print "Counting down: ", (6 .. 1), "\textbackslash n";
+
+\noindent print "Counting down  (properly this time) : ", reverse(1 .. 6), "\textbackslash n";
+
+\noindent 
+
+\noindent print "Half the alphabet: ", ('a' .. 'm'), "\textbackslash n";
+
+\noindent print "The other half (backwards): ", reverse('n' .. 'z'), "\textbackslash n";
+
+\noindent 
+
+\noindent print "Going from 3 to z: ", (3 .. 'z'), "\textbackslash n";
+
+\noindent print "Going from z to 3: ", ('z' .. 3), "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Which of those will work and which won't? Let's find out\dots :
+
+\noindent 
+
+\noindent $>$ \textbf{perl ranges.plx}
+
+\noindent Argument "z" isn't numeric in range (or flop) at ranges.plx line 13. Argument "z" isn't numeric in range (or flop) at ranges.plx line 14.
+
+\noindent Counting up: 123456
+
+\noindent Counting down:
+
+\noindent Counting down  (properly this time): 654321
+
+\noindent Half the alphabet: abcdefghijklm
+
+\noindent The other half (backwards): zyxwvutsrqpon
+
+\noindent Going from 3 to z
+
+\noindent Going from z to 30123
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent After the usual opening, we first count upwards with a range:
+
+\noindent 
+
+\noindent print "Counting up: ", (1 .. 6), "\textbackslash n";
+
+\noindent 
+
+\noindent We've seen the range in action before, and we know this produces (1, 2, 3, 4, 5, 6). We pass print a list containing the string "Counting up: ", the six elements, and a new line. Because a list inside a list gets flattened, we're actually just passing an eight-element list. It's the same as if we'd done:
+
+\noindent 
+
+\noindent print "Counting up: ", 1, 2, 3, 4, 5, 6, "\textbackslash n";
+
+\noindent 
+
+\noindent And we get the expected result:
+
+\noindent 
+
+\noindent Counting up: 123456
+
+\noindent 
+
+\noindent Next, we try and count down:
+
+\noindent 
+
+\noindent print "Counting down: ", (6 .. 1), "\textbackslash n";
+
+\noindent 
+
+\noindent This doesn't work because the right hand side needs to be bigger than the left, and all that's produced is the empty list, (). To count down properly, we need to make a list using (1 .. 6) as before and turn
+
+\noindent it around. The reverse operator turns any list on its head. For example:
+
+\noindent 
+
+\noindent reverse (qw(The cat sat on the mat))
+
+\noindent 
+
+\noindent produces the same as:
+
+\noindent 
+
+\noindent qw(mat the on sat cat The)
+
+\noindent 
+
+\noindent In this case, reverse(1..6) produces (1, 2, 3, 4, 5, 6) and then turns it around to become
+
+\noindent (6, 5, 4, 3, 2, 1), and we see the list appear in that order:
+
+\noindent 
+
+\noindent Counting down  (properly this time) : 654321
+
+\noindent 
+
+\noindent Next we demonstrate a simple alphabetic range:
+
+\noindent 
+
+\noindent print "Half the alphabet: ", ('a' .. 'm'), "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent This range expands to the values 'a', 'b', 'c', and so, on all the way to 'm'. Doing that backwards is easy:
+
+\noindent 
+
+\noindent print "The other half (backwards): ", reverse('n' .. 'z'), "\textbackslash n";
+
+\noindent 
+
+\noindent Now we come to the ones that don't work, and it's no surprise that perl warns us against them:
+
+\noindent 
+
+\noindent Argument "z" isn't numeric in range (or flop) at ranges.plx line 13. Argument "z" isn't numeric in range (or flop) at ranges.plx line 14.
+
+\noindent 
+
+\noindent The lines in question are:
+
+\noindent 
+
+\noindent print "Going from 3 to z: ", (3 .. 'z'), "\textbackslash n";
+
+\noindent print "Going from z to 3: ", ('z' .. 3), "\textbackslash n";
+
+\noindent 
+
+\noindent What does the error message mean? Well, pretty much what it says: we gave an argument of 'z' to a
+
+\noindent range, when it was expecting a number instead. The interpreter converted the 'z' to a number, as per the rules in the last chapter, and got a 0. It's equivalent to this:
+
+\noindent 
+
+\noindent print "Going from 3 to z: ", (3 .. 0), "\textbackslash n";
+
+\noindent print "Going from z to 3: ", (0 .. 3), "\textbackslash n";
+
+\noindent 
+
+\noindent The first one produces an empty list, and the second one counts up from 0 to 3.
+
+\noindent 
+
+\noindent \textit{Combining Ranges and Slices}
+
+\noindent We can, of course, use ranges in our list slices. The following gets March through September:
+
+\noindent 
+
+\noindent (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)[2..8])
+
+\noindent 
+
+\noindent And this gets November through February via December and January (remember that --2 is the second
+
+\noindent to last, and -1 the last):
+
+\noindent 
+
+\noindent (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)[-2..1])
+
+\noindent 
+
+\noindent We can also use a mixture of ranges and literals in our slice. This gives you January, April, and August
+
+\noindent to December:
+
+\noindent 
+
+\noindent (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)[0,3,7..11])
+
+\noindent 
+
+\noindent It may be a bit confusing, but have a go at slicing your own arrays, and you'll get the hang of it in no time at all.
+
+\noindent 
+
+\noindent 
+
+\noindent Arrays
+
+\noindent 
+
+\noindent Just as with scalars, there's only so much you can do with literals. Literal lists get cumbersome to repeat and don't allow us to manipulate them at all. If we wanted to say 'the same list, but without the last element', we couldn't do it. As before, we need to find a way to store them in a variable.
+
+\noindent 
+
+\noindent The variable storage we use for lists is called an \textbf{array}. Whereas the name of a scalar variable started with a dollar sign, arrays start with an at sign (@). The same rules for naming your arrays apply as for any other variables: start with an alphabetic character or underscore, followed by one or more alphabetic characters, underscores, or numbers:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent A scalar variable is
+
+\noindent like a single house. It houses one family.
+
+\noindent An array variable is like a like a terrace of
+
+\noindent houses. It houses several families joined together, but each are in their own separate house.
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Assigning Arrays}
+
+\noindent We store a list in an array just like we store a scalar literal into a scalar variable, by assigning it with =:
+
+\noindent 
+
+\noindent 
+
+\noindent @array = (1,2,3);
+
+\noindent 
+
+\noindent Once we've assigned our array, we can use our array where we would use a list:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# dayarray.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @days;
+
+\noindent @days = qw(Monday Tuesday Wednesday Thursday Friday Saturday Sunday);
+
+\noindent print @days, "\textbackslash n";
+
+\noindent 
+
+\noindent This prints:
+
+\noindent 
+
+\noindent $>$ \textbf{perl dayarray.plx}
+
+\noindent MondayTuesdayWednesdayThursdayFridaySaturdaySunday
+
+\noindent $>$
+
+\noindent 
+
+\noindent Note that \$days is a completely different variable from @days -- setting one does nothing to the other.
+
+\noindent In fact, if you were to do this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# baddayarray1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @days;
+
+\noindent @days = qw(Monday Tuesday Wednesday Thursday Friday Saturday Sunday);
+
+\noindent \$days = 31;
+
+\noindent 
+
+\noindent 
+
+\noindent you would get the following error:
+
+\noindent 
+
+\noindent Global symbol "\$days" requires explicit package name at dayarray.plx line 8.
+
+\noindent 
+
+\noindent This is because you have declared @days to be a lexical variable, but not \$days. Even when you declare them both, setting one has no effect on the other:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# baddayarray2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @days;
+
+\noindent my \$days;
+
+\noindent @days = qw(Monday Tuesday Wednesday Thursday Friday Saturday Sunday);
+
+\noindent \$days = 31;
+
+\noindent print @days, "\textbackslash n";
+
+\noindent print \$days, "\textbackslash n";
+
+\noindent 
+
+\noindent prints:
+
+\noindent 
+
+\noindent MondayTuesdayWednesdayThursdayFridaySaturdaySunday
+
+\[31\] 
+
+
+\noindent What would happen if you assigned an array to a scalar variable? Well, let's see:
+
+\noindent 
+
+\noindent Try It Out - Assigning An Array To A Scalar
+
+\noindent 
+
+\noindent Here's an example of two arrays that we will assign to two different scalar variables:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# arraylen.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array1;
+
+\noindent my \$scalar1;
+
+\noindent @array1 = qw(Monday Tuesday Wednesday Thursday Friday Saturday Sunday);
+
+\noindent \$scalar1 = @array1;
+
+\noindent 
+
+\noindent print "Array 1 is @array1\textbackslash nScalar 1 is \$scalar1\textbackslash n";
+
+\noindent 
+
+\noindent my @array2;
+
+\noindent my \$scalar2;
+
+\noindent @array2 = qw(Winter Spring Summer Autumn);
+
+\noindent \$scalar2 = @array2;
+
+\noindent 
+
+\noindent print "Array 2 is @array2\textbackslash nScalar 2 is \$scalar2\textbackslash n";
+
+\noindent 
+
+\noindent Save this as arraylen.plx, and run it through perl:
+
+\noindent 
+
+\noindent $>$ \textbf{perl arraylen.plx}
+
+\noindent Array 1 is Monday Tuesday Wednesday Thursday Friday Saturday Sunday
+
+\noindent Scalar 1 is 7
+
+\noindent Array 2 is Winter Spring Summer Autumn
+
+\noindent Scalar 2 is 4
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Hmm\dots  The first array has seven elements, and the scalar value is 7. The second has four elements, and
+
+\noindent the scalar value is 4.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Note how array variables interpolate in a double-quoted string. We've seen that if you put a scalar- variable name inside a string, perl will fill in the value of the variable. Now we've put an array variable
+
+\noindent in a string, and perl has filled it in, but it has placed spaces between the elements. Look at the following two print statements:
+
+\noindent 
+
+\noindent @array = (4, 6, 3, 9, 12, 10);
+
+\noindent print @array, "\textbackslash n";
+
+\noindent print "@array\textbackslash n";
+
+\noindent 
+
+\noindent The first one does exactly what we've seen with lists, printing all the elements next to each other. The second statement, however, inserts a space between each element:
+
+\noindent 
+
+\[46391210\] 
+
+\[4 6 3 9 12 10\] 
+
+
+\noindent This adding of spaces between elements is what happens when an array is interpolated in a double- quoted string. As with scalars, interpolation is not confined to print. For example:
+
+\noindent 
+
+\noindent \$scalar =  "@array\textbackslash n";
+
+\noindent 
+
+\noindent is the same as:
+
+\noindent 
+
+\noindent 
+
+\noindent \$scalar = "4639 12 10\textbackslash n";
+
+\noindent 
+
+\noindent Forcing variables to make sense in a string is called \textbf{stringifying }them.
+
+\noindent 
+
+\noindent \textit{Scalar vs List Context}
+
+\noindent What happens when we assign an array to a scalar variable? Well, one key point to remember is that perl knows exactly what type of value you want, whether a scalar or an array, at any stage in an operation, and will do its best to make sure you get it.
+
+\noindent 
+
+\noindent For example, if we're looking to assign to a scalar variable, we need to have a scalar value -- the
+
+\noindent assignment is taking place in \textbf{scalar context}. On the other hand, for example, print expects to see a list
+
+\noindent of arguments. Those arguments are in \textbf{list context}. However, some operations may return different
+
+\noindent values depending on which context they are called. That's what's happening in this case:
+
+\noindent 
+
+\noindent 
+
+\noindent print @array1;
+
+\noindent \$scalar1 = @array1;
+
+\noindent 
+
+\noindent The first line is in list context. In list context, an array returns the list of its elements. In the second line, however, the assignment wants to see a single result, or scalar value, and therefore it is in scalar context.
+
+\noindent In scalar context, an array returns the number of its elements, in our case, 7 for the days and 4 for the
+
+\noindent seasons.
+
+\noindent 
+
+\noindent 
+
+\noindent If we were to do this:
+
+\noindent 
+
+\noindent 
+
+\noindent @array2 = @array1;
+
+\noindent 
+
+\noindent we would be assigning to an array. So we're looking for a list of values to fill @array2. Here, we're back in list context, and so @array2 gets filled with all of the values of @array1.
+
+\noindent 
+
+\noindent We can force something to be in scalar context when it expects to be in list context by using the
+
+\noindent scalar operator. Compare these two statements:
+
+\noindent 
+
+\noindent 
+
+\noindent print @array1;
+
+\noindent print scalar @array1;
+
+\noindent 
+
+\noindent As we've explained before, print usually wants a list, so perl evaluates print's arguments in list context. In the example above, print is looking to get a list from each of arguments. That's why the first statement prints the contents of @array1. If we force @array1 into scalar context, then the number of elements in the array is passed to print and not the contents of the array:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Perl distinguishes between operations that want a list and operations that want a}
+
+\noindent \textbf{scalar. Those that want a list, such as print or assigning to an array, are said to be}
+
+\noindent \textbf{in list context. Those that want a scalar are said to be in scalar context. The value of}
+
+\noindent \textbf{an array in list context is the list of its elements -- the value in scalar context is the}
+
+\noindent \textbf{number of its elements.}
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Adding to an Array}
+
+\noindent How do we add elements to an array? Well, one way to do it is by using the 'list flattening' principle and treating our arrays as lists. This isn't a particularly good way to do it, but it works:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# addelem.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array1 = (1, 2, 3);
+
+\noindent my @array2;
+
+\noindent @array2 = (@array1, 4, 5, 6);
+
+\noindent print "@array2\textbackslash n";
+
+\noindent 
+
+\noindent @array2 = (3, 5, 7, 9);
+
+\noindent @array2 = (1, @array2, 11);
+
+\noindent print "@array2\textbackslash n";
+
+\noindent 
+
+\noindent $>$perl addelem.plx
+
+\[1 2 3 4 5 6 \] 
+
+\[1 3 5 7 9 11\] 
+$>$
+
+\noindent 
+
+\noindent 
+
+\noindent It's far better,  however,  to  use  the  functions  we're  going  to  see  later  on  --  push,  pop,  shift,
+
+\noindent and unshift.
+
+\noindent 
+
+\noindent Accessing an Array
+
+\noindent 
+
+\noindent Once we've got our list of scalars into an array, it would make sense to be able to get them back out again. We do this slightly differently to the way we get values out of lists.
+
+\noindent 
+
+\noindent \textit{Accessing Single Elements}
+
+\noindent So, we can now put elements into an array:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = (10, 20, 30);
+
+\noindent 
+
+\noindent If we look at the array in scalar context, we get the number of elements in it. So:
+
+\noindent 
+
+\noindent 
+
+\noindent print scalar @array;
+
+\noindent 
+
+\noindent will print the value 3. But how do we get at one of those elements? We could use the list assignment we were looking at earlier:
+
+\noindent 
+
+\noindent my \$scalar1; my \$scalar2; my \$scalar3; (\$scalar1, \$scalar2, \$scalar3) = @array; print "Scalar one is \$scalar1\textbackslash n";
+
+\noindent print "Scalar two is \$scalar2\textbackslash n";
+
+\noindent print "Scalar three is \$scalar3\textbackslash n";
+
+\noindent 
+
+\noindent This will print out each of the elements:
+
+\noindent 
+
+\noindent Scalar one is 10
+
+\noindent Scalar two is 20
+
+\noindent Scalar three is 30
+
+\noindent 
+
+\noindent To get at a single element, we do something quite similar to what we did with a list. To get a single element from a list, if you remember, we put the number we want in square brackets after it:
+
+\noindent 
+
+\noindent 
+
+\noindent \$a = (10, 20, 30)[0];
+
+\noindent 
+
+\noindent This will set \$a to the zeroth element, 10. We could do this:
+
+\noindent 
+
+\noindent 
+
+\noindent \$a = (@array)[0];
+
+\noindent 
+
+\noindent in exactly the same way. However, it's more usual to write that as follows:
+
+\noindent 
+
+\noindent 
+
+\noindent \$a = \$array[0];
+
+\noindent 
+
+\noindent Look carefully at that. Even though @array and \$array are different variables, we use the \$array[]
+
+\noindent form. Why?
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{The prime rule is this: the prefix represents what you want to get, not what you've got.}
+
+\noindent \textbf{So @ represents a list of values, and \$ represents a single scalar. Hence, when we're}
+
+\noindent \textbf{getting a single scalar from an array, we never prefix the variable with @ -- that would}
+
+\noindent \textbf{mean a list. A single scalar is always prefixed with a \$.}
+
+\noindent 
+
+\noindent 
+
+\noindent \$array[0] and @array aren't related -- \$array[0] can only refer to an element of the @array
+
+\noindent array. If you try and use the wrong prefix, perl will complain with a warning:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# badprefix.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = (1, 3, 5, 7, 9);
+
+\noindent print @array[1];
+
+\noindent 
+
+\noindent will print:
+
+\noindent 
+
+\noindent $>$\textbf{perl badprefix.plx}
+
+\noindent Scalar value @array[1] better written as \$array[1] at badprefix.plx line 8.
+
+\noindent 3$>$
+
+\noindent 
+
+\noindent We call the number in the square brackets the \textbf{array index }or \textbf{array subscript}. The array index is the number of the element that we want to get hold of. Back in our little street, we could explain arrays
+
+\noindent like so:
+
+\noindent 
+
+\noindent 
+
+\noindent The collection of houses is
+
+\noindent @ array; each house is a scalar, and is therefore
+
+\noindent \$array [0]...\$array[3]
+
+\noindent 
+
+\noindent 
+
+\[[0] [1] [2] [3]\] 
+@ array Street
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Just like extracting elements from lists, we can use a scalar variable as our subscript:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# scalarsub.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = (1, 3, 5, 7, 9);
+
+\noindent my \$subscript = 3;
+
+\noindent print \$array[\$subscript], "\textbackslash n";
+
+\noindent \$array[\$subscript] = 12;
+
+\noindent 
+
+\noindent This prints the third element from zero, which has the value 7. It then changes that 7 to a 12. Negative subscripts work from the end; as before, \$array[-1] will give you the last element in the array.
+
+\noindent 
+
+\noindent 
+
+\noindent Now let's write something to extract a given element from an array:
+
+\noindent 
+
+\noindent Try It Out -- The Joke Machine
+
+\noindent 
+
+\noindent We'll use arrays to write a program to tell us some (really bad) jokes. We actually set up two arrays --
+
+\noindent one containing the question, and one containing the answer:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# joke1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @questions = qw(Java Python Perl C);
+
+\noindent my @punchlines = (
+
+\noindent "None. Change it once, and it's the same everywhere.",
+
+\noindent "One. He just stands below the socket and the world revolves around him.",
+
+\noindent "A million. One to change it, the rest to try and do it in fewer lines.",
+
+\noindent '"CHANGE?!!"'
+
+\noindent );
+
+\noindent 
+
+\noindent print "Please enter a number between 1 and 4: ";
+
+\noindent my \$selection = $<$STDIN$>$;
+
+\noindent \$selection -= 1;
+
+\noindent print "How many \$questions[\$selection] ";
+
+\noindent print "programmers does it take to change a lightbulb?\textbackslash n\textbackslash n";
+
+\noindent sleep 2;
+
+\noindent print \$punchlines[\$selection], "\textbackslash n";
+
+\noindent 
+
+\noindent $>$ \textbf{perl joke1.plx}
+
+\noindent Please enter a number between 1 and 4: \textbf{3}
+
+\noindent How many Perl programmers does it take to change a lightbulb?
+
+\noindent 
+
+\noindent A million. One to change it, the rest to try and do it in fewer lines.
+
+\noindent 
+
+\noindent Hmm. I don't think I'm ready for the move into stand-up comedy quite yet.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent We first set up our arrays. One is a list of words and so we can use qw// to specify it. The other is a list
+
+\noindent of strings, so we use the ordinary list style:
+
+\noindent 
+
+\noindent my @questions = qw(Java Python Perl C);
+
+\noindent my @punchlines = (
+
+\noindent "None. Change it once, and it's the same everywhere.",
+
+\noindent "One. He just stands below the socket and the world revolves around him.", "A million. One to change it, the rest to try and do it in fewer lines.",
+
+\noindent '"CHANGE?!!"'
+
+\noindent );
+
+\noindent 
+
+\noindent We now ask the user to choose their joke:
+
+\noindent 
+
+\noindent print "Please enter a number between 1 and 4: ";
+
+\noindent my \$selection = $<$STDIN$>$;
+
+\noindent \$selection -= 1;
+
+\noindent 
+
+\noindent 
+
+\noindent Why take one from it? Well, we've asked for a number between one and four, and our array subscripts
+
+\noindent go from zero to three.
+
+\noindent 
+
+\noindent Next we display the set-up line:
+
+\noindent 
+
+\noindent 
+
+\noindent print "How many \$questions[\$selection] ";
+
+\noindent print "programmers does it take to change a lightbulb?\textbackslash n\textbackslash n";
+
+\noindent 
+
+\noindent From the first line, we see that array elements stringify just like scalar variables. Next, this new function sleep:
+
+\noindent 
+
+\noindent sleep 2;
+
+\noindent 
+
+\noindent What sleep does, as you'll know if you've run the program, is pause the program's operation for a number of seconds. In this case, we're telling it to sleep for two seconds.
+
+\noindent 
+
+\noindent After the user has had time to think about it, we display the punchline:
+
+\noindent 
+
+\noindent 
+
+\noindent print \$punchlines[\$selection], "\textbackslash n";
+
+\noindent 
+
+\noindent Hopefully, you're starting to see alternative ways we can use arrays by now. Of course, we've only been pulling single values from arrays so far. The next logical step is to start working with multiple array elements.
+
+\noindent 
+
+\noindent \textit{Accessing Multiple Elements}
+
+\noindent If you'll recall, we created and used a list slice by putting ranges or several numbers in brackets to get multiple elements from a list. If we want to get multiple elements from an array, we can use the analogous concept, an \textbf{array slice}.
+
+\noindent 
+
+\noindent List slices, if you remember, looked like this:
+
+\noindent 
+
+\noindent 
+
+\noindent (qw(Jan Feb Mar May Apr Jun Jul Aug Sep Oct Nov Dec))[3,5,7..9]
+
+\noindent 
+
+\noindent Can you work out which elements the slice above consists of? If not, write a short Perl program to print them out, and see if you can get it to separate them with spaces. (Hint: Only arrays stringify with spaces,
+
+\noindent so you'll need to use one.)
+
+\noindent 
+
+\noindent Array slices look very similar. However, now that we are accessing multiple elements and expecting a list, we no longer want to use \$ as the prefix -- now we should be using @.
+
+\noindent 
+
+\noindent We can get the same list as the above like this:
+
+\noindent 
+
+\noindent 
+
+\noindent my @array = qw(Jan Feb Mar May Apr Jun Jul Aug Sep Oct Nov Dec);
+
+\noindent 
+
+\noindent print @array[3,5,7..9];
+
+\noindent 
+
+\noindent Array slices act like any normal list, and so can be used as an lvalue. Here's a load of slices to mess around with:
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out - Array Slices
+
+\noindent 
+
+\noindent 
+
+\noindent Here are a year's sales results for a fictitious bathroom tile shop:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# aslice.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @sales = (69, 118, 97, 110, 103, 101, 108, 105, 76, 111, 118, 101);
+
+\noindent my @months = qw(Jan Feb Mar May Apr Jun Jul Aug Sep Oct Nov Dec);
+
+\noindent 
+
+\noindent print "Second quarter sales:\textbackslash n";
+
+\noindent print "@months[3..5]\textbackslash n@sales[3..5]\textbackslash n";
+
+\noindent my @q2=@sales[3..5];
+
+\noindent 
+
+\noindent \# Incorrect results in May, August, Oct, Nov and Dec!
+
+\noindent @sales[4, 7, 9..11] = (68, 101, 114, 111, 117);
+
+\noindent 
+
+\noindent \# Swap April and May
+
+\noindent @months[3,4] = @months[4,3];
+
+\noindent 
+
+\noindent Most of the work is behind the scenes, but this is what you'd see if you run it:
+
+\noindent 
+
+\noindent Second quarter sales: May Apr Jun
+
+\[110 103 101\] 
+
+
+\noindent Let's take a look at what's actually going on.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent We set up our two arrays -- one holding our sales figures, and the other holding the names of the months:
+
+\noindent 
+
+\noindent my @sales = (69, 118, 97, 110, 103, 101, 108, 105, 76, 111, 118, 101);
+
+\noindent my @months = qw(Jan Feb Mar May Apr Jun Jul Aug Sep Oct Nov Dec);
+
+\noindent 
+
+\noindent To extract the information about the second quarter, we use an array slice for the months in question:
+
+\noindent 
+
+\noindent 
+
+\noindent print "Second quarter sales:\textbackslash n";
+
+\noindent print "@months[3..5]\textbackslash n@sales[3..5]\textbackslash n";
+
+\noindent my @q2=@sales[3..5];
+
+\noindent 
+
+\noindent In addition to saving the relevant elements to another array, we can also print out the slice and it will be stringified. We can also assign values to an array slice, as well as getting data from it:
+
+\noindent 
+
+\noindent @sales[4, 7, 9..11] = (68, 101, 114, 111, 117);
+
+\noindent 
+
+\noindent This sets new values for \$sales[4], \$sales[7], \$sales[9], \$sales[10] and \$sales[11].
+
+\noindent 
+
+\noindent 
+
+\noindent Finally, we can use something similar to the (\$a, \$b) = (\$b, \$a) list trick to swap two
+
+\noindent array elements:
+
+\noindent 
+
+\noindent 
+
+\noindent @months[3,4] = @months[4,3];
+
+\noindent 
+
+\noindent This is exactly the same as the following statement:
+
+\noindent 
+
+\noindent 
+
+\noindent (\$months[3], \$months[4]) = (\$months[4], \$months[3]);
+
+\noindent 
+
+\noindent As you can see, this isn't all that far from the list assignment to swap two variables:
+
+\noindent 
+
+\noindent 
+
+\noindent (\$mone, \$mtwo) = (\$mtwo, \$mone);
+
+\noindent 
+
+\noindent Watch your parentheses and square brackets, though.
+
+\noindent 
+
+\noindent \textit{Running through Arrays}
+
+\noindent One thing we'll want to  do quite  often  is  run  over  each  of  the elements  in  an  array  or  list in  turn.  If
+
+\noindent we want to  double every value  in  an  array,  then  for  each  element  we  come across,  we  multiply  by two.  The  keyword to use here  is  for.  Here's  a  \textbf{for loop},  which  prints  each  element  of  an  array, followed by a new line:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# forloop1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = qw(America Asia Europe Africa);
+
+\noindent my \$element;
+
+\noindent for \$element (@array) \{
+
+\noindent print \$element, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent We set up an array, and we declare another scalar variable, \$element. What we then say is 'set each element of @array to \$element in turn, and then do all the statements in the following block'. So, on
+
+\noindent our first iteration, \$element is set to America, and then the print statement is run. Then \$element
+
+\noindent is set to Asia, and the print statement runs again. This continues until the end of the array is reached. This should print:
+
+\noindent $>$\textbf{perl forloop1.plx}
+
+\noindent America Asia Europe
+
+\noindent Africa
+
+\noindent $>$
+
+\noindent 
+
+\noindent \$element is called an \textbf{iterator variable }or \textbf{loop variable}. It's what we 'see' when we look at each element in turn. This is the syntax of the for loop:
+
+\noindent 
+
+\noindent \textit{for $<$ITERATOR$>$ ($<$LIST OR ARRAY$>$) $<$BLOCK$>$}
+
+\noindent 
+
+\noindent 
+
+\noindent The block must start with an opening brace and end with a closing brace, and the list or array that we're
+
+\noindent running over must be surrounded by parentheses. If we don't supply an iterator variable of our own,
+
+\noindent perl uses the special \$\_ variable, which is often used in Perl functions as a 'default value'. Note that the for loop doesn't require a semicolon after the block.
+
+\noindent 
+
+\noindent So, when processing a for loop, perl makes the iterator a copy of each element of the list or array in turn, and then runs the block. If the block happens to change the value of the iterator, the corresponding array element changes as well. We can double each element of an array like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# forloop2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array=(10, 20, 30, 40);
+
+\noindent print "Before: @array\textbackslash n";
+
+\noindent for (@array) \{ \$\_  *=2\} 
+
+\noindent print "After: @array\textbackslash n";
+
+\noindent 
+
+\noindent This prints:
+
+\noindent 
+
+\noindent $>$\textbf{perl forloop2.plx}
+
+\noindent Before: 10 20 30 40
+
+\noindent After: 20 40 60 80
+
+\noindent $>$
+
+\noindent 
+
+\noindent If you need to know the number of the element you're currently processing, it's usually best to have the iterator as the range of numbers you're processing -- from 0 up to the highest element number in the
+
+\noindent array. Let's rewrite the joke machine so that it tells \textit{all }the bad jokes, without prompting:
+
+\noindent 
+
+\noindent Try It Out -- Joke Machine II -- The Revenge
+
+\noindent 
+
+\noindent 
+
+\noindent Here we use the same jokes tell each of them in turn:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# joke2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my @questions = qw(Java Python Perl C);
+
+\noindent my @punchlines = (
+
+\noindent "None. Change it once, and it's the same everywhere.",
+
+\noindent "One. He just stands below the socket and the world revolves around him.",
+
+\noindent "A million. One to change it, the rest to try and do it in fewer lines.",
+
+\noindent '"CHANGE?!!"'
+
+\noindent );
+
+\noindent 
+
+\noindent for (0..\$\#questions) \{
+
+\noindent print "How many \$questions[\$\_] ";
+
+\noindent print "programmers does it take to change a lightbulb?\textbackslash n";
+
+\noindent sleep 2;
+
+\noindent print \$punchlines[\$\_], "\textbackslash n\textbackslash n";
+
+\noindent sleep 1;
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent The changes to our old joke1.plx program produce this result:
+
+\noindent 
+
+\noindent $>$ \textbf{perl joke2.plx}
+
+\noindent How many Java programmers does it take to change a lightbulb? None. Change it once, and it's the same everywhere.
+
+\noindent 
+
+\noindent How many Python programmers does it take to change a lightbulb?
+
+\noindent One. He just stands below the socket and the world revolves around him.
+
+\noindent 
+
+\noindent How many Perl programmers does it take to change a lightbulb?
+
+\noindent A million. One to change it, the rest to try and do it in fewer lines.
+
+\noindent 
+
+\noindent How many C programmers does it take to change a lightbulb? "CHANGE?!!"
+
+\noindent 
+
+\noindent $>$
+
+\noindent 
+
+\noindent I promise I'll keep my day-job....
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The for loop is now the main part of our program. Let's have a look at it again:
+
+\noindent 
+
+\noindent 
+
+\noindent for (0..\$\#questions) \{
+
+\noindent print "How many \$questions[\$\_] ";
+
+\noindent print "programmers does it take to change a lightbulb?\textbackslash n";
+
+\noindent sleep 2;
+
+\noindent print \$punchlines[\$\_], "\textbackslash n\textbackslash n";
+
+\noindent sleep 1;
+
+\noindent \}
+
+\noindent 
+
+\noindent The key thing about this example is that we need to match the questions to the punchlines. This means we can't just go through one or the other of the arrays, but we have to go through them both together. We do this by using a list, which counts up from 0 to the highest element of one of the arrays. Since the
+
+\noindent arrays are both the same size, it doesn't matter which one. The line that does this is:
+
+\noindent 
+
+\noindent 
+
+\noindent for (0..\$\#questions) \{
+
+\noindent 
+
+\noindent \$\#questions is the index of the highest element in the @questions array. That's different from the value we get when we look at @questions in a scalar context. Look:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# elems.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = qw(alpha bravo charlie delta);
+
+\noindent 
+
+\noindent print "Scalar value : ", scalar @array, "\textbackslash n";
+
+\noindent print "Highest element: ", \$\#array, "\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent $>$\textbf{perl elems.plx}
+
+\noindent Scalar value : 4
+
+\noindent Highest element: 3
+
+\noindent $>$
+
+\noindent 
+
+\noindent Why? There are four elements in the array -- so that's the scalar value. Their indices are 0, 1, 2, and 3. Since we're starting at zero, the highest element (\$\#array) will always be one less than the number of elements in the array.
+
+\noindent 
+
+\noindent So, we count up from 0 to the index of the highest element in @questions, which happens to be 3. We
+
+\noindent set the iterator to each number in turn. Where's the iterator? Since we didn't give one, perl will use \$\_. Now we do the block four times, once when \$\_ is 0, once when it is 1, and so on:
+
+\noindent 
+
+\noindent print "How many \$questions[\$\_] ";
+
+\noindent 
+
+\noindent This line prints the zeroth element of @questions the first time around, then the first, then the second, third, and fourth:
+
+\noindent 
+
+\noindent print \$punchlines[\$\_], "\textbackslash n\textbackslash n";
+
+\noindent 
+
+\noindent And so it is with the punchlines. If we'd just said:
+
+\noindent 
+
+\noindent 
+
+\noindent for (@questions) \{
+
+\noindent 
+
+\noindent \$\_ would have been set to each question in turn, but we would not have advanced our way through the answers.
+
+\noindent 
+
+\noindent \textit{Array Functions}
+
+\noindent It's time we met some more of the things we can do with arrays. These are variously called \textbf{array functions }and \textbf{array operators}. As mentioned previously, perl doesn't draw much distinction between functions and operators. The important part is that they all do some kind of work on an array. We've already met one of them: reverse, which we used to count down ranges instead of counting up. We can use reverse on arrays as well as lists:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# countdown.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @count = (1..5);
+
+\noindent for (reverse(@count)) \{
+
+\noindent print "\$\_...\textbackslash n";
+
+\noindent sleep 1;
+
+\noindent \}
+
+\noindent 
+
+\noindent print "BLAST OFF!\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Hopefully, you should have a good idea of what this will print out before you run it.
+
+\noindent 
+
+\noindent $>$perl \textbf{countdown.plx}
+
+\[5...\] 
+
+\[4...\] 
+
+\[3...\] 
+
+\[2...\] 
+
+\[1...\] 
+BLAST OFF!
+
+\noindent $>$
+
+\noindent 
+
+\noindent Now a while back I mentioned some useful functions for adding elements to arrays. Here they are now, along with a couple of other useful tips and tricks.
+
+\noindent 
+
+\noindent \textit{Pop and Push}
+
+\noindent Now we've already seen a simple way to add elements to an array: @array = (@array, \$scalar).
+
+\noindent 
+
+\noindent One of the original metaphors that computer programmers like to use to analyze arrays is a \textbf{stack }of spring-loaded plates in a canteen. You push down when you put another plate on the top, and the stack pops up when a plate is taken away:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Push Pop
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\[2\] 
+
+
+\[1\] 
+
+
+\[0\] 
+
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Following this  metaphor,  push is  the  operator  that  adds  an  element,  or  list  of  elements,  to  the  end
+
+\noindent of an array.  Similarly,  to  remove  the  top  element  --  the  element  with  the highest  index,  we  use  the
+
+\noindent pop operator:
+
+\noindent 
+
+\noindent Try It Out -- Paper Stacks
+
+\noindent 
+
+\noindent Stacks are all around us. In my case, they're all stacks of paper. We can manipulate arrays just as we can
+
+\noindent manipulate these stacks of paper:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# stacks.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$hand;
+
+\noindent my @pileofpaper = ("letter", "newspaper", "gas bill", "notepad");
+
+\noindent 
+
+\noindent 
+
+\noindent print "Here's what's on the desk: @pileofpaper\textbackslash n";
+
+\noindent 
+
+\noindent print "You pick up something off the top of the pile.\textbackslash n";
+
+\noindent \$hand = pop @pileofpaper;
+
+\noindent print "You have now a \$hand in your hand.\textbackslash n";
+
+\noindent 
+
+\noindent print "You put the \$hand away, and pick up something else.\textbackslash n";
+
+\noindent \$hand = pop @pileofpaper;
+
+\noindent print "You picked up a \$hand.\textbackslash n";
+
+\noindent 
+
+\noindent print "Left on the desk is: @pileofpaper\textbackslash n";
+
+\noindent 
+
+\noindent print "You pick up the next thing, and throw it away.\textbackslash n";
+
+\noindent pop @pileofpaper;
+
+\noindent 
+
+\noindent print "You put the \$hand back on the pile.\textbackslash n";
+
+\noindent push @pileofpaper, \$hand;
+
+\noindent 
+
+\noindent print "You also put a leaflet and a bank statement on the pile.\textbackslash n";
+
+\noindent push @pileofpaper, "leaflet", "bank statement";
+
+\noindent 
+
+\noindent print "Left on the desk is: @pileofpaper\textbackslash n";
+
+\noindent 
+
+\noindent Watch what happens:
+
+\noindent 
+
+\noindent $>$\textbf{perl stacks.plx}
+
+\noindent Here's what's on the desk: letter newspaper gas bill notepad
+
+\noindent You pick up something off the top of the pile. You have now a notepad in your hand.
+
+\noindent You put the notepad away, and pick up something else. You picked up a gas bill.
+
+\noindent Left on the desk is: letter newspaper
+
+\noindent You pick up the next thing, and throw it away. You put the gas bill back on the pile.
+
+\noindent You also put a leaflet and a bank statement on the pile.
+
+\noindent Left of the desk is: letter gas bill leaflet bank statement
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Let's take this play-by-play. First off, we initialize our \$hand and our @pileofpaper. Since the pile
+
+\noindent of paper is a stack, the zeroth element (the letter), is at the bottom, and the notepad is at the top:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$hand;
+
+\noindent my @pileofpaper = ("letter", "newspaper", "gas bill", "notepad");
+
+\noindent 
+
+\noindent We use pop @array to remove the top element from the array and it returns that element, which we store in \$hand. So, we take the notepad from the stack and put it into our hand. What's left? The letter
+
+\noindent at the bottom of the stack, then the newspaper and gas bill:
+
+\noindent 
+
+\noindent 
+
+\noindent print "You pick up something off the top of the pile.\textbackslash n";
+
+\noindent \$hand = pop @pileofpaper;
+
+\noindent print "You have now a \$hand in your hand.\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent As we pop again, we take the next element (the gas bill) off the top of the stack and store it again in
+
+\noindent \$hand. Since we didn't save the notepad from last time, it's lost forever now:
+
+\noindent 
+
+\noindent print "You put the \$hand away, and pick up something else.\textbackslash n";
+
+\noindent \$hand = pop @pileofpaper;
+
+\noindent print "You picked up a \$hand.\textbackslash n";
+
+\noindent 
+
+\noindent The next item is the newspaper. We pop this as before, but we never store it anywhere:
+
+\noindent 
+
+\noindent print "You pick up the next thing, and throw it away.\textbackslash n";
+
+\noindent pop @pileofpaper;
+
+\noindent 
+
+\noindent We've still got the gas bill in \$hand from previously. push @array, \$scalar will add the scalar onto the top of the stack. In our case, we're putting the gas bill on top of the letter:
+
+\noindent 
+
+\noindent print "You put the \$hand back on the pile.\textbackslash n";
+
+\noindent push @pileofpaper, \$hand;
+
+\noindent 
+
+\noindent push can also be used to add a list of scalars onto the stack -- in this case, we've added two more strings. We could add the contents of an array to the top of the stack with push @array1, @array2. So we
+
+\noindent now know that we can replace a list with an array:
+
+\noindent 
+
+\noindent print "You also put a leaflet and a bank statement on the pile.\textbackslash n";
+
+\noindent push @pileofpaper, "leaflet", "bank statement";
+
+\noindent 
+
+\noindent As you might suspect, you can also push lists of lists onto an array: They simply get flattened first into a single list and then added.
+
+\noindent 
+
+\noindent \textit{Shift and Unshift}
+
+\noindent While the functions push and pop deal with the 'top end' of the stack, adding and taking away elements from the highest index of the array -- the functions unshift and shift do the corresponding jobs for
+
+\noindent a similar job for the bottom end:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#shift.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = ();
+
+\noindent unshift(@array, "first");
+
+\noindent print "Array is now: @array\textbackslash n";
+
+\noindent unshift @array, "second", "third";
+
+\noindent print "Array is now: @array\textbackslash n";
+
+\noindent shift @array ;
+
+\noindent print "Array is now: @array\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl shift.plx}
+
+\noindent Array is now: first
+
+\noindent Array is now: second third first
+
+\noindent Array is now: third first
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent First we unshift() an element onto the array, and the element appears at the beginning of the list. It's
+
+\noindent not easy to see this since there are no other elements, but it does. We then unshift two more elements. Notice that the entire list is added to the beginning of the array all at once, rather than one element at a time. We then use shift to take off the first element, ignoring what it was.
+
+\noindent 
+
+\noindent \textit{Sort}
+
+\noindent One last thing you may want to do while processing data is put it in alphabetical or numeric order. The
+
+\noindent sort operator takes a list and returns a sorted version:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#sort1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @unsorted = qw(Cohen Clapton Costello Cream Cocteau);
+
+\noindent print "Unsorted: @unsorted\textbackslash n";
+
+\noindent my @sorted = sort @unsorted;
+
+\noindent print "Sorted: @sorted\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl sort1.plx}
+
+\noindent Unsorted: Cohen Clapton Costello Cream Cocteau
+
+\noindent Sorted: Clapton Cocteau Cohen Costello Cream
+
+\noindent $>$
+
+\noindent 
+
+\noindent This is only good for strings and alphabetic sorting. If you're sorting numbers, there is a problem. Can you guess what it is? This may help:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#sort2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @unsorted = (1, 2, 11, 24, 3, 36, 40, 4);
+
+\noindent my @sorted = sort @unsorted;
+
+\noindent print "Sorted: @sorted\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl sort2.plx}
+
+\noindent Sorted:   1 11 2 24 3 36 4 40
+
+\noindent $>$
+
+\noindent 
+
+\noindent What? 11 doesn't come between 1 and 2. What we need to do is compare the numeric values instead of the string ones. Cast your mind back to last chapter and recall how to compare two numeric variables,
+
+\noindent \$a and \$b. Here, we're going to use the $<$=$>$ operator. sort allows us to give it a block to describe how two values should be ordered, and we do this by comparing \$a and \$b.These two variables are given to
+
+\noindent us by the sort function:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#sort3.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent my @unsorted = (1, 2, 11, 24, 3, 36, 40, 4);
+
+\noindent 
+
+\noindent 
+
+\noindent my @string = sort \{ \$a cmp \$b \} @unsorted;
+
+\noindent print "String sort:  @string\textbackslash n";
+
+\noindent 
+
+\noindent my @number = sort \{ \$a $<$=$>$ \$b \} @unsorted;
+
+\noindent print "Numeric sort:  @number\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl sort3.plx}
+
+\noindent String sort:  1 11 2 24 3 36 4 40
+
+\noindent Numeric sort:  1 2 3 4 11 24 36 40
+
+\noindent $>$
+
+\noindent 
+
+\noindent Another good reason for using string comparison operators for strings and numeric comparison operators for numbers!
+
+\noindent 
+
+\noindent 
+
+\noindent Hashes
+
+\noindent 
+
+\noindent The final variable type we have is the hash. In the introduction, I said that the hash was like a dictionary
+
+\noindent or a phone book, but that's not quite right. There is a slight difference in that a phone book is normally ordered -- the names are sorted alphabetically. In a hash the data is totally unsorted and has no intrinsic order. In fact, it's more like directory enquiries than a phone book in that you can easily find out what
+
+\noindent the number is if you have the name. Someone else keeps the order for you, and you needn't ask what the first entry is.
+
+\noindent 
+
+\noindent Here's where a diagram helps:
+
+\noindent 
+
+\noindent 
+
+\noindent 'Scalars'
+
+\noindent 'Arrays'
+
+\noindent 'Hashes'
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent A scalar is one piece of data; it's like a single block. An array or a list is like a tower of blocks: it's kept
+
+\noindent in order, and it's kept together as a single unit. A hash, on the other hand, is more like the diagram on above. It contains several pairs of data. The pairs are in no particular order (no pair is 'first' or 'top'),
+
+\noindent and they're all scattered around the hash.
+
+\noindent 
+
+\noindent Creating a Hash
+
+\noindent 
+
+\noindent A hash looks very similar to a list, and it also behaves very much like a list. It's only actually effective as
+
+\noindent a hash when you store it in a hash variable. Just like scalar variables have a \$ prefix, and arrays have a
+
+\noindent @ prefix, hashes have their own prefix -- a percent sign \%. Again, the same naming rules apply, and the variables \%hash, \$hash, and @hash are all different.
+
+\noindent 
+
+\noindent 
+
+\noindent There are two ways of writing a hash. First, just like an ordinary list of pairs:
+
+\noindent 
+
+\noindent \%where=(
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent );
+
+\noindent 
+
+\noindent "Gary" , "Dallas", "Lucy" , "Exeter", "Ian" , "Reading", "Samantha" , "Oregon"
+
+\noindent 
+
+\noindent In this case, the hash could be saying that "Gary's whereabouts is Dallas", "Lucy lives in Exeter" and so
+
+\noindent on. All it really does is pair Gary and Dallas, Lucy and Exeter, and so on. How the pairing is interpreted
+
+\noindent is up to you.
+
+\noindent 
+
+\noindent If we want to make the relationship a little clearer, as well as highlighting the fact that we're dealing with
+
+\noindent a hash, we can use the =$>$ operator. That's not $>$=, which is greater-than-or-equal-to; the =$>$ operator
+
+\noindent acts like a 'quoting comma'. Essentially, it's a comma, but whatever appears on the left hand side of it --
+
+\noindent and only the left -- is treated as a double-quoted string:
+
+\noindent 
+
+\noindent \%where=(
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent );
+
+\noindent 
+
+\noindent Gary =$>$ "Dallas", Lucy =$>$ "Exeter", Ian =$>$ "Reading", Samantha =$>$ "Oregon"
+
+\noindent 
+
+\noindent The scalars on the left of the arrow are called the \textbf{hash keys}, the scalars on the right are the values. We
+
+\noindent use the keys to look up the values:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Hash keys must be unique. You cannot have more than one entry for the same name,}
+
+\noindent \textbf{and if you try to add a new entry with the same key as an existing entry, the old one}
+
+\noindent \textbf{will be over-written. Hash values meanwhile need not be unique.}
+
+\noindent 
+
+\noindent 
+
+\noindent Key uniqueness  is more of an  advantage  than  a  limitation.  Every  time  the  word 'unique'  comes into
+
+\noindent a  problem,  like  counting the  unique  elements  of  an  array,  your mind  should  immediately  echo  'use
+
+\noindent a  hash!'
+
+\noindent 
+
+\noindent Because hashes and arrays are both built from structures that look like lists, you can convert between them, from array to hash like this:
+
+\noindent 
+
+\noindent @array = qw(Gary Dallas Lucy Exeter Ian Reading Samantha Oregon);
+
+\noindent \%where = @array;
+
+\noindent 
+
+\noindent And then back to an array, like so:
+
+\noindent 
+
+\noindent @array = \%where;
+
+\noindent 
+
+\noindent However, you need to be careful when converting back from a hash to an array. Hashes do not have
+
+\noindent a guaranteed order. Although values will always follow keys, you cannot tell what order the keys will come in. Since hash keys are unique, however, we can be sure that \%hash1 = \%hash2 will copy a hash accurately.
+
+\noindent 
+
+\noindent 
+
+\noindent If you need to turn your hash around, to look up people by location, you can use this list-like structure to
+
+\noindent your advantage... just reverse the list. Be careful though -- if you have two values that are the same, then converting them to keys means that one will be lost. Remember that keys must be unique:
+
+\noindent 
+
+\noindent @array = qw(Gary Dallas Lucy Exeter Ian Reading Samantha Oregon);
+
+\noindent \%where = @array;
+
+\noindent 
+
+\noindent \%where now holds the same value as if the following call had been made:
+
+\noindent 
+
+\noindent \%where=(
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent );
+
+\noindent 
+
+\noindent Gary =$>$ "Dallas", Lucy =$>$ "Exeter", Ian =$>$ "Reading", Samantha =$>$ "Oregon"
+
+\noindent 
+
+\noindent Likewise, \%who will hold the same values no matter which of the two calls below were made:
+
+\noindent 
+
+\noindent \%who = reverse @array;
+
+\noindent \%who = (
+
+\noindent Oregon  =$>$ "Samantha",
+
+\noindent Reading =$>$ "Ian",
+
+\noindent Exeter  =$>$ "Lucy",
+
+\noindent Dallas  =$>$ "Gary"
+
+\noindent );
+
+\noindent 
+
+\noindent Working with Hash Values
+
+\noindent To look up a value in a hash, we use something similar to the index notation for arrays. However, instead of locating elements by number, we're now locating them by name; instead of using square brackets, we use braces (curly brackets):
+
+\noindent 
+
+\noindent Try It Out -- Using Hashes
+
+\noindent 
+
+\noindent Here's a simple example of looking up details in a hash:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#hash1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$place = "Oregon";
+
+\noindent my \%where=(
+
+\noindent Gary =$>$ "Dallas",
+
+\noindent Lucy =$>$ "Exeter",
+
+\noindent Ian =$>$ "Reading",
+
+\noindent Samantha =$>$ "Oregon"
+
+\noindent );
+
+\noindent my \%who = reverse \%where;
+
+\noindent 
+
+\noindent print "Gary lives in ", \$where\{Gary\}, "\textbackslash n";
+
+\noindent print "Ian lives in \$where\{Ian\}\textbackslash n";
+
+\noindent print "\$who\{Exeter\} lives in Exeter\textbackslash n";
+
+\noindent print "\$who\{\$place\} lives in \$place\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent $>$ \textbf{perl hash1.plx}
+
+\noindent Gary lives in Dallas
+
+\noindent Ian lives in Reading
+
+\noindent Lucy lives in Exeter
+
+\noindent Samantha lives in Oregon
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textbf{\textit{How It Works}}
+
+\noindent First, we set up our main hash, which tells us where people live:
+
+\noindent 
+
+\noindent 
+
+\noindent my \%where=(
+
+\noindent Gary =$>$ "Dallas", Lucy =$>$ "Exeter", Ian =$>$ "Reading", Samantha =$>$ "Oregon"
+
+\noindent );
+
+\noindent 
+
+\noindent By reversing the order of the list, we produce a hash that tells us who lives where:
+
+\noindent 
+
+\noindent 
+
+\noindent my \%who = reverse \%where;
+
+\noindent 
+
+\noindent When doing this you need to be careful, as I have already mentioned. You must not have two values the same, since they will need to become keys, and keys must be unique -- one or other of them will get lost.
+
+\noindent 
+
+\noindent Now we can look up an entry in our hashes -- we'll ask 'Where does Gary live?':
+
+\noindent 
+
+\noindent print "Gary lives in ", \$where\{Gary\}, "\textbackslash n";
+
+\noindent 
+
+\noindent This is almost identical to looking up an array element, except for the brackets and the fact that we are now allowed to use strings as well as numbers to index our elements.
+
+\noindent 
+
+\noindent print "Ian lives in \$where\{Ian\}\textbackslash n";
+
+\noindent print "\$who\{Exeter\} lives in Exeter\textbackslash n";
+
+\noindent 
+
+\noindent The braces of a hash look-up can also quote what is inside them in double quotes if we do not provide the quotes ourselves:
+
+\noindent 
+
+\noindent print "\$who\{\$place\} lives in \$place\textbackslash n";
+
+\noindent 
+
+\noindent Just as with array elements, we need not use a literal to index the element -- we can look-up using a variable as well.
+
+\noindent 
+
+\noindent \textit{Adding, Changing, and Taking Values Away from a Hash}
+
+\noindent Hash entries are very much like ordinary scalar variables, except that you need not declare an individual hash key before assigning to it or using it. We can add a new person to our hash just by assigning to their hash entry:
+
+\noindent 
+
+\noindent \$where\{Eva\} = "Uxbridge";
+
+\noindent print "Eva lives in \$where\{Eva\}\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent A new entry springs into existence, without any problems. We can also change the entries in a hash just
+
+\noindent by reassigning to them. Let's move people around a little:
+
+\noindent 
+
+\noindent 
+
+\noindent \$where\{Eva\} = "Denver";
+
+\noindent \$where\{Samantha\} = "California";
+
+\noindent \$where\{Lucy\} = "Tokyo";
+
+\noindent \$where\{Gary\} = "Las Vegas";
+
+\noindent \$where\{Ian\} = "Southampton";
+
+\noindent 
+
+\noindent print "Gary lives in \$where\{Gary\}\textbackslash n";
+
+\noindent 
+
+\noindent To remove an entry from a hash, you need to use the delete() function, as we do in this little variant
+
+\noindent on hash1.plx:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#badhash1.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my \%where=(
+
+\noindent Gary =$>$ "Dallas", Lucy =$>$ "Exeter", Ian =$>$ "Reading", Samantha =$>$ "Oregon"
+
+\noindent );
+
+\noindent 
+
+\noindent delete \$where\{Lucy\};
+
+\noindent print "Lucy lives in \$where\{Lucy\}\textbackslash n";
+
+\noindent 
+
+\noindent Now here we delete Lucy's entry in \%where before we access it. So after running it, we should get an error. Sure enough, we get:
+
+\noindent 
+
+\noindent $>$ \textbf{perl badhash1.plx}
+
+\noindent Use of uninitialized value in concatenation (.) at badhash1.plx line 11
+
+\noindent Lucy lives in Exeter
+
+\noindent $>$
+
+\noindent 
+
+\noindent It's not that we haven't initialized poor Lucy, but rather that we've decided to get rid of her.
+
+\noindent 
+
+\noindent 
+
+\noindent Accessing Multiple Values
+
+\noindent 
+
+\noindent The problem with hashes looking like lists is that we can't really use for loops on them directly. If we did, we would get both keys and values with no indication as to which was which. To help us, Perl provides three functions for iterating over hashes.
+
+\noindent 
+
+\noindent First, there is keys (\%hash). This gives us a list of the keys (all of the scalars on the left-hand side). This is usually what we want when we wish to visit each hash entry in turn:
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out -- Looping Over A Hash
+
+\noindent 
+
+\noindent 
+
+\noindent Let's leave the computer to run over hash and tell us where each person lives:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#hash2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \%where=(
+
+\noindent Gary =$>$ "Dallas",
+
+\noindent Lucy =$>$ "Exeter",
+
+\noindent Ian =$>$ "Reading",
+
+\noindent Samantha =$>$ "Oregon"
+
+\noindent );
+
+\noindent 
+
+\noindent for (keys \%where) \{
+
+\noindent print "\$\_  lives in \$where\{\$\_\}\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Currently, this tells me:
+
+\noindent 
+
+\noindent $>$\textbf{perl hash2.plx }Samantha lives in Oregon Gary lives in Dallas
+
+\noindent Lucy lives in Exeter
+
+\noindent Ian lives in Reading
+
+\noindent $>$
+
+\noindent 
+
+\noindent You may find that the output appears in a different order on your machine. Don't worry, as I said,
+
+\noindent hashes are unordered, and there's no guarantee that the keys will come out in the same order each time.
+
+\noindent It really depends on the particular version of Perl that you are using.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent Here is the part that does all the work:
+
+\noindent 
+
+\noindent 
+
+\noindent for (keys \%where) \{
+
+\noindent print "\$\_  lives in \$where\{\$\_\}\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent keys is a function which, like sort and reverse, returns a list. The list in my case was
+
+\noindent qw(Samantha Gary Lucy Ian),  and for visited each of those values in turn. As \$\_ was set to each one, we could print the name and look up that entry in the hash.
+
+\noindent 
+
+\noindent The counterpart to keys is values, which returns a list of all of the values in the hash. This is
+
+\noindent somewhat less useful, since you can always find the value if you have the key, but you cannot easily find the key if you have the value. It's almost always advantageous to use keys instead.
+
+\noindent 
+
+\noindent The final function is each, which we will look at later. It returns each hash entry as a key-value pair.
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Lists are a series of scalars in order. Arrays are variable incarnations of lists. Both lists and arrays are flattened, so we cannot yet have a distinct list inside another list. We get at both lists and arrays with
+
+\noindent square-bracket subscripts. These can be single numbers, or a list of elements. If we're looking up a single scalar in an array, we need to remember to use the form \$array[\$element], because the variable
+
+\noindent prefix always refers to what we want, not what we have got. We can also use ranges to save time and to
+
+\noindent specify list and array slices.
+
+\noindent 
+
+\noindent Perl differentiates between scalar and list context and returns different values depending on what the statement is expecting to see. For instance, the scalar context value of an array is the number of elements in it; the list context value is of course the list of the elements themselves.
+
+\noindent 
+
+\noindent Hashes are unordered structures made up of pairs, each pair consisting of a key and a value. Given the key, we can look up the entry. Generally, \$hash\{\$key\} = \$value. We can loop over all the
+
+\noindent elements of a list or array using a for loop. We need to modify this when looping over two lists at once
+
+\noindent or when looking for the keys or values of a hash.
+
+\noindent 
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent 1.   When you assign to a list, the elements are copied over from the right to the left:
+
+\noindent 
+
+\noindent (\$a, \$b) = ( 10, 20 );
+
+\noindent 
+
+\noindent will make \$a become 10 and \$b become 20. Investigate what happens when:
+
+\noindent 
+
+\noindent ? There are more elements on the right than on the left.
+
+\noindent ? There are more elements on the left than on the right.
+
+\noindent ? There is a list on the left but a single scalar on the right.
+
+\noindent ? There is a single scalar on the left but a list on the right.
+
+\noindent 
+
+\noindent 2.   What elements make up the range ('aa' .. 'bb')? What about ('a0' .. 'b9')?
+
+\noindent 
+
+\noindent 3.   Store your important phone numbers in a hash. Write a program to look up numbers by the person's name.
+
+\noindent 
+
+\noindent 4.   Turn the joke machine program from two arrays into one hash. While doing so, write some better lightbulb jokes.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
+% == UNREGISTERED! == GrindEQ Word-to-LaTeX 2008 ==
+
