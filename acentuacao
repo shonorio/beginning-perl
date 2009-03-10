@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+use strict;
+
+my %acentuacao = ( 'á' => q[\'a],
+                   'à' => q[\'a],
+                   'ã' => q[\~a],
+                   'â' => q[\^a],
+                   'é' => q[\'e],
+                   'ê' => q[\^e],
+                   'í' => q[\'{\i}],
+                   'Í' => q[\'I],
+                   'ó' => q[\'o],
+                   'õ' => q[\~o],
+                   'ô' => q[\^o],
+                   'ú' => q[\'u],
+                   'ç' => q[\c{c}],
+                   'Ç' => q[\c{C}]
+                );
+
+if ( -e $ARGV[0] ) {
+  open my $file, $ARGV[0]
+        or die "Erro ao abrir o arquivo, $!";
+  
+  my $entire_file = do {local $/; <$file>};
+  while ( my ( $k, $v ) = each %acentuacao ) {
+    $entire_file =~ s/$k/$v/g;
+  }
+     
+  print $entire_file; 
+}
+
