@@ -10,10 +10,10 @@ O status poderá ser :
 * revisão_formato
 * concluido
 
-Arquivo            Status           Responsável
+Arquivo		Status		Responsável
 Intro.tex
-Chap01.tex
-Chap02.tex
+Chap01.tex	traduzindo	shonorio
+Chap02.tex	traduzindo	shonorio
 Chap03.tex
 Chap04.tex
 Chap05.tex
