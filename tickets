@@ -1,0 +1,33 @@
+O controle de tickets ocorrerá por este arquivo, simples assim porque não
+precisamos de complicar as coisas.
+
+O status poderá ser :
+* aberto : não tem responsável
+* traduzindo : tem um responsável pela tradução
+* revisão_estilo
+* revisão_gramátical
+* revisão_consistência
+* revisão_formato
+* concluido
+
+Arquivo            Status           Responsável
+Intro.tex
+Chap01.tex
+Chap02.tex
+Chap03.tex
+Chap04.tex
+Chap05.tex
+Chap06.tex
+Chap07.tex
+Chap08.tex
+Chap09.tex
+Chap10.tex
+Chap11.tex
+Chap12.tex
+Chap13.tex
+Chap14.tex
+AppA.tex
+AppB.tex
+AppC.tex
+AppD.tex
+AppE.tex
