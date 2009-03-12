@@ -56,69 +56,69 @@
 
 \noindent 
 
-\noindent A coisa mais importante que você precisa ter em mente, porém, é que você não será capaz de expressar uma tarefa para um computador, se você não pode exprimi-la a si mesmo. Programação de computador não tem espaço para especificações vagas. Se você quiser escrever um programa para, por exemplo, remover arquivos inúteis do seu computador, você precisa ser capaz de explicar a si mesmo como determinar o que é um arquivo é inútil ou não. Você precisa analisar e detalhar os processos necessários para realizar a tarefa para si mesmo: Você poderia excluir um arquivo que não tenha sido acessado por um longo tempo? Quanto tempo, mais precisamente? Apagar o arquivo imediatamente, ou examiná-lo? Se você examiná-lo, quanto dele vai examinar? E o que você examinará?
+\noindent A coisa mais importante que voc\^e precisa ter em mente, por\'em, \'e que voc\^e n\~ao ser\'a capaz de expressar uma tarefa para um computador, se voc\^e n\~ao pode exprimi-la a si mesmo. Programa\c{c}\~ao de computador n\~ao tem espa\c{c}o para especifica\c{c}\~oes vagas. Se voc\^e quiser escrever um programa para, por exemplo, remover arquivos in\'uteis do seu computador, voc\^e precisa ser capaz de explicar a si mesmo como determinar o que \'e um arquivo \'e in\'util ou n\~ao. Voc\^e precisa analisar e detalhar os processos necess\'arios para realizar a tarefa para si mesmo: Voc\^e poderia excluir um arquivo que n\~ao tenha sido acessado por um longo tempo? Quanto tempo, mais precisamente? Apagar o arquivo imediatamente, ou examin\'a-lo? Se voc\^e examin\'a-lo, quanto dele vai examinar? E o que voc\^e examinar\'a?
 
 \noindent 
 
-\noindent O primeiro passo em programação é parar de pensar em “quero um programa que remove arquivos inúteis”, para “eu quero um programa que verifique cada arquivo no computador e remova os criados a mais de seis meses e que não contenha qualquer uma das palavras 'Simon', 'Perl' ou 'importantes' nas cincos primeiras linhas”. Em outras palavras, você tem de especificar a sua tarefa com precisão..
+\noindent O primeiro passo em programa\c{c}\~ao \'e parar de pensar em “quero um programa que remove arquivos in\'uteis”, para “eu quero um programa que verifique cada arquivo no computador e remova os criados a mais de seis meses e que n\~ao contenha qualquer uma das palavras 'Simon', 'Perl' ou 'importantes' nas cincos primeiras linhas”. Em outras palavras, voc\^e tem de especificar a sua tarefa com precis\~ao..
 
 \noindent 
 
-\noindent Quando você for capaz de restruturar a sua pergunta, é necessário traduzi-la para a linguagem de programação que você está utilizando. Infelizmente, a linguagem de programação não possui uma relação equivalente direta para o que você está tentando dizer. Então, você terá que desenvolver as tuas atividades utilizando o que a linguagem tem a lhe oferecer, o quê significará que você precisará detalhar (especificar) mais ainda a tua tarefa. Por exemplo, não existe uma maneira de dizer "que não contenha qualquer uma destas palavras nas cincos primeiras linhas" em Perl. No entanto, existe uma maneira de dizer "se uma linha contém a palavra", uma maneira de dizer "buscar outra linha", e "faça isso cinco vezes". A programação é a arte de colocar os elementos juntos para fazer o que você deseja.
+\noindent Quando voc\^e for capaz de restruturar a sua pergunta, \'e necess\'ario traduzi-la para a linguagem de programa\c{c}\~ao que voc\^e est\'a utilizando. Infelizmente, a linguagem de programa\c{c}\~ao n\~ao possui uma rela\c{c}\~ao equivalente direta para o que voc\^e est\'a tentando dizer. Ent\~ao, voc\^e ter\'a que desenvolver as tuas atividades utilizando o que a linguagem tem a lhe oferecer, o qu\^e significar\'a que voc\^e precisar\'a detalhar (especificar) mais ainda a tua tarefa. Por exemplo, n\~ao existe uma maneira de dizer "que n\~ao contenha qualquer uma destas palavras nas cincos primeiras linhas" em Perl. No entanto, existe uma maneira de dizer "se uma linha cont\'em a palavra", uma maneira de dizer "buscar outra linha", e "fa\c{c}a isso cinco vezes". A programa\c{c}\~ao \'e a arte de colocar os elementos juntos para fazer o que voc\^e deseja.
 
 \noindent 
 
-\noindent Existe tantas coisas para você fazer – mas o que computador faz? Depois termos especificado as tarefas em nossa linguagem de programação, o computador pega nossas instruções e executa-as. Chamamos isto de \textbf{'rodando'} ou \textbf{'executando'} o programa. Normalmente, vamos escrever as instruções em um arquivo, utilizando um editor de texto normal; mas se temos um programa muito pequeno, podemos digitá-lo diretamente na linha de comando. De qualquer forma, as instruções que damos ao computador - no nosso caso, escrito em Perl - são coletivamente chamado de \textbf{código fonte} (ou, por vezes, apenas \textbf{código} ou \textbf{code}) para nosso programa.
+\noindent Existe tantas coisas para voc\^e fazer – mas o que computador faz? Depois termos especificado as tarefas em nossa linguagem de programa\c{c}\~ao, o computador pega nossas instru\c{c}\~oes e executa-as. Chamamos isto de \textbf{'rodando'} ou \textbf{'executando'} o programa. Normalmente, vamos escrever as instru\c{c}\~oes em um arquivo, utilizando um editor de texto normal; mas se temos um programa muito pequeno, podemos digit\'a-lo diretamente na linha de comando. De qualquer forma, as instru\c{c}\~oes que damos ao computador - no nosso caso, escrito em Perl - s\~ao coletivamente chamado de \textbf{c\'odigo fonte} (ou, por vezes, apenas \textbf{c\'odigo} ou \textbf{code}) para nosso programa.
 
-\section{Interpretado vs Código Compilado}
+\section{Interpretado vs C\'odigo Compilado}
 
-\noindent O que exatamente o computador faz com o nosso código fonte, então? Tradicionalmente, havia duas formas de descrever o que a linguagem de computador fazia com o código fonte: Pode-se dizer que foram \textbf{compilados}, ou \textbf{interpretados}.
-
-\noindent 
-
-\noindent Uma linguagem interpretada, como o Basic, precisa de outro programa chamado \textbf{interpretador} para processar o código fonte cada vez que você deseja executar o programa. A tradução do código fonte para a linguagem de máquina é demorado. Nós chamamos de linguagem de baixo nível, ou \textbf{código de computador}, porque é linguagem para a máquinas ler, já o \textbf{código fonte} é para os seres humanos. Enquanto que o código fonte parece com o Inglês, por exemplo, \texttt{("do\_this() if \$that")}, já o código de máquina parece muito mais com algo como por exemplo, \texttt{"4576616E67656C6961"}, e esta é a versão legível! O código de máquina produzida depende do processador do computador e do sistema operacional executado, a tradução seria muito diferente de um computador x86 executando o Windows NT, em comparação com um SUN ou Digital executando Unix.
+\noindent O que exatamente o computador faz com o nosso c\'odigo fonte, ent\~ao? Tradicionalmente, havia duas formas de descrever o que a linguagem de computador fazia com o c\'odigo fonte: Pode-se dizer que foram \textbf{compilados}, ou \textbf{interpretados}.
 
 \noindent 
 
-\noindent Por outro lado, uma linguagem compilada, como o C, utiliza um compilador que faz todo esse processamento de uma só vez antes do código ser executado. Depois disso, você pode executar o código máquina diretamente, sem precisar mas do compilador. Porque você não precisa processar o código fonte cada vez que você execute-o, código compilado normalmente será executado rápido do que um equivalente interpretado. Você também pode dar o código compilado para pessoas que não têm um compilador. Isto também prevenirá que outras pessoas leem o seu código fonte - útil se você estiver usando um algoritmo proprietário ou se o seu código é particularmente embaraçoso/vergonhoso. No entanto, porque você está distribuindo código máquina que nem todos os tipos de computadores possam compreender, isto não é necessariamente portáteis.
+\noindent Uma linguagem interpretada, como o Basic, precisa de outro programa chamado \textbf{interpretador} para processar o c\'odigo fonte cada vez que voc\^e deseja executar o programa. A tradu\c{c}\~ao do c\'odigo fonte para a linguagem de m\'aquina \'e demorado. N\'os chamamos de linguagem de baixo n\'{\i}vel, ou \textbf{c\'odigo de computador}, porque \'e linguagem para a m\'aquinas ler, j\'a o \textbf{c\'odigo fonte} \'e para os seres humanos. Enquanto que o c\'odigo fonte parece com o Ingl\^es, por exemplo, \texttt{("do\_this() if \$that")}, j\'a o c\'odigo de m\'aquina parece muito mais com algo como por exemplo, \texttt{"4576616E67656C6961"}, e esta \'e a vers\~ao leg\'{\i}vel! O c\'odigo de m\'aquina produzida depende do processador do computador e do sistema operacional executado, a tradu\c{c}\~ao seria muito diferente de um computador x86 executando o Windows NT, em compara\c{c}\~ao com um SUN ou Digital executando Unix.
+
+\noindent
+
+\noindent Por outro lado, uma linguagem compilada, como o C, utiliza um compilador que faz todo esse processamento de uma s\'o vez antes do c\'odigo ser executado. Depois disso, voc\^e pode executar o c\'odigo m\'aquina diretamente, sem precisar mas do compilador. Porque voc\^e n\~ao precisa processar o c\'odigo fonte cada vez que voc\^e execute-o, c\'odigo compilado normalmente ser\'a executado r\'apido do que um equivalente interpretado. Voc\^e tamb\'em pode dar o c\'odigo compilado para pessoas que n\~ao t\^em um compilador. Isto tamb\'em prevenir\'a que outras pessoas leem o seu c\'odigo fonte - \'util se voc\^e estiver usando um algoritmo propriet\'ario ou se o seu c\'odigo \'e particularmente embara\c{c}oso/vergonhoso. No entanto, porque voc\^e est\'a distribuindo c\'odigo m\'aquina que nem todos os tipos de computadores possam compreender, isto n\~ao \'e necessariamente port\'ateis.
 
 \noindent 
 
-\noindent Recentes linguagens têm confundindo a distinção compilado/interpretado. Java e Perl, ambas linguagem da classe  de "byte-compilados", são particularmente responsáveis pela confusão. No caso do Perl, onde o interpretador (que sempre chamamos de \textbf{perl} com "p" minúsculo) lê o seu código fonte, e o compila inteiro de uma vez. No entanto, em vez de compilar para o código da máquina que em está executando, ele compila em um código especial para uma \textbf{máquina virtual (virtual machine)} de um computador fictício. A "máquina virtual" do Java é muito parecido com o processador de um computador normal, em relação ao que pode ser feito, e pessoas têm tentado construir processadores que possa conversar código da máquina virtual Java "nativamente". Em comparação, a máquina virtual do Perl não é muito semelhante a qualquer processador de  computador existente e por isto menos susceptível de ser construído.
+\noindent Recentes linguagens t\^em confundindo a distin\c{c}\~ao compilado/interpretado. Java e Perl, ambas linguagem da classe  de "byte-compilados", s\~ao particularmente respons\'aveis pela confus\~ao. No caso do Perl, onde o interpretador (que sempre chamamos de \textbf{perl} com "p" min\'usculo) l\^e o seu c\'odigo fonte, e o compila inteiro de uma vez. No entanto, em vez de compilar para o c\'odigo da m\'aquina que em est\'a executando, ele compila em um c\'odigo especial para uma \textbf{m\'aquina virtual (virtual machine)} de um computador fict\'{\i}cio. A "m\'aquina virtual" do Java \'e muito parecido com o processador de um computador normal, em rela\c{c}\~ao ao que pode ser feito, e pessoas t\^em tentado construir processadores que possa conversar c\'odigo da m\'aquina virtual Java "nativamente". Em compara\c{c}\~ao, a m\'aquina virtual do Perl n\~ao \'e muito semelhante a qualquer processador de  computador existente e por isto menos suscept\'{\i}vel de ser constru\'{\i}do.
 
 \noindent 
 
-\noindent Uma vez que temos esse código de máquina, o que chamamos \textbf{bytecode}, você pode fazer uma série de coisas com ele. 
+\noindent Uma vez que temos esse c\'odigo de m\'aquina, o que chamamos \textbf{bytecode}, voc\^e pode fazer uma s\'erie de coisas com ele. 
 
-\noindent Você pode:
+\noindent Voc\^e pode:
 
 \begin{itemize}
 
  \item Armazena-lo agora para ser executado depois.
 
- \item Traduzi-lo para o código nativo do seu computador, e executá-lo imediatamente.
+ \item Traduzi-lo para o c\'odigo nativo do seu computador, e execut\'a-lo imediatamente.
 
- \item Executá-lo através de um programa que finge ser a máquina virtual e através do processamento do bytecode, executa as ações apropriadas.
+ \item Execut\'a-lo atrav\'es de um programa que finge ser a m\'aquina virtual e atrav\'es do processamento do bytecode, executa as a\c{c}\~oes apropriadas.
 
 \end{itemize}
 
-\noindent Nós não fazemos o primeiro item em Perl, embora Java o faz. O "Perl compilador" tenta fazer o segundo, mas é uma tarefa muito complicada, e ainda não está completo. Normalmente, porém, fazemos o terceiro, e assim que o perl terminar de compilar o código fonte em bytecodes, depois assume o papel de interpretador, traduzindo o código da máquina virtual para o código verdadeiro. Daí Perl não é uma linguagem  estritamente compilada ou interpretada.
+\noindent N\'os n\~ao fazemos o primeiro item em Perl, embora Java o faz. O "Perl compilador" tenta fazer o segundo, mas \'e uma tarefa muito complicada, e ainda n\~ao est\'a completo. Normalmente, por\'em, fazemos o terceiro, e assim que o perl terminar de compilar o c\'odigo fonte em bytecodes, depois assume o papel de interpretador, traduzindo o c\'odigo da m\'aquina virtual para o c\'odigo verdadeiro. Da\'{\i} Perl n\~ao \'e uma linguagem  estritamente compilada ou interpretada.
 
 \noindent 
 
-\noindent Algumas pessoas vão dizer é que Perl é uma linguagem de "script", com a conotação de que é uma linguagem interpretada. Como vimos, isso não é realmente verdade. No entanto, esteja ciente de que você pode ouvir a palavra "script" com a intenção de "programa".
+\noindent Algumas pessoas v\~ao dizer \'e que Perl \'e uma linguagem de "script", com a conota\c{c}\~ao de que \'e uma linguagem interpretada. Como vimos, isso n\~ao \'e realmente verdade. No entanto, esteja ciente de que voc\^e pode ouvir a palavra "script" com a inten\c{c}\~ao de "programa".
 
-\section{Bibliotecas, Módulos e Pacotes}
+\section{Bibliotecas, M\'odulos e Pacotes}
 
-\noindent Um monte de gente usa Perl. Uma consequência disto é que, sem surpresa, um monte de código Perl tem sido escrito. De facto, uma grande parte do código Perl que você necessitará escrever provavelmente já tenha sido escrito antes. Para evitar perda de tempo reinventando a roda, programadores Perl empacotam seus códigos reutilizáveis e os distribuí, principalmente no CPAN - a Comprehensive Perl Archive Network - que você pode encontrar on-line em http://www.perl.com/CPAN/.
-
-\noindent 
-
-A maior parte do CPAN é composto por \textbf{módulos} Perl. Um módulo é um arquivo ou um conjunto de arquivos que permite realizar uma tarefa. Existe módulo para que formatar texto em parágrafos, para desenhar gráficos, e até mesmo efetuar o download e instalar outros módulos. Seus programas podem utilizar estes módulos e adquirir suas funcionalidades. Posteriormente, iremos dedicar a totalidade do Capítulo 10 para usar, instalar, e escrever módulos.
+\noindent Um monte de gente usa Perl. Uma consequ\^encia disto \'e que, sem surpresa, um monte de c\'odigo Perl tem sido escrito. De facto, uma grande parte do c\'odigo Perl que voc\^e necessitar\'a escrever provavelmente j\'a tenha sido escrito antes. Para evitar perda de tempo reinventando a roda, programadores Perl empacotam seus c\'odigos reutiliz\'aveis e os distribu\'{\i}, principalmente no CPAN - a Comprehensive Perl Archive Network - que voc\^e pode encontrar on-line em http://www.perl.com/CPAN/.
 
 \noindent 
 
-\noindent Intimamente ligada à ideia de um módulo é o conceito de \textbf{pacote}, que é outra maneira de dividir um programa. Ao utilizar pacotes, você pode ter certeza que o que você faz em uma seção do seu programa não afeta outra seção. Considerando que um módulo trabalha com um arquivo ou grupo de arquivos no disco, um pacote é apenas parte do código-fonte. Um único arquivo, por exemplo, pode conter vários pacotes Inversamente, um pacote pode ser repartido por vários arquivos. Um módulo normalmente vive em sua própria embalagem, isolando o código que você escreve fora de interferência. Novamente, vamos chegar a isso mais tarde no Capítulo 10.
+A maior parte do CPAN \'e composto por \textbf{m\'odulos} Perl. Um m\'odulo \'e um arquivo ou um conjunto de arquivos que permite realizar uma tarefa. Existe m\'odulo para que formatar texto em par\'agrafos, para desenhar gr\'aficos, e at\'e mesmo efetuar o download e instalar outros m\'odulos. Seus programas podem utilizar estes m\'odulos e adquirir suas funcionalidades. Posteriormente, iremos dedicar a totalidade do Cap\'{\i}tulo 10 para usar, instalar, e escrever m\'odulos.
+
+\noindent 
+
+\noindent Intimamente ligada \'a ideia de um m\'odulo \'e o conceito de \textbf{pacote}, que \'e outra maneira de dividir um programa. Ao utilizar pacotes, voc\^e pode ter certeza que o que voc\^e faz em uma se\c{c}\~ao do seu programa n\~ao afeta outra se\c{c}\~ao. Considerando que um m\'odulo trabalha com um arquivo ou grupo de arquivos no disco, um pacote \'e apenas parte do c\'odigo-fonte. Um \'unico arquivo, por exemplo, pode conter v\'arios pacotes Inversamente, um pacote pode ser repartido por v\'arios arquivos. Um m\'odulo normalmente vive em sua pr\'opria embalagem, isolando o c\'odigo que voc\^e escreve fora de interfer\^encia. Novamente, vamos chegar a isso mais tarde no Cap\'{\i}tulo 10.
 
 \noindent 
 
