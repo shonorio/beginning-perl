@@ -158,45 +158,32 @@
 
 \noindent Quando eu digo 'qualquer pessoa pode ajudar', não signfica apenas aquelas que conhecem todo o código fonte do Perl. Claro, pessoas que possam contribuir no código fonte são bem vindos, mas igualmente útil é o trabalho realizado pelo exército de voluntários que oferecem seus serviços como testadores, documentadores, revisores entre outros. Qualquer pessoa pode contribuir revisando a documenta\c{c}ão, bem como contribuir com uma nova maneira de explicar um conceito, ou atravéz de exemplos úteis para uma fun\c{c}ão.
 
-\noindent O desenvolvimento do Perl é realizado de maneira aberto, na lista de email \textbf{perl5-porters}. O programa perlbug, entregue com o Perl, pode ser utilizado para informar problemas para a list, mas é uma boa ideia verificar se é realmente o problema e se já não foi resolvido na versão mais recente ou na versão em desenvolvimento.
+\noindent O desenvolvimento do Perl é realizado de maneira aberta, na lista de email \textbf{perl5-porters}. O programa perlbug, entregue com o Perl, pode ser utilizado para informar problemas para a list, mas é uma boa ideia verificar se é realmente o problema e se já não foi resolvido na versão mais recente ou na versão em desenvolvimento.
 
 \subsection{Developers Releases and Topaz}
 
-\noindent Perl is a living language, and it continues to evolve. The development happens on two fronts:
+\noindent Perl é uma línguagem viva, e em continua evolu\c{c}ão. O desenvolvimento ocorre em duas frentes:
+
+\noindent Versão estável do Perl, destinado ao público em geral, possue número de versão \textbf{x.y.z}  onde o \textbf{z} é menos que 50. Atualmente, estamos na versão 5.10.0; a próxima grande versão estável será o 5.12.0. Quando o valor de \textbf{z} é maior que 0 representa versões de manuten\c{c}ão para corre\c{c}ões de bugs sérios. Estas corre\c{c}ões são raros. A versão 5.8, por exemplo, teve 9 manuten\c{c}ões deste Julho de 2002.
+
+\noindent Durante as versões estáveis, os desenvolvedores trabalham na nova versão do Perl, onde o \textbf{y} é ímpar. Quando o 5.10 foi disponibilizado, os trabalhos no 5.11.0 (a trilha de desenvolvimento) iniciaram para eventualmente se transformar no 5.12.0. Naturalmente, atualiza\c{c}ões na trilha de desenvolvimento ocorrem com muito mais frequência do que ocorre na versão estável, mas não pense que você deverá utilizar a versão em desenvolvimento para obter as últimas e melhores características, ou somente porquë a tua versão estável do último ano parece antiga em compara\c{c}ão com a novíssima e radiante versão do Perl da última semana. Não existem garantias de estabilidade nas versões em desenvolvimento.
+
+\noindent Atualiza\c{c}ões são coordenada pelo(a) mantenedor(a) de corre\c{c}ões (\textbf{patch}) (o(a) controlador(a) de qualidade), que com a ajuda do Larry, decide que contribui\c{c}ões serão incluídas e quando, assumindo a ardua responsabilidade de lançar um novo Perl. Ele ou ela matém a mais atual e o código oficial do Perl, que em algum momento será disponibilizado para o público.
+
+\noindent \textit{Porque um(a) mantenedor(a) ? Para permitir que as pessoas possam trabalhar nas diversas áreas do Perl simultanemante e evitar que duas pessoas alterem a mesma área de diferente maneira, uma pessoa precisa tomar a responsábilidade sobre qual altera\c{c}ão prevalecerá, e todas as alter\c{c}ões passarão por ela. Como a pessoa mantedora é a única que autoriza altera\c{c}ões, Chip Salzenburg explica:}
+
+\noindent \textit{'David Croy disse uma vez que num antigo emprego havia uma unidade de backup e vários sistemas que o utilizava para realizar o backup. Mas ao invéz de utilizarem um software de alta tecnologia, eles utilizavam um método de baixa tecnologia para evitar acessos simultâneos no backup: um mantenendor de backup. Ninguém pode fazer backup antes que tenha sido autorizado pelo "mantenedor de backup".'}
+
+\noindent Então o que acontece no desenvolvimento ? Além da corre\c{c}ão de bug, os principais objetivos do desenvolvimento é permitir que o Perl seja construído com mas facilidade na maior quantidade de computadores e ser mais eficiente na utiliza\c{c}ão do sistema operacional e dos hardware existente, como por exemplo suporte a processadores de 64-bit. Existe também uma gama de otimiza\c{c}ões a serem realizadas, para tornar o Perl mais rápido e eficiente, e trabalhos avan\c{c}am para fornecer documentações mais precisas e úteis. Finalmente, existem algumas melhorias na sintaxe do Perl que estão em debates - o arquivo '\textit{TODO}' \textbf{(Para fazer)} no fonte do Perl explica o que está atualmente em evidência.
+
+
+\subsection{Nosso Primeiro Progra Perl}
+
+\noindent Estou assumindo que neste momento você já possui uma cópia do Perl instalado na sua máquina de acordo com as instru\c{c}ões da Introdu\c{c}ão. Se for o caso, você está pronto para seguir a frente. Se não for, retorne e siga as instru\c{c}ões. Agora crie um diretório para todos os exemplos que será utilizado pelo resto do livro e vamos criar nosso primeiro programa Perl.
 
 \noindent 
 
-\noindent Stable releases of Perl, intended for the general public, have a version number x.y.z  where  z  is less than 50. Currently, we're at 5.6.0; the next major stable release is going to be 5.8.0. Cases where z is more than 0 are maintenance releases issued to fix any overwhelming bugs. This happens extremelyc infrequently. For example, the 5.5 series had three maintenance releases in approximately one year of service.
-
-\noindent 
-
-\noindent Meanwhile between stable releases, the porters work on the development track, (where y is odd). Whenc5.6.0 was released, work began on 5.7.0 (the development track) to eventually become 5.8.0. Naturally, releases on the development track happen much more frequently than those on the stable track, but don't think that you should be using a development Perl to get the latest and greatest features or just because your stable version of last year seems old in comparison to the bright and shiny Perl released last week. No guarantees whatsoever are made about a development release of Perl.
-
-\noindent 
-
-\noindent Releases are coordinated by a 'patch pumpkin holder', or 'pumpking' -- a quality controller who, with help from Larry, decides which contributions make the grade and when and bears the heavy responsibility of releasing a new Perl. He or she maintains the most current and official source to Perl, which they sometimes make available to the public: Gurusamy Sarathy is the current pumpkin, and keeps the very latest Perl at \texttt{ftp://ftp.linux.activestate.com/pub/staff/gsar/APC/perl-current/}.
-
-\noindent 
-
-\textit{Why a pumpkin? To allow people to work on various areas of Perl at the same time and to avoid two people changing the same area in different ways, one person has to take responsibility for bits of development, and all changes are to go through them. Hence, the person who has the patch pumpkin is the only person who is allowed to make the change. Chip Salzenburg explains:}
-
-\noindent \textit{'David Croy once told me once that at a previous job, there was one tape drive and multiple systems that used it for backups. But instead of some high-tech exclusion software, they used a low-tech method to prevent multiple simultaneous backups: a stuffed pumpkin. No one was allowed to make backups unless they had the "backup pumpkin".'}
-
-\noindent 
-
-\noindent So what development happens? As well as bug fixes, the main thrust of development is to allow Perl to build more easily on a wider range of computers and to make better use of what the operating system and the hardware provides for example support for 64-bit processors. (The Perl compiler, mentioned above, is steadily getting more useful but still has a way to go.) There's also a range of optimizations to be done, to make Perl faster and more efficient, and work progresses to provide more helpful and more accurate documentation. Finally, there are a few enhancements to Perl syntax that are being debated -- the 'Todo' file in the Perl source kit explains what's currently on the table.
-
-\noindent 
-
-\noindent The other line of development that's going on is the \textbf{Topaz }project, led by Chip Salzenburg, an attempt to rewrite the entirety of Perl in C++. Compared to the main development track, this is going slowly but steadily. Topaz is by no means ready for use; currently, it can merely emulate some of the Perl internals; there is no interpreter or compiler yet and probably will not be for some time. However, it's expected that Topaz development will speed up in the near future. The homepage of the Topaz project is \texttt{http://topaz.sourceforge.net/}.
-
-\subsection{Our First Perl Program}
-
-\noindent I'm assuming that by now you've got a copy of Perl installed on your machine after following the instructions in the introduction. If so, you're ready to go. If not, go back and follow the instructions. What we'll do now is set up a directory for all the examples we'll use in the rest of the book and write our first Perl program.
-
-\noindent 
-
-\noindent Here's what it'll look like:
+\noindent Ele se parece como:
 
 \noindent 
 
@@ -205,89 +192,31 @@
 
 \noindent 
 
-\noindent The 'Hello World' example is the traditional incantation to the programming gods and will ensure your quick mastery of the language, so please make sure you actually do this exercise, instead of just reading about it.
+\noindent O 'Hello World' é exemplo do tradicional encantamento dos deuses para a programa\c{c} e garantirá o teu rápido domínio da linguagem, por isso, certifique-se de que você realmente completou este exercício, em vez de apenas ler sobre ele.
 
 \noindent 
 
-\noindent Before we go any further however, a quick note on editors. Perl source code is just plain text and should be written with a plain text editor, rather than a word processor. If you're using Windows, you really will want to investigate getting hold of a good programmer's editor. Notepad may be fine for this example, despite its annoying tendency to want to rename file extensions to .plx.txt for you, but I wouldn't recommend its use beyond that. WordPad also renames file extensions for you, and additionally, you must remember to save as plain text, not Word format. Edit was bearable, but no longer ships with Windows versions after 95.
+\noindent Antes de continuarmos, uma breve nota sobre editores. O código fonte de programa Perl é texto simples e deve ser escrito com um simples editor de texto, ao invéz de um processador de textos. Se você estiver usando Windows, você realmente vai querer pesquisar para encontrar um bom editor para programador. O \textit{\textbf{Notepad}} ('\textbf{Bloco de nota}') pode ser um bom exemplo, apesar da sua irritante tendência de querer renomear extensões de arquivo para .pl.txt por você, mas eu não recomendo a sua utilização para além disso. \textit{WordPad} também renomeia extensões do arquivo por você e, além disso, você deve lembrar-se de salvar como texto simples, não no formato Word. \textit{Edit} era suportável, mas já não vem com versões do Windows depois de 95.
+
+\noindent Um editor decente vai ajudá-lo com suporte à indentação e pode até mesmo usar cores diferentes para assinalar diferentes partes do seu código. Você certamente desejará visualizar e editar o seu código em uma fonte com largura fixa. Os tradicionais editores do mundo Unix, vi, emacs, entre outros são perfeitamente adequados, e versões ("portados") destes, estão disponíveis para Windows. Quando programo para Windows, pessoalmente utilizo o Open Perl IDE (http://open-perl-ide.sourceforge.net). Certo, então, de volta para o código.
+
+\noindent Após encolher o editor que será utilizado para codificar os teus programas Perl, grave o primeiro programa no diretório que será utilizado para o desenvolvimento deste livro execute com o comando :
 
 \noindent 
 
-\noindent A decent editor will help you with bracket matching indentation and may even use different colors to point out different parts of your code. You will almost certainly want to view and edit your code in a fixed-width font. The usual Unix editors, vi, emacs, and so on are perfectly suitable, and versions ('ports') of these are available for Windows -- I personally use a port of vim a vi-like editor -- available at http://shareware.cnet.com --, when programming on Windows. Right then, back to the code.
+\noindent $>$\texttt{perl hello1.pl}
 
-\noindent \textit{If You are a Windows User}
-
-\noindent 1. Open Windows Explorer. Left click on the icon for your C: drive and choose \underbar{N}ew \textbar \underbar{F}older from the \underbar{F}ile menu.
-
-\noindent 2. Give the folder the name 'BegPerl' and press Return.
-
-\noindent 3. Open Notepad, which you'll find in the Programs \textbar Accessories menu under the Start button, and type in the two lines of code as shown above.
-
-\noindent 4. Choose Save As from the File menu and change the menu option in Save as type to All Files (*.*). Find your BegPerl folder, and save the file as hello1.plx. The caption box should
-
-\noindent \includegraphics[bb=0mm 0mm 208mm 296mm, width=70.2mm, height=43.6mm, viewport=3mm 4mm 205mm 292mm]{image5.ps}look this.
+\noindent Se ocorrer tudo bem, aparecerá na tela do seu computador.
 
 \noindent 
 
-\noindent 5. Click Save and then exit Notepad.
-
-\noindent 6. It's possible that Notepad will have renamed your file hello1.plx.txt, so in Windows Explorer, go to the BegPerl folder. If it has been renamed, right-click on the file and select Rename. Rename the file back to hello1.plx
-
-\noindent 7. The icon should change to a picture of a pearl \includegraphics[bb=0mm 0mm 208mm 296mm, width=3.7mm, height=3.2mm, viewport=3mm 4mm 205mm 292mm]{image6.ps} -- double click on it, and you'll see a window appear briefly and disappear before you have time to read it. This is your first lesson about clicking on Perl programs -- a window will open to run them in, run them, and then close as soon as they are finished. In order to actually keep the results of our program on screen, we need to open an MS-DOS Prompt window first. So let's do that.
-
-\noindent 8. Click Start and select MS-DOS Prompt from the Programs menu. Type cd c:\textbackslash BegPerl and press \textit{Return}.
-
-\noindent 
-
-\noindent Type perl hello1.plx -- If Perl is in your path and all is well, this is what you should see on screen:
-
-\noindent 
-
-\noindent $>$\textbf{perl hello1.plx}
-
-\noindent Hello, World.
-
-\noindent 
-
-\noindent $>$
-
-\noindent 
-
-\noindent Congratulations. You've successfully run your first piece of code!
-
-\noindent 
-
-\noindent \textit{If You're A Unix User}
-
-\noindent 1. Open up a terminal window if you haven't already got one open, and cd to your home directory.
-
-\noindent 2. Type mkdir begperl; cd begperl
-
-\noindent 3. Open your favorite editor and edit hello1.plx -- for example, vi hello1.plx
-
-\noindent 4. Confirm that your Perl distribution has been installed in /usr/bin/perl as the first line suggests, by typing which perl -- if this doesn't give you anything, try whence perl. If the result is not /usr/bin/perl, be prepared to make appropriate changes.
-
-\noindent 5. Type in the two lines of code as shown above, save, and exit.
-
-\noindent 6. Run the file by typing perl hello1.plx -- you should get similar output to the Windows users:
-
-\noindent 
-
-\noindent $>$\textbf{perl hello1.plx}
-
-\noindent Hello, World.
-
-\noindent $>$
+\noindent \texttt{Hello, World.}
 
 \noindent 
 
 \noindent 
 
-\noindent \textbf{Note that from this point on, we'll not run through these steps again. Instead, the name we've given the file will be shown as a comment on the second line of the program.}
-
-\noindent 
-
-\noindent \textbf{You may also have noticed that the output for hello1.plx on Windows and Unix differs in that Windows adds a silent print \textbackslash n to all its perl programs. From now on, we'll only print the Unix output that is more strict. Windows users please be aware of this.}
+\noindent Parabéns. Você executou com sucesso o teu primeiro código !
 
 \noindent 
 
