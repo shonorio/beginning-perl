@@ -1,0 +1,3041 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent La\c{c}os de repeti\c{c}\~{a}o e decis\H{o}es
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent A maioria dos programas têm sido estruturada de uma maneira muito simples -- executa uma instrução após outra sucessivamente. Se fôssemos representar instruções como caixas, nossos programas se pareceriam assim:
+
+\noindent 
+
+\noindent 
+
+\noindent Instrução
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Instrução
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Instrução
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Este tipo de diagrama é chamado de \textbf{fluxograma}, e programadores têm utilizado fluxogramas há muito tempo para auxiliar o projeto de seus programas. Atualmente, apesar de serem considerados um pouco ultrapassados, ainda são úteis. O caminho que Perl
+
+\noindent (ou qualquer outra linguagem) toma ao seguir as setas é chamado de \textbf{fluxo de execução }do programa. Caixas indicam instruções (ou um único grupo de instruções), e diamantes (losangos) representam testes. Há também um grande número símbolos para representar fitas magnéticas, \textit{drum storage}, e todo tipo de dispositivo maravilhoso, agora, felizmente, perdido nas brumas do tempo.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent No último capítulo, nós adicionamos o loop for ao nosso repertório, em crescimento, de ferramentas de programação. Ao invés
+
+\noindent de seguir por uma linha reta através do programa, Perl executou o mesmo bloco de instruções para cada elemento da lista. O for é uma \textbf{estrutura de controle }-- que controla o fluxo de execução. Ao invés de ir em uma linha reta, podemos seguir em círculos, em um loop:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent para cada
+
+\noindent elemento
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Faça algo
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Não apenas isso, mas podemos escolher o caminho que o programa irá percorrer de acordo com algumas coisas, como as comparações que vimos no Capítulo 2. Por exemplo, iremos fazer algo se duas strings forem iguais:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Strings são
+
+\noindent iguais?
+
+\noindent 
+
+\noindent Sim Não
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Faça isso Faça aquilo
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Iremos ver os outros tipos de estruturas de controle que temos em Perl, por exemplo, estruturas que fazem coisas \textbf{se (if) }ou \textbf{a não ser (unless) }que alguma coisa seja verdadeira. Veremos também estrutuas que fazem coisas  \textbf{enquanto (while) }algo for verdadeiro ou \textbf{até (until) }que seja verdadeiro. Estruturas que realizam loops \textbf{por (for) }um certo número de vezes, ou \textbf{para cada (for each) }elemento de uma lista. Cada uma das palavras em negrito é uma palavra-chave do Perl e são elas que iremos examinar neste capítulo.
+
+\noindent 
+
+\noindent 
+
+\noindent Decidindo se...
+
+\noindent 
+
+\noindent Primeiramente, vamos extender nosso programa de conversão de moedas, usando o que aprendemos sobre hashes no capítulo anterior.
+
+\noindent 
+
+\noindent 
+
+\noindent Tente : Conversor múltiplo de moedas
+
+\noindent 
+
+\noindent 
+
+\noindent Iremos usar um hash para armazenar as cotações de alguns países. Nosso programa irá perguntar pela moeda de origem, pela moeda de destino e pelo valor que deverá ser convertido:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# convert1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my (\$value, \$from, \$to, \$rate, \%rates);
+
+\noindent \%rates = (
+
+\noindent pounds =$>$ 1,
+
+\noindent dollars =$>$ 1.6,
+
+\noindent marks =$>$ 3.0,
+
+\noindent "french francs" =$>$ 10.0,
+
+\noindent yen =$>$ 174.8,
+
+\noindent "swiss francs"  =$>$ 2.43,
+
+\noindent drachma =$>$ 492.3,
+
+\noindent euro =$>$ 1.5
+
+\noindent );
+
+\noindent 
+
+\noindent print "Informe a moeda de origem: ";
+
+\noindent \$from = $<$STDIN$>$;
+
+\noindent print "Informe a moeda de destino: ";
+
+\noindent \$to = $<$STDIN$>$;
+
+\noindent print "Informe o valor: ";
+
+\noindent \$value = $<$STDIN$>$;
+
+\noindent 
+
+\noindent chomp(\$from,\$to,\$value);
+
+\noindent \$rate = \$rates\{\$to\} / \$rates\{\$from\};
+
+\noindent 
+
+\noindent print "\$value \$from é ",\$value*\$rate," \$to.\textbackslash n";
+
+\noindent 
+
+\noindent Um exemplo da execução do programa:
+
+\noindent 
+
+\noindent $>$ \textbf{perl convert1.plx}
+
+\noindent Informe a moeda de origem: \textbf{dollars }Informe a moeda de destino: \textbf{euro }Informe o valor: \textbf{200}
+
+\noindent 200 dollars is 187.5 euro.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Primeiramente, vamos ver como tudo isto funciona, e então veremos o que há de errado.
+
+\noindent 
+
+\noindent \textit{Como funciona}
+
+\noindent A primeira coisa que fazemos é declarar todas as nossas variáveis. Você não precisa faze-lo no início do programa, mas isto nos ajuda a organizar:
+
+\noindent 
+
+\noindent my (\$value, \$from, \$to, \$rate, \%rates);
+
+\noindent 
+
+\noindent 
+
+\noindent Observe que é preciso usar parênteses quando declarar mais de uma variável. Mais uma vez trata-se de prioridade -- my possui menor prioridade que uma vírgula. Agora, podemos definir nossa tabela de cotações:
+
+\noindent 
+
+\noindent 
+
+\noindent \%rates = (
+
+\noindent pounds =$>$ 1, dollars =$>$ 1.6, marks =$>$ 3.0, "french francs" =$>$ 10.0, yen =$>$ 174.8, "swiss francs"  =$>$ 2.43, drachma =$>$ 492.3, euro =$>$ 1.5
+
+\noindent );
+
+\noindent 
+
+\noindent Da mesma forma que usamos $<$STDIN$>$ no último capítulo para ler uma linha do console, iremos perguntar pelas duas moedas e pelo valor:
+
+\noindent 
+
+\noindent 
+
+\noindent print "Informe a moeda de origem: ";
+
+\noindent \$from = $<$STDIN$>$;
+
+\noindent print "Informe a moeda de destino: ";
+
+\noindent \$to = $<$STDIN$>$;
+
+\noindent print "Informe o valor: ";
+
+\noindent \$value = $<$STDIN$>$;
+
+\noindent 
+
+\noindent Agora temos um problema. Nós lemos linhas inteiras e linhas terminam com um caractere de quebra de linha. Para podermos ler as moedas no hash e exibi-las corretamente, precisamos nos livrar deste caractere. A forma de fazer isso é usando o operador chomp nos valores que acabamos de ler -- chomp remove o caractere de quebra de linha, mas não faz nada se não existir um. Por exemplo, ele transforma "euro\textbackslash n", que não está no hash, em "euro", que está:
+
+\noindent 
+
+\noindent chomp(\$from,\$to,\$value);
+
+\noindent 
+
+\noindent Observe que isto realmente altera o valor das variáveis passadas como argumento. Ao invés de retornar uma nova string, ele modifica a variável e retorna o número de caracteres de quebra de linha removidos. Na verdade, não \textit{precisamos }remover o caractere de quebra de linha de \$value. Tudo que temos que fazer é utiliza-lo em uma cálculo e o Perl irá converte-lo para um número. Quando fazemos isso, o caractere de quebra de linha é automaticamente perdido. Entretanto, como queremos mostrar, '200 marks', precisamos ter certeza que não há quebra de linha depois de '200'.
+
+\noindent 
+
+\noindent Em seguida calculamos a taxa de cotação, que nada mais é que a taxa de cotação da moeda de destino dividida pela taxa da moeda de origem:
+
+\noindent 
+
+\noindent 
+
+\noindent \$rate = \$rates\{\$to\} / \$rates\{\$from\};
+
+\noindent 
+
+\noindent Finalmente, multiplicamos o valor pela taxa de cotação e exibimos o resultado:
+
+\noindent 
+
+\noindent 
+
+\noindent print "\$value \$from é ",\$value*\$rate," \$to.\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Até agora está tudo bem, mas observe o que acontece se uma das moedas informadas não estiver no hash:
+
+\noindent 
+
+\noindent $>$ \textbf{perl convert1.plx}
+
+\noindent Informe a moeda de origem: \textbf{dollars}
+
+\noindent Informe a moeda de destino: \textbf{lira}
+
+\noindent Informe o valor: \textbf{300}
+
+\noindent Use of uninitialized value in division (/) at convert1.plx line 26, $<$STDIN$>$ line 3.
+
+\noindent 300 dollars é 0 lira.
+
+\noindent 
+
+\noindent O que foi esta mensagem de aviso? Bem, ela diz sobre alguma coisa que usamos na divisão da linha 26:
+
+\noindent 
+
+\noindent 
+
+\noindent \$rate = \$rates\{\$to\} / \$rates\{\$from\};
+
+\noindent 
+
+\noindent não foi definida. Nós sabemos que neste caso foi a moeda de destino. \$rates\{lira\} não está no hash. Agora, quando a outra moeda não é definida temos sérios problemas:
+
+\noindent 
+
+\noindent $>$ \textbf{perl convert1.plx}
+
+\noindent Informe a moeda de origem: \textbf{lira }Informe a moeda de destino: \textbf{dollars }Informe o valor: \textbf{132000}
+
+\noindent Use of uninitialized value in division (/) at convert1.plx line 26, $<$STDIN$>$ line 3.
+
+\noindent Illegal division by zero at convert.plx line 26, $<$STDIN$>$ line 3.
+
+\noindent 
+
+\noindent Desta vez, o outro lado da divisão não foi definido, e Perl converte o valor indefinido para zero. Infelizmente, você não pode dividir por zero. Para resolver estes dois problemas nós precisamos ser capazes de parar o programa quando uma moeda desconhecida for informada -- ou seja, se determinada string não existir no hash.
+
+\noindent 
+
+\noindent We now need to find out if something happened, and perform a certain action if it did. This expression
+
+\noindent is called an \textbf{if statement}. Here's what an if statement looks like in Perl:
+
+\noindent 
+
+\noindent 
+
+\noindent if ( \textit{$<$some test$>$ })\{ 
+
+\noindent \textit{$<$do something$>$}
+
+\noindent \}
+
+\noindent 
+
+\noindent In our case, we want to ensure a hash key exists. Now Perl isn't a difficult language; to sort a list, you
+
+\noindent use the sort keyword, to find the length of a string, you use the length keyword. To see if a hash key exists, we use the aptly named exists keyword for our test -- exists \$rates\{\$to\} and exists
+
+\noindent \$rates\{\$from\}:
+
+\noindent 
+
+\noindent Try It Out : Testing Invalid Keys
+
+\noindent 
+
+\noindent Let's now put the if statement to use and test to make sure we are given valid, existing keys:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# convert2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent 
+
+\noindent my (\$value, \$from, \$to, \$rate, \%rates);
+
+\noindent \%rates = (
+
+\noindent pounds =$>$ 1, dollars =$>$ 1.6, marks =$>$ 3.0, "french francs" =$>$ 10.0, yen =$>$ 174.8, "swiss francs"  =$>$ 2.43, drachma =$>$ 492.3, euro =$>$ 1.5
+
+\noindent );
+
+\noindent 
+
+\noindent print "Enter your starting currency: ";
+
+\noindent \$from = $<$STDIN$>$;
+
+\noindent print "Enter your target currency: ";
+
+\noindent \$to = $<$STDIN$>$;
+
+\noindent print "Enter your amount: ";
+
+\noindent \$value = $<$STDIN$>$;
+
+\noindent 
+
+\noindent chomp(\$from,\$to,\$value);
+
+\noindent 
+
+\noindent if (not exists \$rates\{\$to\}) \{
+
+\noindent die "I don't know anything about \$to as a currency\textbackslash n";
+
+\noindent \}
+
+\noindent if (not exists \$rates\{\$from\}) \{
+
+\noindent die "I don't know anything about \$from as a currency\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent \$rate = \$rates\{\$to\} / \$rates\{\$from\};
+
+\noindent 
+
+\noindent print "\$value \$from is ",\$value*\$rate," \$to.\textbackslash n";
+
+\noindent 
+
+\noindent Now if we enter a currency that is unknown, we get our own error message and the program ends:
+
+\noindent 
+
+\noindent $>$ \textbf{perl convert2.plx}
+
+\noindent Enter your starting currency: \textbf{dollars}
+
+\noindent Enter your target currency: \textbf{lira}
+
+\noindent Enter your amount: \textbf{300}
+
+\noindent I don't know anything about lira as a currency
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent After we've got the currency names, and before we try to divide, we use the following code to see if the currencies are valid entries in the hash. We do two very similar comparisons, one for the start currency and one for the target, so let's just examine one of them:
+
+\noindent 
+
+\noindent if (not exists \$rates\{\$to\}) \{
+
+\noindent die "I don't know anything about \$to currency\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent This is our if statement: if the entry \$to does not exist in the \%rates hash, then we give an error
+
+\noindent message. die is a way of making Perl print out an error message and finish the program. It also reports
+
+\noindent to the operating system -- Windows, Unix, or whatever it may be, that the program finished with an
+
+\noindent error. The part in brackets, not exists \$rates\{\$to\} is known as the \textbf{condition}. If that condition is true, we do the action in braces and terminate the program.
+
+\noindent 
+
+\noindent How do we construct conditions, then?
+
+\noindent 
+
+\noindent Logical Operators Revisited
+
+\noindent 
+
+\noindent The if statement, and all the other control structures we're going to visit in this chapter, test to see if a condition is true or false. They do this using the Boolean logic mentioned in Chapter 2, together with Perl's ideas of true and false. To remind you of these:
+
+\noindent 
+
+\noindent ? An empty string, "", is false.
+
+\noindent 
+
+\noindent ? The number zero and the string "0" are both false.
+
+\noindent 
+
+\noindent ? An empty list, (), is false.
+
+\noindent 
+
+\noindent ? The undefined value is false.
+
+\noindent 
+
+\noindent ? Everything else is true.
+
+\noindent 
+
+\noindent 
+
+\noindent However, you need to be careful for a few traps here. A string containing invisible characters, like
+
+\noindent spaces or new lines, is true. A string that isn't "0" is true, even if its numerical value is zero, so "0.0"
+
+\noindent for instance, is true.
+
+\noindent 
+
+\noindent Larry Wall has said that programming Perl is an empirical science -- you learn things about it by trying
+
+\noindent it out. Is (()) a true value? You can look it up in books and the online documentation, or you can spend a few seconds writing a program like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl use strict;
+
+\noindent use warnings;
+
+\noindent 
+
+\noindent if( (()))\{ 
+
+\noindent print "Yes, it is.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent This way you get the answer right away, with a minimum of fuss. (If you're interested, it isn't a true value.) We'll see in later chapters how to make this sort of test program easier and faster to write, but what we know now is sufficient to test the hypothesis. I'm continually writing these little programs to check out facets of Perl I'm not sure about. Try getting into the habit of doing it, too.
+
+\noindent 
+
+\noindent We've also seen that conditional operators can test things out, returning 1 if the test was successful and the undefined value if it was not. Let's see more of the things we can test.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Comparing Numbers}
+
+\noindent We can test whether one number is bigger, smaller, or the same as another. Assuming we have two numbers, stored in the variables \$a and \$b, here are the operators we can use for this:
+
+\noindent 
+
+\noindent \$a $>$ \$b \$a is greater than \$b
+
+\noindent 
+
+\noindent \$a $<$ \$b \$a is less than \$b
+
+\noindent 
+
+\noindent \$a == \$b \$a has the same numeric value as \$b
+
+\noindent 
+
+\noindent \$a != \$b \$a does not have the same numeric value as \$b
+
+\noindent 
+
+\noindent 
+
+\noindent Don't forget that the numeric comparison needs a doubled equals sign (==), so that Perl doesn't think
+
+\noindent you're trying to set \$a to the value of \$b:
+
+\noindent 
+
+\noindent Also remember that Perl converts \$a and \$b to numbers in the usual way. It reads numbers or decimal points from the left for as long as possible, ignoring initial spaces, and then drops the rest of the string.
+
+\noindent If no numbers were found, the value is set to zero.
+
+\noindent 
+
+\noindent Try It Out : Guess My Number
+
+\noindent 
+
+\noindent 
+
+\noindent This is a very simple guessing game. The computer has a number, and the user has to guess what it is. If
+
+\noindent the user doesn't guess correctly, the computer gives a hint. As we learn more about Perl, we'll add the opportunity to give more than one try and to pick a different number each game:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# guessnum.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$target = 12;
+
+\noindent print "Guess my number!\textbackslash n";
+
+\noindent print "Enter your guess: ";
+
+\noindent my \$guess = $<$STDIN$>$;
+
+\noindent 
+
+\noindent if (\$target == \$guess) \{
+
+\noindent print "That's it! You guessed correctly!\textbackslash n";
+
+\noindent exit;
+
+\noindent \}
+
+\noindent if (\$guess $>$ \$target) \{
+
+\noindent print "Your number is bigger than my number\textbackslash n";
+
+\noindent exit;
+
+\noindent \}
+
+\noindent if (\$guess $<$ \$target)\{
+
+\noindent print "Your number is less than my number\textbackslash n";
+
+\noindent exit;
+
+\noindent \}
+
+\noindent 
+
+\noindent Let's have a few go's at it:
+
+\noindent 
+
+\noindent 
+
+\noindent $>$ \textbf{perl guessnum.plx}
+
+\noindent Guess my number!
+
+\noindent Enter your guess: \textbf{3}
+
+\noindent Your number is less than my number
+
+\noindent $>$ \textbf{perl guessnum.plx }Guess my number! Enter your guess: \textbf{15}
+
+\noindent Your number is bigger than my number
+
+\noindent $>$ \textbf{perl guessnum.plx }Guess my number! Enter your guess: \textbf{12}
+
+\noindent That's it! You guessed correctly!
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent First off, we set up our secret number. OK, at the moment it's not very secret, since it's right there in the source code, but we can improve on this later. After this, we get a number from the user:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$guess = $<$STDIN$>$;
+
+\noindent 
+
+\noindent Then we do three sorts of comparisons with the numeric operators we've just seen. We use the basic pattern of the if statement again, if ( $<$condition$>$ ) \{ $<$action$>$ \}:
+
+\noindent 
+
+\noindent if (\$target == \$guess) \{
+
+\noindent print "That's it! You guessed correctly!\textbackslash n";
+
+\noindent exit;
+
+\noindent \}
+
+\noindent 
+
+\noindent Since only one of the tests can be true -- the user's number can't be both smaller than our number and the same as it -- we may as well stop work after a test was successful. The exit operator tells perl to
+
+\noindent stop the program completely. You can optionally give exit a number from 0 to 255 to report back to
+
+\noindent the operating system. Traditionally, 0 denotes success and anything else is failure. By default, exit
+
+\noindent reports success.
+
+\noindent 
+
+\noindent \textit{Comparing Strings}
+
+\noindent When we're comparing strings, we use a different set of operators to do the comparisons:
+
+\noindent 
+
+\noindent \$a gt \$b \$a sorts alphabetically after \$b
+
+\noindent 
+
+\noindent \$a le \$b \$a sorts alphabetically before \$b
+
+\noindent 
+
+\noindent \$a eq \$b \$a is the same as \$b
+
+\noindent 
+
+\noindent \$a ne \$b \$a is not the same as \$b
+
+\noindent 
+
+\noindent 
+
+\noindent Here's a very simple way of testing if a user knows a password. Don't use this for anything you value,
+
+\noindent since the user can just read the source code to find it!
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# password.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$password = "foxtrot";
+
+\noindent print "Enter the password: ";
+
+\noindent my \$guess = $<$STDIN$>$;
+
+\noindent chomp \$guess;
+
+\noindent if (\$password eq \$guess) \{
+
+\noindent print "Pass, friend.\textbackslash n";
+
+\noindent \}
+
+\noindent if (\$password ne \$guess) \{
+
+\noindent die "Go away, imposter!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Here's our security system in action:
+
+\noindent 
+
+\noindent $>$ \textbf{perl password.plx}
+
+\noindent Enter the password: \textbf{abracadabra}
+
+\noindent Go away, imposter!
+
+\noindent $>$ \textbf{perl password.plx}
+
+\noindent Enter the password: \textbf{foxtrot}
+
+\noindent Pass, friend.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent As before, we ask the user for a line:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$guess = $<$STDIN$>$;
+
+\noindent 
+
+\noindent Just a warning: this is a horrendously bad way of asking for a password, since it's echoed to the screen,
+
+\noindent and everyone looking at the user's computer would be able to read it. Even though you won't be using a program like this, if you ever do need to get a password from the user, the Perl FAQ provides a better method. In perlfaq8, type perldoc -q password to find it.
+
+\noindent 
+
+\noindent chomp \$guess;
+
+\noindent 
+
+\noindent We must never forget to remove the new line from the end of the user's data. We didn't need to do this for numeric comparison, because Perl would remove that for us anyway during conversion to a number.
+
+\noindent Otherwise, even if the user had put the right password in, Perl would have tried to compare
+
+\noindent "foxtrot" with "foxtrot\textbackslash n" and it could never be the same:
+
+\noindent 
+
+\noindent 
+
+\noindent if (\$password ne \$guess) \{
+
+\noindent die "Go away, imposter!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Then if the password we have isn't the same as the user's input, we send out a rude message and terminate the program.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Other Tests}
+
+\noindent What other tests can we perform? We've seen exists at the beginning of this chapter, for determining whether a key exists in a hash. We can test if a variable is defined (It must contain something other than the undefined value), by using defined:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# defined.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my (\$a, \$b);
+
+\noindent \$b = 10;
+
+\noindent if (defined \$a) \{
+
+\noindent print "\textbackslash \$a has a value.\textbackslash n";
+
+\noindent \}
+
+\noindent if (defined \$b) \{
+
+\noindent print "\textbackslash \$b has a value.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Not surprisingly, the result we get is this:
+
+\noindent 
+
+\noindent $>$\textbf{perl defined.plx}
+
+\noindent \$b has a value.
+
+\noindent $>$
+
+\noindent 
+
+\noindent You can use this to avoid the warnings that occur when you try and use a variable that doesn't have a value. If we'd tried to say if (\$a == \$b), Perl would have said:
+
+\noindent 
+
+\noindent Use of uninitialized value in numeric eq (==)
+
+\noindent 
+
+\noindent So we have our basic comparisons. Don't forget that some functions will return a true value if they were successful and the undefined value if they were not. You will often want to check whether the return
+
+\noindent value of an operation (particularly one that relates to the operating system) is true or not.
+
+\noindent 
+
+\noindent How do you actually test whether something is a true value or not? You may want to see if a user's input isn't empty after being chomped, for example. Well, don't do it like this:
+
+\noindent 
+
+\noindent my \$true = (1 == 1);
+
+\noindent if (\$a == \$true)\{\dots \} 
+
+\noindent 
+
+\noindent The whole point of if is that it does the action if something is true. You should just say if (\$a) \{ ... \}
+
+\noindent 
+
+\noindent \textit{Logical Conjunctions}
+
+\noindent We also saw in Chapter 2 that we can join together several tests into one, by the use of the logical operators. Here's a summary of those:
+
+\noindent 
+
+\noindent \$a and \$b True if both \$a and \$b are true.
+
+\noindent 
+
+\noindent \$a or \$b True if either of \$a or \$b, or both are true.
+
+\noindent 
+
+\noindent not \$a True if \$a is not true.
+
+\noindent 
+
+\noindent 
+
+\noindent In fact, we saw not earlier:
+
+\noindent 
+
+\noindent if (not exists \$rates\{\$to\})
+
+\noindent 
+
+\noindent There is also another set of logical operators: \&\& for and, \textbar \textbar  for or, and ! for not. However, I find the first set easier to read and understand. Don't forget there is a difference in precedence between the two
+
+\noindent -- and,   or, and not all have lower precedence than their symbolic representations.
+
+\noindent 
+
+\noindent Running Unless...
+
+\noindent 
+
+\noindent There's another way of saying if (not exists \$rates\{\$to\}). As always in Perl, there's more than one way to do it. Some people prefer to think 'if this doesn't exist, then \{ ... \}', but other
+
+\noindent people think 'unless this does exist, then \{ ... \}'. Perl caters for both sets of thought patterns, and we could just as easily have written this:
+
+\noindent 
+
+\noindent unless (exists \$rates\{\$to\}) \{
+
+\noindent die "I don't know anything about \{\$to\} as a currency\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent The psychology is different, but the effect is the same: unless (\$a) is effectively if (not (\$a)). We'll see later how Perl provides a few alternatives for these control structures to help them more effectively fit the way you think.
+
+\noindent 
+
+\noindent Statement Modifiers
+
+\noindent 
+
+\noindent When we're talking in English, it's quite normal for us to say
+
+\noindent 
+
+\noindent ? If this doesn't exist, then this happens, or
+
+\noindent 
+
+\noindent ? Unless this exists, this happens.
+
+\noindent 
+
+\noindent 
+
+\noindent Similarly, it's also quite natural to reverse the two phrases, saying
+
+\noindent 
+
+\noindent ? This happens, if this doesn't exist, or
+
+\noindent 
+
+\noindent ? This happens unless this exists.
+
+\noindent 
+
+\noindent 
+
+\noindent Going back to our currency converter example, convert2.plx, we could turn around the if statements within to read:
+
+\noindent 
+
+\noindent die "I don't know anything about \$rates\{\$to\} as a currency\textbackslash n"
+
+\noindent if not exists \$rates\{\$to\};
+
+\noindent 
+
+\noindent Notice how  the syntax  here is  slightly  different,  it's  \textit{$<$action$>$ }if \textit{$<$condition$>$}.  There  is  no  need for brackets around the condition,  and  there  are  no  braces  around  the  action.  Indeed,  the  indentation isn't  part of the syntax,  so  we  could  even  put  the  whole  statement  on  one line.  Only  a  single
+
+\noindent statement will be covered by  the  condition.  The  condition  modifies  the  statement,  and  so  is  called  a
+
+\noindent \textbf{statement modifier}.
+
+\noindent 
+
+\noindent We can turn unless into a statement modifier, too. So instead of this:
+
+\noindent 
+
+\noindent 
+
+\noindent if (not exists \$rates\{\$to\}) \{
+
+\noindent die "I don't know anything about \{\$to\} as a currency\textbackslash n";
+
+\noindent \}
+
+\noindent if (not exists \$rates\{\$from\}) \{
+
+\noindent die "I don't know anything about\{\$from\} as a currency\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent you may find it more natural to write this:
+
+\noindent 
+
+\noindent die "I don't know anything about \$to as a currency\textbackslash n"
+
+\noindent unless exists \$rates\{\$to\};
+
+\noindent die "I don't know anything about \$from as a currency\textbackslash n"
+
+\noindent unless exists \$rates\{\$from\};
+
+\noindent 
+
+\noindent Sure enough, if you swap those lines into convert2.plx, you'll get the same results.
+
+\noindent 
+
+\noindent Using Logic
+
+\noindent There is yet another way to do something if a condition is true, and we saw it briefly in Chapter 2. By using the fact that perl stops processing a logical conjunction when it knows the answer for definite, we can create a sort of unless conditional:
+
+\noindent 
+
+\noindent exists \$rates\{\$to\}
+
+\noindent or die "I don't know anything about \{\$to\} as a currency\textbackslash n";
+
+\noindent 
+
+\noindent How does this work? Well, it's reliant on the fact that perl uses lazy evaluation to give a logical conjunction its value. If we have the statement X or Y, then if X is true, it doesn't matter what Y is, so perl doesn't look at it. If X isn't true, perl has to look at Y to see whether or not that's true. So if
+
+\noindent \$rates\{\$to\} exists in the hash, then our currency converter won't die with an error message. Instead,
+
+\noindent it will do nothing and continue executing the next statement.
+
+\noindent 
+
+\noindent This form of conditional is most often used when checking that something we did succeeded or returned
+
+\noindent a true value. We will see it often when we're handling files.
+
+\noindent 
+
+\noindent To create a positive if conditional this way, use and instead of or. For example, to add one to a counter if a test is successful, you may say:
+
+\noindent 
+
+\noindent \$success and \$counter++;
+
+\noindent 
+
+\noindent If you recall, and statements are reliant on both sub-statements being true. So, if \$success is not true, perl won't bother evaluating \$counter++ and upping its value by one. If \$success was true, then it
+
+\noindent would.
+
+\noindent 
+
+\noindent Multiple Choice
+
+\noindent If you look back to when we did our password tester, you'll see the following lines:
+
+\noindent 
+
+\noindent if (\$password eq \$guess) \{
+
+\noindent print "Pass, friend.\textbackslash n";
+
+\noindent \}
+
+\noindent if (\$password ne \$guess) \{
+
+\noindent die "Go away, imposter!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent While this does what we want, we know that if the first one is true, then the second one will not be --
+
+\noindent we're asking exactly opposite questions: Are these the same? Are they not the same?
+
+\noindent 
+
+\noindent In which case, it seems wasteful to do two tests. It'd be much nicer to be able to say 'if the strings are the same, do this. Otherwise, do that.' And in fact we can do exactly that, although the keyword is not
+
+\noindent 'otherwise' but '\textbf{else}':
+
+\noindent 
+
+\noindent if (\$password eq \$guess) \{
+
+\noindent print "Pass, friend.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent die "Go away, imposter!\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent That's:
+
+\noindent 
+
+\noindent if ( $<$condition$>$ ) \{ $<$action$>$ \} else \{ $<$alternative action$>$ \}
+
+\noindent 
+
+\noindent \textit{if elsif else}
+
+\noindent In some cases, we'll want to test more than one condition. When looking at several related possibilities, we'll want to ask questions like "Is this true? If this isn't, then is that true? If that's not true, how about
+
+\noindent the other?" Note that this is distinct from asking three independent questions; whether we ask the
+
+\noindent second depends on whether or not the first was true. In Perl, we could very easily write something like this:
+
+\noindent 
+
+\noindent if ( $<$condition 1$>$ ) \{
+
+\noindent $<$action$>$
+
+\noindent \} else \{
+
+\noindent if ( $<$condition 2$>$ ) \{
+
+\noindent $<$second action$>$
+
+\noindent \} else \{
+
+\noindent if ( $<$condition 3$>$ ) \{
+
+\noindent $<$third action$>$
+
+\noindent \} else \{
+
+\noindent $<$if all else fails$>$
+
+\noindent \}
+
+\noindent \}
+
+\noindent \}
+
+\noindent 
+
+\noindent I  hope you'll agree though that  this  looks  pretty  messy.  To  make  it  nicer,  we  can combine  the  else
+
+\noindent and the next if into  a single word:  elsif.  Here's  what  the  above  would  look  like  when  rephrased  in this way:
+
+\noindent 
+
+\noindent if ( $<$condition 1$>$ ) \{
+
+\noindent $<$action$>$
+
+\noindent \} elsif ( $<$condition 2$>$ ) \{
+
+\noindent $<$second action$>$
+
+\noindent \} elsif ( $<$condition 3$>$ ) \{
+
+\noindent ...
+
+\noindent \} else \{
+
+\noindent $<$if all else fails$>$
+
+\noindent \}
+
+\noindent 
+
+\noindent Much neater! We don't have an awful cascade of closing brackets at the end, and it's easier to see what we're testing and when we're testing it.
+
+\noindent 
+
+\noindent 
+
+\noindent Try It Out : Want To Go For A Walk?
+
+\noindent 
+
+\noindent I'll certainly not go outside if it's raining, but I'll always go out for a walk in the snow. I'll not go outside
+
+\noindent if it's less than 18 degrees Celsius. Otherwise, I'll probably go out unless I've got too much work to do. Do I want to go for a walk?
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# walkies.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent print "What's the weather like outside? ";
+
+\noindent my \$weather = $<$STDIN$>$;
+
+\noindent print "How hot is it, in degrees? ";
+
+\noindent my \$temperature = $<$STDIN$>$;
+
+\noindent print "And how many emails left to reply to? ";
+
+\noindent my \$work = $<$STDIN$>$;
+
+\noindent chomp(\$weather, \$temperature);
+
+\noindent 
+
+\noindent if (\$weather eq "snowing") \{
+
+\noindent print "OK, let's go!\textbackslash n";
+
+\noindent \} elsif (\$weather eq "raining") \{
+
+\noindent print "No way, sorry, I'm staying in.\textbackslash n";
+
+\noindent \} elsif (\$temperature $<$ 18) \{
+
+\noindent print "Too cold for me!\textbackslash n";
+
+\noindent \} elsif (\$work $>$ 30) \{
+
+\noindent print "Sorry -- just too busy.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Well, why not?\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent It's 20 degrees, I've got 27 emails to reply to, and it's cloudy out there. Let's see what the Simulated
+
+\noindent Simon would do:
+
+\noindent 
+
+\noindent $>$ \textbf{perl walkies.plx}
+
+\noindent What's the weather like outside? \textbf{cloudy}
+
+\noindent How hot is it, in degrees? \textbf{20}
+
+\noindent And how many emails left to reply to? \textbf{27}
+
+\noindent Well, why not?
+
+\noindent $>$
+
+\noindent 
+
+\noindent Looks like I can fit a walk in after all. Maybe after I show you how this program works.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The point of this rather silly little program is that once it has gathered the information it needs, it runs through a series of tests, each of which could cause it to finish. First, we check to see if it's snowing:
+
+\noindent 
+
+\noindent if (\$weather eq "snowing") \{
+
+\noindent print "OK, let's go!\textbackslash n";
+
+\noindent 
+
+\noindent If so, then we print our message and, this is the important part, do no more tests. If not, then we move onto the next test:
+
+\noindent 
+
+\noindent \} elsif (\$weather eq "raining") \{
+
+\noindent print "No way, sorry, I'm staying in.\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent Again, if this is true, we stop testing; otherwise, we move on. Finally, if none of the tests are true, we get
+
+\noindent to the else:
+
+\noindent 
+
+\noindent \} else \{
+
+\noindent print "Well, why not?\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Please remember that this is very different to what would happen if we used four separate if statements. The tests overlap, so it is possible for more than one condition to be true at once. For example, if it were snowing and I have over 30 emails to reply to, we'd get two conflicting answers. elsif tests should be read as 'Well, how about if\dots ?'
+
+\noindent 
+
+\noindent Just in case you were curious, there is no elsunless. This is a Good Thing.
+
+\noindent 
+
+\noindent \textit{More Elegant Solutions}
+
+\noindent For three or four tests, it's reasonable to use if-elsif-elsif-\dots -else. But for any more than that, it starts to look ugly. What happens if we get input from the user and there are ten options? There are two general solutions to this, the first of which is to use a hash. We'll see in a few chapters time how you can store code to be executed inside a hash. If you can't use a hash, you're pretty much stuck with a chain of elsifs. You may, however, find it easier to do it like this:
+
+\noindent 
+
+\noindent print "Please enter your selection (1 to 10): ";
+
+\noindent my \$choice = $<$STDIN$>$;
+
+\noindent for (\$choice) \{
+
+\noindent \$\_  == 1 \&\& print "You chose number one\textbackslash n";
+
+\noindent \$\_  == 2 \&\& print "You chose number two\textbackslash n";
+
+\noindent \$\_  == 3 \&\& print "You chose number three\textbackslash n";
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent We're using a for loop just like in the last chapter, but with a list of one thing. Why? Two reasons really:
+
+\noindent 
+
+\noindent ? To give our program a bit of structure -- brackets and indenting should make you realize there's a control structure going on.
+
+\noindent 
+
+? To alias \$choice to \$\_ for more convenient access. Let's have a look in more detail about how the for loop works.
+
+\noindent 
+
+\noindent 1, 2, Skip A Few, 99, 100
+
+\noindent 
+
+\noindent Now we know how to do everything once. But what if we need to repeat an operation or series of operations? Of course, there are methods available to specify this in perl too. We saw the for loop in Chapter 3, and this is one example of a class of control structures called loops.
+
+\noindent 
+
+\noindent In programming, there are various types of loop. Some loop forever and are called \textbf{infinite loops}, while most, in contrast, are finite loops. We say that a program 'gets into' or 'enters' a loop and then 'exits' or
+
+\noindent 'gets out' when finished. Infinite loops may not sound very useful, but they certainly can be --
+
+\noindent particularly because most languages, Perl included, provide you with a 'site door' by which you can exit
+
+\noindent 
+
+\noindent 
+
+\noindent the loop. They will also be useful for when you just want the program to continue running until the user
+
+\noindent stops it manually, the computer powers down, or the heat death of the universe occurs, whichever is sooner.
+
+\noindent 
+
+\noindent There's also a difference between 'definite' loops and 'indefinite' loops. In a definite loop, you know how many times the block will be repeated in advance -- a for loop is definite, because it will always
+
+\noindent iterate for each item in the array. An indefinite loop will check a condition in each iteration to whether
+
+\noindent it should do another or not.
+
+\noindent 
+
+\noindent There's also a difference between an indefinite loop that checks before the iteration and one that checks afterward. The latter will always go through at least one iteration in order to get to the check, whereas
+
+\noindent the former checks first and so may not go through any iterations at all.
+
+\noindent 
+
+\noindent Perl supports ways of expressing all of these types of loop. First, let's examine again the for loops we saw in the previous chapter.
+
+\noindent 
+
+\noindent for Loops
+
+\noindent 
+
+\noindent The for loop executes the statements in a block for each element in a list. Because of this, it's also known as the foreach loop, and you can use foreach anywhere you'd use for. For example:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#forloop1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = (1, 3, 5, 7, 9);
+
+\noindent my \$i;
+
+\noindent for \$i (@array) \{
+
+\noindent print "This element: \$i\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent This does exactly the same thing, and gives exactly the same output as this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#forloop2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my @array = (1, 3, 5, 7, 9);
+
+\noindent my \$i;
+
+\noindent foreach \$i (@array) \{
+
+\noindent print "This element: \$i\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent It's mainly a question of personal style -- you won't go wrong if you use foreach all the time when talking about arrays. There's another form of for that does something completely different, and we'll
+
+\noindent see that a bit later on. We borrowed the syntax from a language called C, and so people who are used to programming in C can sometimes be confused by seeing for used with an array. If you use foreach, you'll keep them happy.
+
+\noindent 
+
+\noindent 
+
+\noindent However, foreach is longer to type, and Perl programmers are notoriously lazy. And what's more, this
+
+\noindent is Perl, not C. Personally, I try and use for for constant lists and ranges like (1...10), and foreach
+
+\noindent for arrays, but I'm not really consistent in that. Use whatever suits you.
+
+\noindent 
+
+\noindent As we mentioned above, the for loop is definite. You can work out, before you enter the loop, how many times you are going to repeat. It's also finite, since it's not possible to construct an infinitely long list.
+
+\noindent 
+
+\noindent \textit{Choosing an Iterator}
+
+\noindent We can specify the iterator variable ourselves as we did in the examples above, or we can use the
+
+\noindent default one, \$\_ . Furthermore, if we're being good and using strict, we can make our iterator variable
+
+\noindent a lexical, my variable as we go along. That is, we could write the above like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#forloop3.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my @array = (1, 3, 5, 7, 9);
+
+\noindent foreach my \$i (@array) \{
+
+\noindent print "This element: \$i\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent There's actually a very subtle difference between declaring your iterator inside and outside of the loop.
+
+\noindent If you declare your iterator outside the loop, any value it had then will be restored afterwards. We can check this out by setting the variable and testing it afterwards:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \#forloop4.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my @array = (1, 3, 5, 7, 9);
+
+\noindent my \$i="Hello there";
+
+\noindent foreach \$i (@array) \{
+
+\noindent print "This element: \$i\textbackslash n";
+
+\noindent \}
+
+\noindent print "All done: \$i\textbackslash n";
+
+\noindent 
+
+\noindent This will produce the following output:
+
+\noindent 
+
+\noindent $>$ \textbf{perl forloop4.plx}
+
+\noindent This element: 1
+
+\noindent This element: 3
+
+\noindent This element: 5
+
+\noindent This element: 7
+
+\noindent This element: 9
+
+\noindent All done: Hello there
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Meanwhile declaring the iterator within the loop, as in forloop3.plx, will create a new variable \$i
+
+\noindent each time, which will only exist for the duration of the loop.
+
+\noindent 
+
+\noindent As  a matter of style,  it's usual  to  keep  the  names  of iterator  variables  very  short.  The traditional
+
+\noindent iterator  is \$i,  as I've used here.  The  length  of  a  variable  name  should  be  related  to  the importance  of the variable;  iterators are throwaway  variables  that  only  exist  for  one block,  so  they  shouldn't  be prominently named.
+
+\noindent 
+
+\noindent \textit{What We Can Loop Over}
+
+\noindent We can use foreach and for loops on any type of list whatsoever: A constant list:
+
+\noindent 
+
+\noindent my @array = qw(the quick brown fox ran over the lazy dog);
+
+\noindent for (6, 3, 8, 2, 5, 4, 0, 7) \{
+
+\noindent print "\$array[\$\_] ";
+
+\noindent \}
+
+\noindent 
+
+\noindent an array:
+
+\noindent 
+
+\noindent my @array = qw(the quick brown fox ran over the lazy dog);
+
+\noindent my \$word;
+
+\noindent for \$word (@array) \{
+
+\noindent print "\$word ";
+
+\noindent \}
+
+\noindent 
+
+\noindent even a list generated by a function, like sort or keys:
+
+\noindent 
+
+\noindent my \%hash = ( car =$>$ 'voiture', coach =$>$ 'car', bus =$>$ 'autobus' );
+
+\noindent for (keys \%hash) \{
+
+\noindent print "English: \$\_\textbackslash n";
+
+\noindent print "French: \$hash\{\$\_\}\textbackslash n\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent It's a very powerful tool for those of you who need to list or 'enumerate' the contents of a hash or array, but there is a proviso before you go and use your for loops unwisely.
+
+\noindent 
+
+\noindent \textit{Aliases and Values}
+
+\noindent Be aware that the for loop creates an alias, rather than a value. Any changes you make to the iterator variable, whether it be \$\_ or one you supply, will be reflected in the original array. For instance:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# forloop5.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = (1..10);
+
+\noindent foreach (@array) \{
+
+\noindent \$\_++;
+
+\noindent \}
+
+\noindent 
+
+\noindent print "Array is now: @array\textbackslash n";
+
+\noindent 
+
+\noindent 
+
+\noindent will change the actual contents of the array, as follows:
+
+\noindent 
+
+\noindent $>$ \textbf{perl forloop5.plx}
+
+\noindent Array is now: 2 3 4 5 6 7 8 9 10 11
+
+\noindent $>$
+
+\noindent 
+
+\noindent Naturally, you can't change things that are constant, so doing the following will give an error:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# forloop6.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent foreach (1, 2, 3) \{
+
+\noindent \$\_++;
+
+\noindent \}
+
+\noindent 
+
+\noindent $>$ \textbf{perl forloop6.plx}
+
+\noindent Modification of a read-only value attempted at forloop6.plx line 7
+
+\noindent $>$
+
+\noindent 
+
+\noindent This means exactly what it says -- we tried to modify (by adding one) to something that we could only read from, and not write to -- in this case, the literal value of one. If you need to change the iterator for any reason, make a local copy, like this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# forloop7.plx use warnings; use strict;
+
+\noindent 
+
+\noindent foreach (1, 2, 3) \{
+
+\noindent my \$i = \$\_;
+
+\noindent \$i++;
+
+\noindent \}
+
+\noindent 
+
+\noindent Because \$i is unrelated to the original list, we don't run into this problem.
+
+\noindent 
+
+\noindent \textit{Statement Modifiers}
+
+\noindent Just as there was a statement modifier form of if, like this:
+
+\noindent 
+
+\noindent die "Something wicked happened" if \$error;
+
+\noindent 
+
+\noindent there's  also  a  statement  modifier  form  of  for.  This  means  you  can  iterate  an  array,  executing  a  single statement every time. Here, however, you don't get to choose your own iterator variable: it's always \$\_. Let's create a simple totalling program using this idiom:
+
+\noindent 
+
+\noindent Try It Out : Quick Sum
+
+\noindent 
+
+\noindent The aim of this program is to take a list of numbers and output the total.  For ease of use,  we'll take the
+
+\noindent numbers from the command line.
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# quicksum.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$total=0;
+
+\noindent \$total += \$\_  for @ARGV;
+
+\noindent print "The total is \$total\textbackslash n";
+
+\noindent 
+
+\noindent Now when we give the program a few numbers to sum, it does just that:
+
+\noindent 
+
+\noindent $>$\textbf{perl quicksum.plx 15 62 3 8 4 }
+
+\noindent The total is 92
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{How It Works - }@ARGV\textit{ Explained}
+
+\noindent The whole trickery of this program is in that one line:
+
+\noindent 
+
+\noindent \$total += \$\_  for @ARGV;
+
+\noindent 
+
+\noindent The first key point is the @ARGV array. This contains everything that's on the command line after the name of the program we're running. Perl receives, from the system, an array containing everything on the command line. This is split up a little like a Perl array without the commas. A single word is one
+
+\noindent element, as is a number, or a string in quotes. Depending on the shell, which is the thing that talks to the system in the first place, you may be able to backslash a space to stop it separating. Let's quickly write something that prints out each element of @ARGV separately, so we can see how they're split up:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# whatsargv.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent foreach (@ARGV) \{
+
+\noindent print "Element: \textbar \$\_\textbar \textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Why the strange parallel bars? You'll be pleased to hear it's not some arcane Perl}
+
+\noindent \textbf{syntax for doing anything special. All we're doing is placing a symbol on either side of}
+
+\noindent \textbf{our element. This is an oft-used debugging trick: the idea is that it allows you to see if}
+
+\noindent \textbf{there are any spaces at the start of end of the data, and allows you to tell the}
+
+\noindent \textbf{difference between an empty string and a string consisting entirely of spaces.}
+
+\noindent 
+
+\noindent 
+
+\noindent Now let's try a few examples:
+
+\noindent 
+
+\noindent $>$ \textbf{perl whatsargv.plx one two three}
+
+\noindent Element: \textbar one\textbar 
+
+\noindent Element: \textbar two\textbar  Element: \textbar three\textbar 
+
+\noindent $>$ \textbf{perl whatsargv.plx "a string" 12}
+
+\noindent Element: \textbar a string\textbar  Element: \textbar 12\textbar 
+
+\noindent $>$ \textbf{perl whatsargv.plx}
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent In the first case, the three words were split up into separate elements. In the second, we kept two words
+
+\noindent together by giving them as a string in quotes. We also had another element afterwards, and the amount
+
+\noindent of white space between them made no difference to the number of elements. Finally, if there is nothing after the name of the program, there's nothing in @ARGV.
+
+\noindent 
+
+\noindent Let's get back to our program. We've now got an array constructed from of the command line, and we're going over it with a for loop:
+
+\noindent 
+
+\noindent \$total += \$\_  for @ARGV;
+
+\noindent 
+
+\noindent With these statement modifiers, if they're not obviously clear, think how they'd be written normally. In this case:
+
+\noindent 
+
+\noindent for (@ARGV) \{
+
+\noindent \$total += \$\_;
+
+\noindent \}
+
+\noindent 
+
+\noindent that is,  for  each element,  add  that  element  to  the  total.  This  is  more  or  less  exactly  how  you  take
+
+\noindent a total.
+
+\noindent 
+
+\noindent 
+
+\noindent Looping While...
+
+\noindent 
+
+\noindent Now we come to the indefinite loops. As mentioned above, these check a condition, then do an action. The first one is while. As you might be able to work out from the name, this means anaction continues while a condition is true. The syntax of while is much like the syntax of if:
+
+\noindent 
+
+\noindent \textit{while ( $<$condition$>$ ) \{ $<$action$>$ \}}
+
+\noindent 
+
+\noindent Here's a very simple while loop:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# while1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$countdown = 5;
+
+\noindent 
+
+\noindent while (\$countdown $>$ 0) \{
+
+\noindent print "Counting down: \$countdown\textbackslash n";
+
+\noindent \$countdown--;
+
+\noindent \}
+
+\noindent 
+
+\noindent And here's what it produces:
+
+\noindent 
+
+\noindent $>$\textbf{perl while1.plx}
+
+\noindent Counting down: 5
+
+\noindent Counting down: 4
+
+\noindent Counting down: 3
+
+\noindent Counting down: 2
+
+\noindent Counting down: 1
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Let's see a flow chart for this program:
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Set \$countdown
+
+\noindent to 5
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Is \$countdown $>$0?
+
+\noindent 
+
+\noindent 
+
+\noindent Yes
+
+\noindent 
+
+\noindent 
+
+\noindent No Print message
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Decrease
+
+\noindent \$countdown
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent While there's still a value greater than zero in the \$counter variable, we do the two statements:
+
+\noindent 
+
+\noindent print "Counting down: \$countdown\textbackslash n";
+
+\noindent \$countdown--;
+
+\noindent 
+
+\noindent Perl goes through the loop a first time when \$countdown is 5 -- the condition is met, so a message gets printed, and \$countdown gets decreased to 4. Then, as the flow chart implies, back we go to the top of the   loop.   We   test   again:   \$countdown is   still   more   than   zero,   so   off   we   go   again.   Eventually,
+
+\noindent \$countdown is  1,  we  print  our  message,  \$countdown is  decreased,  and  it's  now  zero.  This  time around, the test fails, and we exit the loop.
+
+\noindent 
+
+\noindent while ($<$STDIN$>$)
+
+\noindent 
+
+\noindent Of course, another way to ensure that your loop is going to terminate is to make the condition do the change. This is sometimes thought of as bad style, but there's one example that is extremely widespread:
+
+\noindent 
+
+\noindent while ($<$STDIN$>$) \{
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent Actually, this is a bit of shorthand; another example of a common Perl idiom. To write it out fully, it would look like this:
+
+\noindent 
+
+\noindent while (defined(\$\_  = $<$STDIN$>$)) \{
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Since $<$STDIN$>$ reads a new line from the user, the condition itself will depend on changing
+
+\noindent information. What we're doing is setting \$\_ to each new line of input until we run out. We'll see in
+
+\noindent Chapter 6 how this is used to process files.
+
+\noindent 
+
+\noindent Infinite Loops
+
+\noindent 
+
+\noindent The important but obvious point is that what we're testing gets changed inside the loop. If our condition
+
+\noindent is always going to give a true result, we have ourselves an \textbf{infinite loop}. Let's just remove the second of those two statements:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# while2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$countdown = 5;
+
+\noindent 
+
+\noindent while (\$countdown $>$ 0) \{
+
+\noindent print "Counting down: \$countdown\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent \$countdown never changes. It's always going to be 5, and 5 is, we hope, always going to be more than zero. So this program will keep printing its message until you interrupt it by holding down Ctrl and C. Hopefully, you can see why you need to ensure that what you do in your loop affects your condition.
+
+\noindent 
+
+\noindent Should we actually want an infinite loop, there's a fairly standard way to do it. Just put a true value --
+
+\noindent typically 1 -- as the condition:
+
+\noindent 
+
+\noindent while \{
+
+\noindent print "Bored yet?\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent The converse of course is to say while(0) in the loop's declaration, but nothing will ever happen because this condition is tested before any of the commands in the loop are executed. A bit silly, really.
+
+\noindent 
+
+\noindent Try It Out : English -- Sdrawkcab Translator
+
+\noindent 
+
+\noindent In this example, we'll use our newly-introduced while($<$STDIN$>$) construction to take a line of text
+
+\noindent from the user and produce the equivalent sentence translated into a language called Sdrawkcab. Sdrawkcab is a word in Sdrawkcab meaning 'backwards' -- I hope you can see why.
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sdrawkcab1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent while ($<$STDIN$>$) \{
+
+\noindent chomp;
+
+\noindent die "!enod llA\textbackslash n" unless \$\_;
+
+\noindent my \$sdrawkcab = reverse \$\_;
+
+\noindent print "\$sdrawkcab\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent And here's a sample run.
+
+\noindent 
+
+\noindent $>$ \textbf{perl sdrawkcab1.plx}
+
+\noindent \textbf{Hello}
+
+\noindent olleH
+
+\noindent \textbf{How are you?}
+
+\noindent ?uoy era woH
+
+\noindent 
+
+\noindent !enod llA
+
+\noindent $>$
+
+\noindent 
+
+\noindent (!oot ,rotalsnart  hsilgnE-backwardS  a  sa ti  esu  yllautca  nac  uoy taht  si  rotalsnart  siht  tuoba  gniht taerg ehT)
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent The main part of this program is a loop that takes in a line from the user and places it in \$\_:
+
+\noindent 
+
+\noindent 
+
+\noindent while ($<$STDIN$>$) \{
+
+\noindent ...
+
+\noindent \}
+
+\noindent 
+
+\noindent Inside that loop, what do we do? First, we remove the new line. If we're going to turn it into Sdrawkcab, we want the new line at the end, not the beginning:
+
+\noindent 
+
+\noindent 
+
+\noindent chomp;
+
+\noindent 
+
+\noindent If,  after  removing that new  line,  there's  nothing  left,  \$\_  is  an  empty  string,  a  false  value,  we then finish the program:
+
+\noindent 
+
+\noindent die "!enod llA\textbackslash n" unless \$\_;
+
+\noindent 
+
+\noindent Next, we do our actual translation -- we can't just do print reverse \$\_ however, because reverse
+
+\noindent in a list context, such as supplied by print, treats its arguments as a list and reverses the order of the items. Since we've only got one item here, that wouldn't be very interesting. You'll just get what you typed in:
+
+\noindent 
+
+\noindent my \$sdrawkcab = reverse \$\_;
+
+\noindent 
+
+\noindent Then, finally, we print it out, and go back to get another line.
+
+\noindent 
+
+\noindent 
+
+\noindent print "\$sdrawkcab\textbackslash n";
+
+\noindent 
+
+\noindent It's not very elegant, granted, but it gets the job done. Of course, there's more than one way to do it as
+
+\noindent I'll show you in the next section. But before you read on, you might like to make the translator a little
+
+\noindent 'prettier', prompting the user for a phrase to translate and prefacing the translation with a suitable phrase. From streams of such small improvements to an established core, most programs came.
+
+\noindent 
+
+\noindent 
+
+\noindent Running at Least Once
+
+\noindent 
+
+\noindent When we were categorizing our lists, we divided indefinite loops into two catagories: those that those
+
+\noindent that execute at least once and those that may execute zero times. The while loop we've seen so far tests the condition first; if the condition isn't true the first time around, the 'body' of the loop never gets executed. There's another way to write our loop to ensure that the body is always executed at least
+
+\noindent once:
+
+\noindent 
+
+\noindent 
+
+\noindent do \{ $<$actions$>$ \} while ($<$condition$>$)
+
+\noindent 
+
+\noindent Now we do the test after the block. This is equivalent to moving the diamond in our flow chart from the top to the bottom.
+
+\noindent 
+
+\noindent You may find it more natural to write the previous program like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sdrawkcab2.plx use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent do \{
+
+\noindent \$\_  = $<$STDIN$>$;
+
+\noindent chomp;
+
+\noindent my \$sdrawkcab = reverse \$\_;
+
+\noindent print "\$sdrawkcab\textbackslash n";
+
+\noindent \} while (\$\_);
+
+\noindent print "!enod llA\textbackslash n";
+
+\noindent 
+
+\noindent This does more or less the same thing, but in a slightly different way. First a line is read, then the translation produced, then we see if we need to get another line. There's one slight problem with this, when we want to end, we input a blank line that Perl 'translates' and prints out. See if you can fix this, and then see if you prefer the end result with the first program.
+
+\noindent 
+
+\noindent \textit{Statement Modifying}
+
+\noindent As before, you can use while as a statement modifier. Following the pattern of for and if, here's what you'd do with while:
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{while ( $<$condition$>$ ) \{ $<$statement$>$ \}}
+
+\noindent 
+
+\noindent becomes:
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{$<$statement$>$ while $<$condition$>$}
+
+\noindent 
+
+\noindent So, here's a way of writing our countdown program in three lines (if you exclude 'use strict' and
+
+\noindent 'use warnings', of course):
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent my \$countdown = 5;
+
+\noindent print "Counting down: \$countdown\textbackslash n" while \$countdown-- $>$ 0;
+
+\noindent 
+
+\noindent 
+
+\noindent Don't be confused by the fact that the while is at the end -- the condition is tested first, just as an
+
+\noindent ordinary while loop.
+
+\noindent 
+
+\noindent Looping Until
+
+\noindent 
+
+\noindent The opposite of if is unless, and the opposite of while is until. It's exactly the same as while
+
+\noindent (not $<$condition$>$) \{ ... \}:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# until.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$countdown = 5;
+
+\noindent 
+
+\noindent until (\$countdown-- == 0) \{
+
+\noindent print "Counting down: \$countdown\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent Controlling Loop Flow
+
+\noindent 
+
+\noindent When we wrote our Sdrawkcab translator, the only way we could stop the loop was to end the program with a die command. Of course, there is another way to do it -- by keeping a variable set to tell us whether or not we want to go through another loop. We can test this in our while condition. This kind
+
+\noindent of Boolean variable is called a \textbf{flag}, because it indicates something about the status of our program. We
+
+\noindent \textbf{set a flag }when we change its value.
+
+\noindent 
+
+\noindent Here's a version of the Sdrawkcab program that sets a flag when it's time to finish:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sdrawkcab3.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$stopnow = 0;
+
+\noindent until (\$stopnow) \{
+
+\noindent \$\_  = $<$STDIN$>$;
+
+\noindent chomp;
+
+\noindent if (\$\_)\{ 
+
+\noindent my \$sdrawkcab = reverse \$\_;
+
+\noindent print "\$sdrawkcab\textbackslash n";
+
+\noindent \} else \{
+
+\noindent \$stopnow = 1;
+
+\noindent \}
+
+\noindent \}
+
+\noindent print "!enod llA\textbackslash n";
+
+\noindent 
+
+\noindent When \$\_ becomes the empty string, and hence a false value, the if (\$\_) test fails. This sets
+
+\noindent \$stopnow to 1 and will end the until loop.
+
+\noindent 
+
+\noindent 
+
+\noindent There's a school of thought, called 'structured programming' that urges strict adherence to these loops
+
+\noindent and conditionals. Unfortunately, you end up with code like on the previous page. Most programmers, though, take a less strict approach. When it's time to leave the loop, they don't wait for the test to come around again, they just leave.
+
+\noindent 
+
+\noindent Breaking Out
+
+\noindent 
+
+\noindent The keyword last, in the body of a loop, will make perl immediately exit, or 'break out of' that loop. The remaining statements are not processed, and you up right at the end. This is exactly what we want
+
+\noindent to do to make the above program easier to deal with:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# sdrawkcab4.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent while ($<$STDIN$>$) \{
+
+\noindent chomp;
+
+\noindent last unless \$\_;
+
+\noindent my \$sdrawkcab = reverse \$\_;
+
+\noindent print "\$sdrawkcab\textbackslash n";
+
+\noindent \}
+
+\noindent \# and now we can carry on with something else...
+
+\noindent 
+
+\noindent You can use this in a for loop as well:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# forlast.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my @array = ( "red", "blue", "STOP THIS NOW", "green");
+
+\noindent for (@array) \{
+
+\noindent last if \$\_  eq "STOP THIS NOW";
+
+\noindent print "Today's colour is \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent $>$\textbf{perl forlast.plx }Today's colour is red Today's colour is blue
+
+\noindent $>$
+
+\noindent 
+
+\noindent If you try to do a last when you're not in a loop, perl will complain, even if you have forgotten to use
+
+\noindent use warnings:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# badlast.plx
+
+\noindent 
+
+\noindent last;
+
+\noindent 
+
+\noindent Can't "last" outside a block at badlast.plx line 4.
+
+\noindent 
+
+\noindent 
+
+\noindent Going onto the Next
+
+\noindent 
+
+\noindent If you want to skip the rest of the processing of the body, but don't want to exit the loop, you can use
+
+\noindent next to immediately go back to the start of the loop, passing the next value to the iterator. This is an oft-used technique to process only selected elements:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# next.plx
+
+\noindent use strict;
+
+\noindent use warnings;
+
+\noindent 
+
+\noindent my @array = (8, 3, 0, 2, 12, 0);
+
+\noindent for (@array) \{
+
+\noindent if (\$\_  == 0) \{
+
+\noindent print "Skipping zero element.\textbackslash n";
+
+\noindent next;
+
+\noindent \}
+
+\noindent print "48 over \$\_  is ", 48/\$\_, "\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent In  next.plx then,  we have set  a  trap  for  all  those  dastardly  zeroes  that  want  to  cause  our  divisions
+
+\noindent to fail:
+
+\noindent 
+
+\noindent $>$\textbf{perl next.plx}
+
+\noindent 48 over 8 is 6
+
+\noindent 48 over 3 is 16
+
+\noindent Skipping zero element.
+
+\noindent 48 over 2 is 24
+
+\noindent 48 over 12 is 4
+
+\noindent Skipping zero element.
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Be careful: while next takes you to the next iteration of the loop, last doesn't take}
+
+\noindent \textbf{you to the last iteration, it takes you past it.}
+
+\noindent 
+
+\noindent 
+
+\noindent On rare occasions, you'll want to go back to the top of the loop, but without testing the condition (in the
+
+\noindent case of a for loop) or getting the next element in the list (as in a while loop). If you feel you need to do this, the keyword to use is redo:
+
+\noindent 
+
+\noindent Try It Out - Debugging Loops 101
+
+\noindent It's perfectly possible to have a loop inside a loop. The interesting part comes when you need to go to the end or the beginning of a external loop from an internal loop. For example, if you're reading some
+
+\noindent input from the user, and the input is any one of a series of pre-determined 'safe words', you end the loop. Here's what you might want to do:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# looploop1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent my @getout = qw(quit leave stop finish);
+
+\noindent 
+
+\noindent 
+
+\noindent while ($<$STDIN$>$) \{
+
+\noindent chomp;
+
+\noindent for my \$check (@getout) \{
+
+\noindent last if \$check eq \$\_;
+
+\noindent \}
+
+\noindent print "Hey, you said \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent The problem with this is that it doesn't work. Now, 'it doesn't work' is possibly the worst way to
+
+\noindent approach finding a bug. What do we mean by 'it doesn't work'? Does it sit on the couch all day watching TV? We need to be specific! What doesn't work about it?
+
+\noindent 
+
+\noindent \textit{How It Doesn't Work and Why}
+
+\noindent Well, even if we put in one of the words that's supposed to let us quit, Perl carries on, like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl looploop1.plx}
+
+\noindent \textbf{Hello}
+
+\noindent Hey, you said Hello
+
+\noindent \textbf{quit}
+
+\noindent Hey, you said quit
+
+\noindent \textbf{stop}
+
+\noindent Hey, you said stop
+
+\noindent \textbf{leave}
+
+\noindent Hey, you said leave
+
+\noindent \textbf{finish}
+
+\noindent Hey, you said finish
+
+\noindent 
+
+\noindent We've specifically isolated the problem. Now, let's see if we can find any clues as to what's causing it. The fact that it's printing out means it's finished the for loop. Let's add in a couple of print statements to help us investigate what the for loop is actually doing:
+
+\noindent 
+
+\noindent for my \$check (@getout) \{
+
+\noindent print "Testing \$check against \$\_\textbackslash n";
+
+\noindent last if \$check eq \$\_;
+
+\noindent print "Well, it wasn't \$check\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Now run it again:
+
+\noindent 
+
+\noindent \textbf{Hello}
+
+\noindent Testing quit against Hello
+
+\noindent Well, it wasn't quit
+
+\noindent Testing leave against hello
+
+\noindent Well, it wasn't leave Testing stop against Hello Well, it wasn't stop
+
+\noindent Testing finish against Hello
+
+\noindent Well, it wasn't finish
+
+\noindent Hey, you said Hello
+
+\noindent \textbf{quit}
+
+\noindent Testing quit against quit
+
+\noindent Hey, you said quit
+
+\noindent 
+
+\noindent 
+
+\noindent Aha, more clues. So it's testing properly, and it's finishing when it sees 'quit', which is one of the stop
+
+\noindent words. That's a relief to know, but it's only finishing the for loop, rather than finishing the while loop. This is the root of the problem:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{'It doesn't work' is not a bug report. First you need to be specific about what doesn't}
+
+\noindent \textbf{work. Then you need to detail what doesn't work about it. Then you can start to}
+
+\noindent \textbf{examine why it doesn't work. When you've got over the 'doesn't work' feeling and}
+
+\noindent \textbf{fully investigated what it's really doing and how that differs from your expectations,}
+
+\noindent \textbf{only then can you begin to fix it.}
+
+\noindent 
+
+\noindent 
+
+\noindent So,  how  do  we fix  this one?  What  we need  to  do  is  to  distinguish  between  the two  loops,  the  inner
+
+\noindent for loop and the outer while loop.  The  way  we  distinguish  between  them  is  by  giving  them names,
+
+\noindent or \textbf{labels}.
+
+\noindent 
+
+\noindent A label goes before the for, while, or until of a loop, and ends with a colon. The rules for naming labels are the same as for naming variables, but it's usual to construct labels from uppercase letters.
+
+\noindent 
+
+\noindent Here's our program with labels attached:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# looploop2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent my @getout = qw(quit leave stop finish);
+
+\noindent 
+
+\noindent OUTER: while ($<$STDIN$>$) \{
+
+\noindent chomp;
+
+\noindent INNER: for my \$check (@getout) \{
+
+\noindent last if \$check eq \$\_;
+
+\noindent \}
+
+\noindent print "Hey, you said \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Now for the finale, we can direct last, next, and redo to a particular loop by giving them the label.
+
+\noindent Here's the fixed version:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# looploop3.plx use warnings; use strict;
+
+\noindent my @getout = qw(quit leave stop finish); OUTER: while ($<$STDIN$>$) \{
+
+\noindent chomp;
+
+\noindent INNER: for my \$check (@getout) \{
+
+\noindent last OUTER if \$check eq \$\_;
+
+\noindent \}
+
+\noindent print "Hey, you said \$\_\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Now when we find a matching word, we don't just jump out of the for loop -- we go all the way to the
+
+\noindent end of the outer while loop as well, which is exactly what we wanted to do.
+
+\noindent 
+
+\noindent 
+
+\noindent Goto
+
+\noindent 
+
+\noindent As a matter of fact, you can put a label before any statement whatsoever. If you want to really mess around with the structure of your programs, you can use goto LABEL to jump anywhere in your program. Whatever you do, don't do this. This is not to be used. Don't go that way.
+
+\noindent 
+
+\noindent I'm telling you about it for the simple reason that if you see it in anyone else's Perl, you can laugh heartily at them. There are other, more acceptable forms of goto, which we'll see when we come to subroutines. But goto with a label is to be avoided like the plague.
+
+\noindent 
+
+\noindent Why? Because not only does it turn the clock back thirty years (the structured programming movement started with the publication of a paper called 'Use of goto considered harmful'), but it tends to make
+
+\noindent your programs amazingly hard to follow. The flow of control can shoot off in any direction at any time,
+
+\noindent into any part of the file, perhaps into a different file. You can even find yourself jumping into the middle
+
+\noindent of loops, which really doesn't bear thinking about. Don't use it unless you really, really, really understand why you shouldn't. And even then, don't use it. Larry Wall has never used goto with a label in Perl, and he wrote it.
+
+\noindent 
+
+\noindent Don't. (He's watching - \textit{Ed})
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Before this chapter, our programs plodded along in a straight line, following one statement with another.
+
+\noindent 
+
+\noindent We've now seen how we can react to different circumstances in our programs, which is the start of flexible and powerful programming. We can test whether something is true or false using if and unless and take appropriate action. We've also examined how to test multiple related conditions,
+
+\noindent using elsif.
+
+\noindent 
+
+\noindent We can repeat areas of a program, in several different ways: once per element of a list, using for, or continually while a condition is true or false, using while and until.
+
+\noindent 
+
+\noindent Finally, we've examined some ways to alter the flow of perl's execution through these loops. We can break out of a loop with last, skip to the next element with next, and start processing the current element again with redo.
+
+\noindent 
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent 1.   Modify the currency program convert2.plx to keep asking for currency names until a valid currency name is entered.
+
+\noindent 
+
+\noindent 2.   Modify the number-guessing program guessnum.plx so that it loops until the correct answer is entered.
+
+\noindent 
+
+\noindent 3.   Write your own program to capture all the prime numbers between 2 and a number the user gives you.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
