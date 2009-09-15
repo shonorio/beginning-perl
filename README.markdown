@@ -1,6 +1,6 @@
 Learning Perl
 =============
 
-Projecto de tradução do Learning Perl para pt_{pt,br}.
+Projecto de tradução do livro Beginning Perl (Simon Cozens) para pt_{pt,br}.
 
 
