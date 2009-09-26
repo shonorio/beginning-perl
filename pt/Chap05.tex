@@ -4,10 +4,10 @@
 
 %%% remove comment delimiter ('%') and specify encoding parameter if required,
 %%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
-%\usepackage[cp1252]{inputenc}
+\usepackage[utf8]{inputenc}
 
 %%% remove comment delimiter ('%') and select language if required
-%\usepackage[english,spanish]{babel}
+\usepackage[english,portuguese,spanish]{babel}
 
 \usepackage{amssymb}
 \usepackage{amsmath}
@@ -18,7 +18,7 @@
 \begin{document}
 
 %%% remove comment delimiter ('%') and select language if required
-%\selectlanguage{spanish} 
+\selectlanguage{portuguese} 
 
 \noindent 
 
@@ -50,7 +50,7 @@
 
 \noindent 
 
-\noindent Regular Expressions
+\noindent Express\~oes Regulares
 
 \noindent 
 
@@ -60,49 +60,48 @@
 
 \noindent 
 
-\noindent \textit{"11:15. Restate my assumptions:}
+\noindent \textit{"11:15. Reafirmando minhas suposoções:}
 
 \noindent 
 
-\noindent \textit{1. Mathematics is the language of nature.}
+\noindent \textit{1. A Matemática é a linguagem da natureza.}
 
-\noindent \textit{2. Everything around us can be represented and understood through numbers.}
+\noindent \textit{2. Tudo ao nosso redor pode ser representado e compreendido através de números.}
 
-\noindent \textit{3. If you graph these numbers, patterns emerge. Therefore: There are patterns everywhere in nature."}
-
-\noindent 
-
-\noindent \textit{- Max Cohen in }Pi\textit{, 1998}
+\noindent \textit{3. Se você desenhar estes números, pdrões emergem. Portanto: Existem padrões em toda a natureza."}
 
 \noindent 
 
-\noindent Whether or not you agree that Max's assumptions give rise to his conclusion is your own opinion, but his case is much easier to follow in the field of computers -- there are certainly patterns everywhere in programming.
+\noindent \textit{- Max Cohen em }Pi\textit{, 1998}
 
 \noindent 
 
-\noindent \textbf{Regular expressions }allow us look for patterns in our data. So far we've been limited to checking a single value against that of a scalar variable or the contents of an array or hash. By using the rules outlined in
-
-\noindent this chapter, we can use that one single value (or pattern) to describe what we're looking for in more general terms: we can check that every sentence in a file begins with a capital letter and ends with a full stop, find out how many times James Bond's name is mentioned in 'Goldfinger', or learn if there are any repeated sequences of numbers in the decimal representation of    greater than five in length.
+\noindent Se você concorda ou não que as suposições de Max levam à conclusão que ele obteve é problema seu, mas é muito mais fácil ver isso no mundo dos computadores -- Certamente há padrões por toda a parte em programação.
 
 \noindent 
 
-\noindent However, regular expressions are a very big area -- they're one of the most powerful features of Perl. We're going to break our treatment of them up into six sections:
+\noindent \textbf{As expressões reguulares }permitem-nos olhar para padrões em nossos dados. Até agora temos nos limitado a verificar único valor contra o de uma variável escalar ou o conteúdo de um array ou hash. Usando as regras descritas neste capítulo, nós poderemos utilizar um simples valor (ou padrão) para descrever o que estamos procuando em termos mais gerais: nós poderemos checar se cada frase em um arquivo começa com uma letra maiúscula e termina com um ponto final, encontrar quantas vezes o nome James Bond é mencionado em 'Goldfinger', ou saber se existem sequências repetidas de números em representação decimal com mais de cinco dígitos.
 
 \noindent 
 
-\noindent ? Basic patterns
+\noindent Contudo, expressões regulares são uma área muito grande -- elas são um dos recursos mais poderosos do Perl.
+Nós vamos quebrar o nosso tratamento deles em seis seções: 
 
 \noindent 
 
-\noindent ? Special characters to use
+\noindent ? Padrões básicos
 
 \noindent 
 
-\noindent ? Quantifiers, anchors and memorizing patterns
+\noindent ? Caracteres especiais
 
 \noindent 
 
-\noindent ? Matching, substituting, and transforming text using patterns
+\noindent ? Quantificadores, âncoras e memorização de padrões
+
+\noindent 
+
+\noindent ? Casamento (mtching), substituição, e transformação de texto usando padrões
 
 \noindent 
 
@@ -110,13 +109,13 @@
 
 \noindent 
 
-\noindent ? A quick look at some simple pitfalls
+\noindent ? Uma rápida olhada em algumas armadilhas simples
 
 \noindent 
 
-\noindent Generally speaking, if you want to ask perl something about a piece of text, regular expressions
-
-\noindent are going to be your first port of call -- however, there's probably one simple question burning in your head\dots 
+\noindent De modo geral, se você quiser perguntar alguma coisa ao perl sobre um pedaço de texto, as expressões regulares
+vão ser o seu primeiro porto de escala -- no entanto, há provavelmente uma pergunta simples queima em sua cabeça
+\dots 
 
 \noindent  
 
