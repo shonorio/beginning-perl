@@ -1,0 +1,2892 @@
+% LaTeX/AMS-LaTeX
+
+\documentclass[a4paper,11pt]{book}
+
+%%% remove comment delimiter ('%') and specify encoding parameter if required,
+%%% see TeX documentation for additional info (cp1252-Western,cp1251-Cyrillic)
+%\usepackage[cp1252]{inputenc}
+
+%%% remove comment delimiter ('%') and select language if required
+%\usepackage[english,spanish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+%%% remove comment delimiter ('%') and specify parameters if required
+%\usepackage[dvips]{graphics}
+
+\begin{document}
+
+%%% remove comment delimiter ('%') and select language if required
+%\selectlanguage{spanish} 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent Regular Expressions
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{"11:15. Restate my assumptions:}
+
+\noindent 
+
+\noindent \textit{1. Mathematics is the language of nature.}
+
+\noindent \textit{2. Everything around us can be represented and understood through numbers.}
+
+\noindent \textit{3. If you graph these numbers, patterns emerge. Therefore: There are patterns everywhere in nature."}
+
+\noindent 
+
+\noindent \textit{- Max Cohen in }Pi\textit{, 1998}
+
+\noindent 
+
+\noindent Whether or not you agree that Max's assumptions give rise to his conclusion is your own opinion, but his case is much easier to follow in the field of computers -- there are certainly patterns everywhere in programming.
+
+\noindent 
+
+\noindent \textbf{Regular expressions }allow us look for patterns in our data. So far we've been limited to checking a single value against that of a scalar variable or the contents of an array or hash. By using the rules outlined in
+
+\noindent this chapter, we can use that one single value (or pattern) to describe what we're looking for in more general terms: we can check that every sentence in a file begins with a capital letter and ends with a full stop, find out how many times James Bond's name is mentioned in 'Goldfinger', or learn if there are any repeated sequences of numbers in the decimal representation of    greater than five in length.
+
+\noindent 
+
+\noindent However, regular expressions are a very big area -- they're one of the most powerful features of Perl. We're going to break our treatment of them up into six sections:
+
+\noindent 
+
+\noindent ? Basic patterns
+
+\noindent 
+
+\noindent ? Special characters to use
+
+\noindent 
+
+\noindent ? Quantifiers, anchors and memorizing patterns
+
+\noindent 
+
+\noindent ? Matching, substituting, and transforming text using patterns
+
+\noindent 
+
+\noindent ? Backtracking
+
+\noindent 
+
+\noindent ? A quick look at some simple pitfalls
+
+\noindent 
+
+\noindent Generally speaking, if you want to ask perl something about a piece of text, regular expressions
+
+\noindent are going to be your first port of call -- however, there's probably one simple question burning in your head\dots 
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent What Are They?
+
+\noindent 
+
+\noindent The term "Regular Expression" (now commonly abbreviated to "RegExp" or even "RE") simply refers to a pattern that follows the rules of syntax outlined in the rest of this chapter. Regular expressions are not limited to perl -- Unix utilities such as sed and egrep use the same notation for finding patterns in text. So why aren't they just called 'search patterns' or something less obscure?
+
+\noindent 
+
+\noindent Well, the actual phrase itself originates from the mid-fifties when a mathematician called Stephen Kleene developed a notation for manipulating 'regular sets'. Perl's regular expressions have grown and grown beyond the original notation and have significantly extended the original system, but some of Kleene's notation remains, and the name has stuck.
+
+\noindent 
+
+\noindent Patterns
+
+\noindent History lessons aside, it's all about identifying patterns in text. So what constitutes a pattern? And how do you compare it against something?
+
+\noindent 
+
+\noindent The simplest pattern is a word -- a simple sequence of characters -- and we may, for example, want to ask perl whether a certain string contains that word. Now, we can do this with the techniques we have already seen: We want to split the string into separate words, and then test to see if each word is the one we're looking for. Here's how we might do that:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# match1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$found = 0;
+
+\noindent \$\_  = "Nobody wants to hurt you... 'cept, I do hurt people sometimes, Case.";
+
+\noindent 
+
+\noindent my \$sought = "people";
+
+\noindent 
+
+\noindent foreach my \$word (split) \{
+
+\noindent if (\$word eq \$sought) \{
+
+\noindent \$found = 1;
+
+\noindent last;
+
+\noindent \}
+
+\noindent \}
+
+\noindent 
+
+\noindent if (\$found) \{
+
+\noindent print "Hooray! Found the word 'people'\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Sure enough the program returns success:
+
+\noindent 
+
+\noindent $>$\textbf{perl match1.plx}
+
+\noindent Hooray! Found the word 'people'
+
+\noindent $>$
+
+\noindent 
+
+\noindent But that's messy! It's complicated, and it's slow to boot! Worse still, the split function (which breaks
+
+\noindent each of our lines up into a list of 'words' -- we'll see more of this, later on in the chapter) actually \textbf{keeps }all
+
+\noindent the punctuation -- the string 'you' wouldn't be found in the above, whereas 'you...' would. This looks like a hard problem, but it should be easy. Perl was designed to make easy tasks easy and hard things possible, so there should be a better way to do this. This is how it looks using a regular expression:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# match1.plx use warnings; use strict;
+
+\noindent 
+
+\noindent \$\_  = "Nobody wants to hurt you... 'cept, I do hurt people sometimes, Case.";
+
+\noindent 
+
+\noindent if (\$\_  =\~{} /people/) \{
+
+\noindent print "Hooray! Found the word 'people'\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent This is much, much easier and yeilds the same result. We place the text we want to find between
+
+\noindent forward slashes -- that's the regular expression part -- that's our pattern, what we're trying to match. We also need to tell perl which particular string we're looking for in that pattern. We do this with the =\~{} operator. This returns 1 if the pattern match was successful (in our case, whether the character sequence
+
+\noindent 'people' was found in the string) and the undefined value if it wasn't.
+
+\noindent 
+
+\noindent Before we go on to more complicated patterns, let's just have a quick look at that syntax. As we noted previously, a lot of Perl's operations take \$\_ as a default argument, and regular expressions are one such operation. Since we have the text we want to test in \$\_, we don't need to use the =\~{} operator to 'bind'
+
+\noindent the pattern to another string. We could write the above even more simply:
+
+\noindent 
+
+\noindent \$\_  = "Nobody wants to hurt you... 'cept, I do hurt people sometimes, Case.";
+
+\noindent if (/people/) \{
+
+\noindent print "Hooray! Found the word 'people'\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Alternatively, we might want to test for the pattern not matching -- the word not being found.
+
+\noindent Obviously, we could say unless (/people/), but if the text we're looking at isn't in \$\_, we may also use the negative form of that =\~{} operator, which is !\~{}. For example:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# nomatch.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$gibson =
+
+\noindent "Nobody wants to hurt you... 'cept, I do hurt people sometimes, Case.";
+
+\noindent 
+
+\noindent if (\$gibson !\~{} /fish/) \{
+
+\noindent print "There are no fish in William Gibson.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent True to form, for cyberpunk books that don't regularly involve fish, we get the result.
+
+\noindent 
+
+\noindent $>$\textbf{perl nomatch.plx}
+
+\noindent There are no fish in William Gibson.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Literal text is the simplest regular expression of all to look for, but we needn't look for just the one word
+
+\noindent -- we could look for any particular phrase. However, we need to make sure that we exactly match \textit{all }the characters:  words (with correct capitalization), numbers, punctuation, and even whitespace:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# match2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\_  = "Nobody wants to hurt you... 'cept, I do hurt people sometimes, Case.";
+
+\noindent 
+
+\noindent if (/I do/) \{
+
+\noindent print "'I do' is in that string.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent if (/sometimes Case/) \{
+
+\noindent print "'sometimes Case' matched.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Let's run this program and see what happens:
+
+\noindent 
+
+\noindent $>$\textbf{perl match2.plx}
+
+\noindent 'I do' is in that string.
+
+\noindent $>$
+
+\noindent 
+
+\noindent The other string didn't match, even though those two words are there. This is because everything in a regular expression has to match the string, from start to finish: first "sometimes", then a space, then "Case". In \$\_, there was a comma before the space, so it didn't match exactly. Similarly, spaces inside the pattern are significant:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# match3.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$test1 = "The dog is in the kennel";
+
+\noindent my \$test2 = "The sheepdog is in the field";
+
+\noindent 
+
+\noindent if (\$test1 =\~{} / dog/) \{
+
+\noindent print "This dog's at home.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent if (\$test2 =\~{} / dog/) \{
+
+\noindent print "This dog's at work.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent This will only find the first dog, as perl was looking for a space followed by the three letters, 'dog':
+
+\noindent 
+
+\noindent $>$\textbf{perl match3.plx}
+
+\noindent This dog's at home.
+
+\noindent $>$
+
+\noindent 
+
+\noindent So, for the moment, it looks like we shall have to specify our patterns with absolute precision. As another example, look at this:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# match4.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent 
+
+\noindent \$\_  = "Nobody wants to hurt you... 'cept, I do hurt people sometimes, Case.";
+
+\noindent if (/case/) \{
+
+\noindent print "I guess it's just the way I'm made.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Case? Where are you, Case?\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent $>$ \textbf{perl match4.plx}
+
+\noindent Case? Where are you, Case?
+
+\noindent $>$
+
+\noindent 
+
+\noindent Hmm,  no  match.  Why not?  Because  we asked  for  a  small  'c'  when we  had a  big 'C'  --  regexps  are
+
+\noindent (if you'll  pardon the  pun)  case-sensitive.  We can  get  around  this  by  asking  perl  to  compare insensitively,  and we do  this  by  putting  an  'i'  (for  'insensitive')  after  the closing  slash.  If  we  alter the code above as follows:
+
+\noindent 
+
+\noindent if (/case/i) \{
+
+\noindent print "I guess it's just the way I'm made.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Case? Where are you, Case?\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent then we find him:
+
+\noindent 
+
+\noindent $>$\textbf{perl match4.plx}
+
+\noindent I guess it's just the way I'm made.
+
+\noindent $>$
+
+\noindent 
+
+\noindent This 'i' is one of several \textbf{modifiers }that we can add to the end of the regular expression to change its behavior slightly. We'll see more of them later on.
+
+\noindent 
+
+\noindent \textit{Interpolation}
+
+\noindent Regular expressions work a little like double-quoted strings; variables and metacharacters are
+
+\noindent interpolated. This allows us to store patterns in variables and determine what we are matching when we run the program -- we don't need to have them hard-coded in:
+
+\noindent 
+
+\noindent Try it out -- Pattern Tester
+
+\noindent 
+
+\noindent This program will ask the user for a pattern and then test to see if it matches our string. We can use this
+
+\noindent throughout the chapter to help us test the various different styles of pattern we'll be looking at:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# matchtest.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\_  = q("I wonder what the Entish is for 'yes' and 'no'," he thought.);
+
+\noindent \# Tolkien, Lord of the Rings
+
+\noindent 
+
+\noindent print "Enter some text to find: ";
+
+\noindent my \$pattern = $<$STDIN$>$;
+
+\noindent chomp(\$pattern);
+
+\noindent 
+
+\noindent 
+
+\noindent if (/\$pattern/) \{
+
+\noindent print "The text matches the pattern '\$pattern'.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "'\$pattern' was not found.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Now we can test out a few things:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{wonder}
+
+\noindent The text matches the pattern 'wonder'.
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{entish}
+
+\noindent 'entish' was not found.
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{hough}
+
+\noindent The text matches the pattern 'hough'.
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{and 'no',}
+
+\noindent The text matches the pattern 'and 'no''.
+
+\noindent 
+
+\noindent Pretty straightforward, and I'm sure you could all spot those not in \$\_ as well.
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent matchtest.plx has its basis in the three lines:
+
+\noindent 
+
+\noindent 
+
+\noindent my \$pattern = $<$STDIN$>$;
+
+\noindent chomp(\$pattern);
+
+\noindent 
+
+\noindent if (/\$pattern/) \{
+
+\noindent 
+
+\noindent We're taking a line of text from the user. Then, since it will end in a new line, and we don't necessarily want to find a new line in our pattern, we chomp it away. Now we do our test.
+
+\noindent 
+
+\noindent Since we're not using the =\~{} operator, the test will be looking at the variable \$\_. The regular expression
+
+\noindent is /\$pattern/, and just like the double-quoted string "\$pattern", the variable \$pattern is interpolated. Hence, the regular expression is purely and simply whatever the user typed in, once we've got rid of the new line.
+
+\noindent 
+
+\noindent \textit{Escaping Special Characters}
+
+\noindent Of  course,  regular expressions  can  be  more  than  just  words  and  spaces.  The  rest of  this chapter  is going  to  be about the  various  ways  we  can  specify  more  advanced  matches  --  where  portions  of  the match are allowed to  be one of  a  number  of characters,  or  where  the  match  must  occur  at  a  certain
+
+\noindent position in the  string.  To  do  this,  we'll  be  describing  the  special  meanings  given  to  certain  characters
+
+\noindent --  called  \textbf{metacharacters }-- and  look  at what  these  meanings  are and  what  sort  of  things  we  can  express with them.
+
+\noindent 
+
+\noindent 
+
+\noindent At this stage, we might not want to use their special meanings -- we may want to literally match the
+
+\noindent characters themselves. As you've already seen with double-quoted strings, we can use a backslash to escape these characters' special meanings. Hence, if you want to match '...' in the above text, you need your pattern to say '\textbackslash .\textbackslash .\textbackslash .'. For example:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{Ent+}
+
+\noindent The text matches the pattern 'Ent+'.
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{Ent\textbackslash +}
+
+\noindent 'Ent\textbackslash +' was not found.
+
+\noindent 
+
+\noindent We'll see later why the first one matched -- due to the special meaning of +.
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{These are the characters that are given special meaning within a regular expression,}
+
+\noindent \textbf{which you will need to backslash if you want to use literally:}
+
+\noindent 
+
+\noindent \textbf{. * ? + [ ] ( ) \{ \} \^{} \$ \textbar  \textbackslash }
+
+\noindent 
+
+\noindent \textbf{Any other characters automatically assume their literal meanings.}
+
+\noindent 
+
+\noindent 
+
+\noindent You can also turn off the special meanings using the escape sequence \textbackslash Q. After perl sees \textbackslash Q, the 14
+
+\noindent special characters above will automatically assume their ordinary, literal meanings. This remains the case until perl sees either \textbackslash E or the end of the pattern.
+
+\noindent 
+
+\noindent For instance, if we wanted to adapt our matchtest program just to look for literal strings, instead of regular expressions, we could change it to look like this:
+
+\noindent 
+
+\noindent if (/\textbackslash Q\$pattern\textbackslash E/) \{
+
+\noindent 
+
+\noindent Now the meaning of + is turned off:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{Ent+}
+
+\noindent 'Ent+' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Note that all \textbackslash Q does is turn off the regular expression magic of those 14 characters above -- it doesn't stop, for example, variable interpolation.
+
+\noindent 
+
+\noindent \textit{Don't forget to change this back again: We'll be using matchtest.plx throughout the chapter,}
+
+\noindent \textit{to demonstrate the regular expressions we look at. We'll need that magic fully functional!}
+
+\noindent 
+
+\noindent \textit{Anchors}
+
+\noindent So far, our patterns have all tried to find a match anywhere in the string. The first way we'll extend our regular expressions is by dictating to perl where the match must occur. We can say 'these characters
+
+\noindent must match the beginning of the string' or 'this text must be at the end of the string'. We do this by
+
+\noindent \textbf{anchor}ing the match to either end.
+
+\noindent 
+
+\noindent 
+
+\noindent The two anchors we have are \^{}, which appears at the beginning of the pattern anchor a match to the
+
+\noindent beginning of the string, and \$ which appears at the end of the pattern and anchors it to the end of the string. So, to see if our quotation ends in a full stop -- and remember that the full stop is a special character -- we say something like this:
+
+\noindent 
+
+\noindent $>$\textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash .\$}
+
+\noindent The text matches the pattern '\textbackslash .\$'.
+
+\noindent 
+
+\noindent That's a full stop (which we've escaped to prevent it being treated as a special character) and a dollar sign at the end of our pattern -- to show that this must be the end of the string.
+
+\noindent 
+
+\noindent Try, if you can, to get into the habit of reading out regular expressions in English. Break them into
+
+\noindent pieces and say what each piece does. Also remember to say that each piece must immediately follow the other in the string in order to match. For instance, the above could be read 'match a full stop
+
+\noindent immediately followed by the end of the string'.
+
+\noindent 
+
+\noindent If you can get into this habit, you'll find that reading and understanding regular expressions becomes a lot easier, and you'll be able to 'translate' back into Perl more naturally as well.
+
+\noindent 
+
+\noindent Here's another example: do we have a capital I at the beginning of the string?
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\^{}I}
+
+\noindent '\^{}I' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent We use \^{} to mean 'beginning of the string', followed by an I. In our case, though, the character at the beginning of the string is a ", so our pattern does not match. If you know that what you're looking for can only occur at the beginning or the end of the match, it's extremely efficient to use anchors. Instead
+
+\noindent of searching through the whole string to see whether the match succeeded, perl only needs to look at a small portion and can give up immediately if even the first character does not match.
+
+\noindent 
+
+\noindent Let's see one more example of this, where we'll combine looking for matches with looking through the lines in a file:
+
+\noindent 
+
+\noindent Try it out : Rhyming Dictionary
+
+\noindent 
+
+\noindent 
+
+\noindent Imagine yourself as a poor poet. In fact, not just poor, but downright bad -- so bad, you can't even think
+
+\noindent of a rhyme for 'pink'. So, what do you do? You do what every sensible poet does in this situation, and you write the following Perl program:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# rhyming.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$syllable = "ink";
+
+\noindent while ($<$$>$) \{
+
+\noindent print if /\$syllable\$/;
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent We can now feed it a file of words, and find those that end in 'ink':
+
+\noindent 
+
+\noindent $>$\textbf{perl rhyming.plx wordlist.txt}
+
+\noindent blink bobolink
+
+\noindent brink
+
+\noindent chink clink
+
+\noindent $>$
+
+\noindent \textit{For a really thorough result, you'll need to use a file containing every word in the dictionary -- be prepared to wait though if you do! For the sake of the example however, any text-based file will do (though it'll help if it's in English). A bobolink, in case you're wondering, is a migratory American songbird, otherwise known as a ricebird or reedbird.}
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent With the loops and tests we learned in the last chapter, this program is really very easy:
+
+\noindent 
+
+\noindent while ($<$$>$) \{
+
+\noindent print if /\$syllable\$/;
+
+\noindent \}
+
+\noindent 
+
+\noindent We've not looked at file access yet, so you may not be familiar with the while($<$$>$)\{...\}
+
+\noindent construction used here. In this example it opens a file that's been specified on the command line, and loops through it, one line at a time, feeding each one into the special variable   \$\_   -- this is what we'll
+
+\noindent be matching.
+
+\noindent 
+
+\noindent Once each line of the file has been fed into \$\_, we test to see if it matches the pattern, which is our syllable, 'ink', anchored to the end of the line (with \$). If so, we print it out.
+
+\noindent 
+
+\noindent The important thing to note here is that perl treats the 'ink' as the last thing on the line, even though there is a new line at the end of \$\_. Regular expressions typically ignore the last new line in a string -- we'll look at this behavior in more detail later.
+
+\noindent 
+
+\noindent \textit{Shortcuts and Options}
+
+\noindent All this is all very well if we know exactly what it is we're trying to find, but finding patterns means
+
+\noindent more than just locating exact pieces of text. We may want to find a three-digit number, the first word on the line, four or more letters all in capitals, and so on.
+
+\noindent 
+
+\noindent We can begin to do this using \textbf{character classes }-- these aren't just single characters, but something that signifies that any one of a \textit{set }of characters is acceptable. To specify this, we put the characters we consider acceptable inside square brackets. Let's go back to our matchtest program, using the same
+
+\noindent test string:
+
+\noindent 
+
+\noindent \$\_  = q("I wonder what the Entish is for 'yes' and 'no'," he thought.);
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{w[aoi]nder}
+
+\noindent The text matches the pattern 'w[aoi]nder'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent What have we done? We've tested whether the string contains a 'w', followed by either an 'a', an 'o', or
+
+\noindent an 'i', followed by 'nder'; in effect, we're looking for either of 'wander', 'wonder', or 'winder'. Since the string contains 'wonder', the pattern is matched.
+
+\noindent 
+
+\noindent Conversely, we can say that everything is acceptable except a given sequence of characters -- we can
+
+\noindent 'negate the character class'. To do this, the character class should start with a \^{}, like so:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{th[\^{}eo]}
+
+\noindent 'th[\^{}eo]' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent So, we're looking for 'th' followed by something that is neither an 'e' or an 'o'. But all we have is 'the'
+
+\noindent and 'thought', so this pattern does not match.
+
+\noindent 
+
+\noindent If the characters you wish to match form a sequence in the character set you're using -- ASCII or
+
+\noindent Unicode, depending on your perl version -- you can use a hyphen to specify a range of characters,
+
+\noindent rather than spelling out the entire range. For instance, the numerals can be represented by the character class [0-9]. A lower case letter can be matched with [a-z]. Are there any numbers in our quote?
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{[0-9]}
+
+\noindent '[0-9]' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent You can use one or more of these ranges alongside other characters in a character class, so long as they stay inside the brackets. If you wanted to match a digit and then a letter from 'A' to 'F', you would say
+
+\noindent [0-9][A-F]. However, to match a single hexadecimal digit, you would write [0-9A-F] or
+
+\noindent [0-9A-Fa-f] if you wished to include lower-case letters.
+
+\noindent 
+
+\noindent Some character classes are going to come up again and again: the digits, the letters, and the various types of whitespace. Perl provides us with some neat shortcuts for these.  Here are the most common ones, and what they represent:
+
+\noindent 
+
+\begin{tabular}{|p{0.7in}|p{0.9in}|p{2.5in}|} \hline 
+\textbf{Shortcut} & \textbf{Expansion} & \textbf{Description} \\ \hline 
+\textbackslash d & [0-9] & Digits 0 to 9. \\ \hline 
+\textbackslash w & [0-9A-Za-z\_] & A 'word' character allowable in a Perl variable name. \\ \hline 
+\textbackslash s & [ \textbackslash t\textbackslash n\textbackslash r] & A whitespace character that is, a space, a tab, a newline or \\ \hline 
+ &  & a return. \\ \hline 
+\end{tabular}
+
+
+
+\noindent also, the negative forms of the above:
+
+\noindent 
+
+\begin{tabular}{|p{0.7in}|p{0.9in}|p{2.4in}|} \hline 
+\textbf{Shortcut} & \textbf{Expansion} & \textbf{Description} \\ \hline 
+\textbackslash D & [\^{}0-9] & Any non-digit. \\ \hline 
+\textbackslash W & [\^{}0-9A-Za-z\_] & A non-'word' character. \\ \hline 
+\textbackslash S & [\^{} \textbackslash t\textbackslash n\textbackslash r] & A non-blank character. \\ \hline 
+\end{tabular}
+
+
+
+\noindent 
+
+\noindent So, if we wanted to see if there was a five-letter word in the sentence, you might think we could do this:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash w\textbackslash w\textbackslash w\textbackslash w\textbackslash w}
+
+\noindent The text matches the pattern '\textbackslash w\textbackslash w\textbackslash w\textbackslash w\textbackslash w'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent But that's not right -- there are no five-letter words in the sentence! The problem is, we've only asked for five letters in a row, and any word with at  least five letters contains five in a row will match that
+
+\noindent pattern. We actually matched 'wonde', which was the first possible series of five letters in a row. To
+
+\noindent actually get a five-letter word, we might consider deciding that the word must appear in the middle of the sentence, that is, between two spaces:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash s\textbackslash w\textbackslash w\textbackslash w\textbackslash w\textbackslash w\textbackslash s}
+
+\noindent '\textbackslash s\textbackslash w\textbackslash w\textbackslash w\textbackslash w\textbackslash w\textbackslash s' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{Word Boundaries}
+
+\noindent The problem with that is, when we're looking at text, words aren't always between two spaces. They can
+
+\noindent be followed by or preceded by punctuation, or appear at the beginning or end of a string, or otherwise next to non-word characters. To help us properly search for words in these cases, Perl provides the special \textbackslash b metacharacter. The interesting thing about \textbackslash b is that it doesn't actually match any character
+
+\noindent in particular. Rather, it matches the point between something that isn't a word character (either \textbackslash W or
+
+\noindent one of the ends of the string) and something that is (a word character), hence \textbackslash b for boundary. So, for example, to look for one-letter words:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash s\textbackslash w\textbackslash s}
+
+\noindent '\textbackslash s\textbackslash w\textbackslash s' was not found.
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash b\textbackslash w\textbackslash b}
+
+\noindent The text matches the pattern '\textbackslash b\textbackslash w\textbackslash b'.
+
+\noindent 
+
+\noindent As the I was preceded by a quotation mark, a space wouldn't match it -- but a word boundary does the job. Later, we'll learn how to tell perl how many repetitions of a character or group of characters we
+
+\noindent want to match without spelling it out directly.
+
+\noindent 
+
+\noindent What, then, if we wanted to match anything at all? You might consider something like [\textbackslash w\textbackslash W] or
+
+\noindent [\textbackslash s\textbackslash S], for instance. Actually, this is quite a common operation, so Perl provides an easy way of specifying it -- a full stop. What about an 'r' followed by two characters -- any two characters -- and then a 'h'?
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{r..h}
+
+\noindent The text matches the pattern 'r..h'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Is there anything after the full stop?
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash ..}
+
+\noindent '\textbackslash ..' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent What's that? One backslashed full stop to mean a full stop, then a plain one to mean 'anything at all'.
+
+\noindent 
+
+\noindent \textit{Posix and Unicode Classes}
+
+\noindent Perl 5.6.0 introduced a few more character classes into the mix -- first, those defined by the POSIX (Portable Operating Systems Interface) standard, which are therefore present in a number of other applications. The more common character classes here are:
+
+\noindent 
+
+\noindent \textbf{Shortcut Expansion Description}
+
+\noindent 
+
+\noindent [[:alpha:]] [a-zA-Z] An alphabetic character.
+
+\noindent 
+
+\noindent [[:alnum:]] [0-9A-Za-z] An alphabetic or numeric character.
+
+\noindent 
+
+\noindent [[:digit:]] \textbackslash d A digit, 0-9.
+
+\noindent 
+
+\noindent [[:lower:]] [a-z] A lower case letter.
+
+\noindent 
+
+\noindent [[:upper:]] [A-Z] An upper case letter.
+
+\noindent 
+
+\noindent [[:punct:]] [!"\#\$\%\&'()*+,-
+
+\noindent ./:;$<$=$>$?@\textbackslash [\textbackslash \textbackslash \textbackslash ]\^{}\_`\{\textbar \}\~{}]
+
+\noindent 
+
+\noindent A punctuation character -- note the escaped characters [, \textbackslash , and ].
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{The Unicode standard also defines 'properties', which apply to some characters. For instance, the}
+
+\noindent \textit{'IsUpper' property can be used to match any upper-case character, in whichever language or alphabet. If you know the property you are trying to match, you can use the syntax \textbackslash p\{\} to match}
+
+\noindent \textit{it, for instance, the upper-case character is \textbackslash p\{IsUpper\}.}
+
+\noindent 
+
+\noindent \textit{Alternatives}
+
+\noindent Instead of giving a series of acceptable characters, you may want to say 'match either this or that'. The
+
+\noindent 'either-or' operator in a regular expression is the same as the bitwise 'or' operator, \textbar . So, to match either
+
+\noindent 'yes' or 'maybe' in our example, we could say this:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{yes\textbar maybe}
+
+\noindent The text matches the pattern 'yes\textbar maybe'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent That's either 'yes'  or 'maybe'.  But  what  if  we wanted  either  'yes'  or  'yet'?  To  get alternatives  on part  of an expression,  we  need  to  group  the  options.  In  a  regular  expression,  grouping  is  always done with parentheses:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{ye(s\textbar t)}
+
+\noindent The text matches the pattern 'ye(s\textbar t)'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent If we have forgotten the parentheses, we would have tried to match either 'yes' or 't'. In this case, we'd
+
+\noindent still get a positive match, but it wouldn't be doing what we want -- we'd get a match for any string with a
+
+\noindent 't' in it, whether the words 'yes' or 'yet' were there or not.
+
+\noindent 
+
+\noindent 
+
+\noindent You can match either 'this' or 'that' or 'the other' by adding more alternatives:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{(this)\textbar (that)\textbar (the other)}
+
+\noindent '(this)\textbar (that)\textbar (the other)' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent However, in this case, it's more efficient to separate out the common elements:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{th(is\textbar at\textbar e other)}
+
+\noindent 'th(is\textbar at\textbar e other)' was not found.
+
+\noindent 
+
+\noindent You can also nest alternatives. Say you want to match one of these patterns:
+
+\noindent 
+
+\noindent ? 'the' followed by whitespace or a letter,
+
+\noindent 
+
+\noindent ? 'or'
+
+\noindent 
+
+\noindent You might put something like this:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{(the(\textbackslash s\textbar [a-z]))\textbar or}
+
+\noindent The text matches the pattern '(the(\textbackslash s\textbar [a-z]))\textbar or'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent It looks fearsome, but break it down into its components. Our two alternatives are:
+
+\noindent 
+
+\noindent ? the(\textbackslash s\textbar [a-z])
+
+\noindent 
+
+\noindent ? or
+
+\noindent 
+
+\noindent The second part is easy, while the first contains 'the' followed by two alternatives: \textbackslash s and [a-z].
+
+\noindent Hence 'either "the" followed by either a whitespace or a lower case letter, or "or"'. We can, in fact, tidy this up a little, by replacing (\textbackslash s\textbar [a-z]) with the less cluttered [\textbackslash sa-z].
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{(the[\textbackslash sa-z])\textbar or}
+
+\noindent The text matches the pattern '(the[\textbackslash sa-z])\textbar or'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{Repetition}
+
+\noindent We've now moved from matching a specific character to a more general type of character -- when we don't know (or don't care) exactly what the character will be. Now we're going to see what happens
+
+\noindent when we want to talk about a more general quantity of characters: more than three digits in a row; two
+
+\noindent to four capital letters, and so on. The metacharacters that we use to deal with a number of characters in
+
+\noindent a row are called \textbf{quantifiers}.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Indefinite Repetition}
+
+\noindent The easiest of these is the question mark. It should suggest uncertainty -- something may be there, or it may not. That's exactly what it does: stating that the immediately preceding character(s) -- or
+
+\noindent metacharacter(s) -- may appear once, or not at all. It's a good way of saying that a particular character or
+
+\noindent group is optional. To match the word 'he or she', you can put:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash bs?he\textbackslash b}
+
+\noindent The text matches the pattern '\textbackslash bs?he\textbackslash b'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent To make a series of characters (or metacharacters) optional, group them in parentheses as before. Did he say 'what the Entish is' or 'what the Entish word is'? Either will do:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{what the Entish (word )?is}
+
+\noindent The text matches the pattern 'what the Entish (word )?is'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Notice that we had to put the space inside the group: otherwise we end up with two spaces between
+
+\noindent 'Entish' and 'is', whereas our text only has one:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{what the Entish (word)? is}
+
+\noindent 'what the Entish (word)? is' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent As well as matching something one or zero times, you can match something one or more times. We do this with the plus sign -- to match an entire word without specifying how long it should be, you can say:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash b\textbackslash w+\textbackslash b}
+
+\noindent The text matches the pattern '\textbackslash b\textbackslash w+\textbackslash b'.
+
+\noindent $>$
+
+\noindent 
+
+\noindent In this case, we match the first available word -- I.
+
+\noindent 
+
+\noindent If, on the other hand, you have something which may be there any number of times but might not be there at all -- zero or one or many -- you need what's called 'Kleene's star': the * quantifier. So, to find a capital letter after any -- but possibly no -- spaces at the start of the string, what would you do? The start
+
+\noindent of the string, then any number of whitespace characters, then a capital:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\^{}\textbackslash s*[A-Z]}
+
+\noindent '\^{}\textbackslash s*[A-Z]' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Of course, our test string begins with a quote, so the above pattern won't match, but, sure enough, if you take away that first quote, the pattern will match fine.
+
+\noindent 
+
+\noindent 
+
+\noindent Let's review the three qualifiers:
+
+\noindent 
+
+\noindent /bea?t/ Matches either 'beat' or 'bet'
+
+\noindent 
+
+\noindent /bea+t/ Matches 'beat', 'beaat', 'beaaat'\dots 
+
+\noindent 
+
+\noindent /bea*t/ Matches 'bet', 'beat', 'beaat'\dots 
+
+\noindent 
+
+\noindent Novice Perl programmers tend to go to town on combinations of dot and star, and the results often
+
+\noindent surprise them, particularly when it comes to searching-and-replacing. We'll explain the rules of the regular expression matcher shortly, but bear the following in mind:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{A regular expression should hardly ever start or finish with a starred character.}
+
+\noindent 
+
+\noindent 
+
+\noindent You should also consider the fact that .* and .+ in the middle of a regular expression will match as
+
+\noindent much of your string as they possibly can. We'll look more at this 'greedy' behavior later on.
+
+\noindent 
+
+\noindent \textit{Well-Defined Repetition}
+
+\noindent If you want to be more precise about how many times a character or roups of characters might be repeated, you can specify the maximum and minimum number of repeats in curly brackets. '2 or 3 spaces' can be written as follows:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash s\{2,3\}}
+
+\noindent '\textbackslash s\{2,3\}' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent So we have no doubled or trebled spaces in our string. Notice how we construct that -- the minimum, a comma, and the maximum, all inside braces. Omitting either the maximum or the minimum signifies 'or more' and 'or fewer' respectively. For example, \{2,\} denotes '2 or more', while \{,3\} is '3 or fewer'. In these cases, the same warnings apply as for the star operator.
+
+\noindent 
+
+\noindent Finally, you can specify exactly how many things are to be in a row by simply putting that number inside the curly brackets. Here's the five-letter-word example tidied up a little:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest.plx}
+
+\noindent Enter some text to find: \textbf{\textbackslash b\textbackslash w\{5\}\textbackslash b}
+
+\noindent '\textbackslash b\textbackslash w\{5\}\textbackslash b' was not found.
+
+\noindent $>$
+
+\noindent 
+
+\noindent \textit{Summary Table}
+
+\noindent To refresh your memory, here are the various metacharacters we've seen so far:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Metacharacter Meaning}
+
+\noindent 
+
+\noindent [abc] any one of the characters a, b, or c.
+
+\noindent 
+
+\noindent [\^{}abc] any one character other than a, b, or c.
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Table continued on following page}
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{Metacharacter Meaning}
+
+\noindent 
+
+\noindent [a-z] any one ASCII character between a and z.
+
+\noindent 
+
+\noindent \textbackslash d \textbackslash D a digit; a non-digit.
+
+\noindent 
+
+\noindent \textbackslash w \textbackslash W a 'word' character; a non-'word' character.
+
+\noindent 
+
+\noindent \textbackslash s \textbackslash S a whitespace character; a non-whitespace character.
+
+\noindent 
+
+\noindent \textbackslash b the boundary between a \textbackslash w character and a \textbackslash W character.
+
+\noindent 
+
+\noindent . any character (apart from a new line).
+
+\noindent 
+
+\noindent (abc) the phrase 'abc' as a group.
+
+\noindent 
+
+\noindent ? preceding character or group may be present 0 or 1 times.
+
+\noindent 
+
+\noindent + preceding character or group is present 1 or more times.
+
+\noindent 
+
+\noindent * preceding character or group may be present 0 or more times.
+
+\noindent 
+
+\noindent \{x,y\} preceding character or group is present between \textit{x }and \textit{y }times.
+
+\noindent 
+
+\noindent \{,y\} preceding character or group is present at most \textit{y }times.
+
+\noindent 
+
+\noindent \{x,\} preceding character or group is present at least \textit{x }times.
+
+\noindent 
+
+\noindent \{x\} preceding character or group is present \textit{x }times.
+
+\noindent 
+
+\noindent 
+
+\noindent \textit{Backreferences}
+
+\noindent What if we want to know what a certain regular expression matched? It was easy when we were
+
+\noindent matching literal strings: we knew that 'Case' was going to match those four letters and nothing else. But now, what matches? If we have /\textbackslash w\{3\}/, which three word characters are getting matched?
+
+\noindent 
+
+\noindent Perl has a series of special variables in which it stores anything that's matched with a group in parentheses. Each time it sees a set of parentheses, it copies the matched text inside into a numbered variable -- the first matched group goes in \$1, the second group in \$2, and so on. By looking at these variables, which we call the \textbf{backreference }variables, we can see what triggered various parts of our match, and we can also extract portions of the data for later use.
+
+\noindent 
+
+\noindent First, though, let's rewrite our test program so that we can see what's in those variables:
+
+\noindent 
+
+\noindent Try it out : A Second Pattern Tester
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# matchtest2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\_  = '1: A silly sentence (495,a) *BUT* one which will be useful.';
+
+\noindent 
+
+\noindent print "Enter a regular expression: ";
+
+\noindent my \$pattern = $<$STDIN$>$;
+
+\noindent chomp(\$pattern);
+
+\noindent 
+
+\noindent 
+
+\noindent if (/\$pattern/) \{
+
+\noindent print "The text matches the pattern '\$pattern'.\textbackslash n";
+
+\noindent print "\textbackslash \$1 is '\$1'\textbackslash n" if defined \$1;
+
+\noindent print "\textbackslash \$2 is '\$2'\textbackslash n" if defined \$2;
+
+\noindent print "\textbackslash \$3 is '\$3'\textbackslash n" if defined \$3;
+
+\noindent print "\textbackslash \$4 is '\$4'\textbackslash n" if defined \$4;
+
+\noindent print "\textbackslash \$5 is '\$5'\textbackslash n" if defined \$5;
+
+\noindent \} else \{
+
+\noindent print "'\$pattern' was not found.\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent \textit{Note that we use a backslash to escape the first 'dollar' symbol in each print statement, thus displaying the actual symbol, while leaving the second in each to display the contents of the appropriate variable.}
+
+\noindent 
+
+\noindent We've got our special variables in place, and we've got a new sentence to do our matching on. Let's see what's been happening:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{([a-z]+)}
+
+\noindent The text matches the pattern '([a-z]+)'.
+
+\noindent \$1 is 'silly'
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{(\textbackslash w+)}
+
+\noindent The text matches the pattern '(\textbackslash w+)'.
+
+\noindent \$1 is '1'
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{([a-z]+)(.*)([a-z]+)}
+
+\noindent The text matches the pattern '([a-z]+)(.*)([a-z]+)'.
+
+\noindent \$1 is 'silly'
+
+\noindent \$2 is ' sentence (495,a) *BUT* one which will be usefu'
+
+\noindent \$3 is 'l'
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{e(\textbackslash w\textbar n\textbackslash w+)}
+
+\noindent The text matches the pattern 'e(\textbackslash w\textbar n\textbackslash w+)'.
+
+\noindent \$1 is 'n'
+
+\noindent 
+
+\noindent \textit{How It Works}
+
+\noindent By printing out what's in each of the groups, we can see exactly what caused perl to start and stop matching, and when. If we look carefully at these results, we'll find that they can tell us a great deal about how perl handles regular expressions.
+
+\noindent 
+
+\noindent \textit{How the Engine Works}
+
+\noindent We've now seen most of the syntax behind regular expression matching and plenty of examples of it in action. The code that does all the matching is called perl's 'regular expression engine'. You might now
+
+\noindent be wondering about the exact rules applied by this engine when determining whether or not a piece of text matches. And how much of it matches what. From what our examples have shown us, let us make some deductions about the engine's operation.
+
+\noindent 
+
+\noindent 
+
+\noindent Our first expression, ([a-z]+) plucked out a set of one-or-more lower-case letters. The first such set
+
+\noindent that perl came across was 'silly'. The next character after 'y' was a space, and so no longer matched the expression.
+
+\noindent 
+
+\noindent ? Rule  one: Once the engine starts matching, it will keep matching a character at a time for as long as it can. Once it sees something that doesn't match, however, it has to stop. In this example, it can never get beyond a character that is not a lower case letter. It has to stop as soon as it encounters one.
+
+\noindent 
+
+\noindent Next, we looked for a series of word characters, using (\textbackslash w+). The engine started looking at the
+
+\noindent beginning of the string and found one, '1'. The next character was not a word character (it was a colon), and so the engine had to stop.
+
+\noindent 
+
+\noindent ? Rule  two: Unlike me, the engine is \textbf{eager}. It's eager to start work and eager to finish, and it starts matching as soon as possible in the string; if the first character doesn't match, try and start matching from the second. Then take every opportunity to finish as quickly as possible.
+
+\noindent 
+
+\noindent Then we tried this:([a-z]+)(.*)([a-z]+). The result we got with this was a little strange. Let's look
+
+\noindent at it again:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{([a-z]+)(.*)([a-z]+)}
+
+\noindent The text matches the pattern '([a-z]+)(.*)([a-z]+)'.
+
+\noindent \$1 is 'silly'
+
+\noindent \$2 is ' sentence (495,a) *BUT* one which will be usefu'
+
+\noindent \$3 is 'l'
+
+\noindent $>$
+
+\noindent 
+
+\noindent Our first  group was the same as  what  matched  before  --  nothing  new  there.  When  we  could  no  longer match lower  case letters, we switched  to  matching  anything  we  could.  Now,  this  \textit{could  }take  up  the  rest
+
+\noindent of the  string,  but that wouldn't  allow  a  match  for  the  third  group.  We  have  to  leave at least one lower-
+
+\noindent case letter.
+
+\noindent 
+
+\noindent So,  the engine started to  reverse  back  along  the  string,  giving  characters  up  one by  one.  It  gave up the closing  bracket,  the 3,  then  the  opening  bracket,  and  so  on,  until  we  got to  the first  thing  that
+
+\noindent would satisfy all  the groups and  let  the  match  go  ahead  --  namely  a  lower-case  letter:  the 'l'  at  the end of 'useful'.
+
+\noindent 
+
+\noindent From this, we can draw up the third rule:
+
+\noindent 
+
+\noindent ? Rule  three: Like me, in this case, the engine is greedy. If you use the + or * operators, they
+
+\noindent will try and steal as much of the string as possible. If the rest of the expression does not match,
+
+\noindent it grudgingly gives up a character at a time and tries to match again, in order to find the fullest possible match.
+
+\noindent 
+
+\noindent 
+
+\noindent We can turn a greedy match into a non-greedy match by putting the ? operator after either the plus or star. For instance, let's turn this example into a non-greedy version: ([a-z]+)(.*?)([a-z]+). This gives us an entirely different result:
+
+\noindent 
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{([a-z]+)(.*?)([a-z]+)}
+
+\noindent The text matches the pattern '([a-z]+)(.*?)([a-z]+)'.
+
+\noindent \$1 is 'silly'
+
+\noindent \$2 is ' '
+
+\noindent \$3 is 'sentence'
+
+\noindent $>$
+
+\noindent 
+
+\noindent Now we've shut off rule three, rule two takes over. The smallest possible match for the second group was a single space. First, it tried to get nothing at all, but then the third group would be faced with a
+
+\noindent space. This wouldn't match. So, we grudgingly accept the space and try and finish again. This time the third group has some lower case letters, and that can match as well.
+
+\noindent 
+
+\noindent What if we turn off greediness in all three groups, and say this: ([a-z]+?)(.*?)([a-z]+?)
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{([a-z]+?)(.*?)([a-z]+?)}
+
+\noindent The text matches the pattern '([a-z]+?)(.*?)([a-z]+?)'.
+
+\noindent \$1 is 's'
+
+\noindent \$2 is ''
+
+\noindent \$3 is 'i'
+
+\noindent $>$
+
+\noindent 
+
+\noindent What about this? Well, the smallest possible match for the first group is the 's' of silly. We asked it to find one character or more, and so the smallest it could find was one. The second group actually
+
+\noindent matched no characters at all. This left the third group facing an 'i', which it took to complete the match.
+
+\noindent 
+
+\noindent Our last example included an alternation:
+
+\noindent 
+
+\noindent $>$ \textbf{perl matchtest2.plx}
+
+\noindent Enter a regular expression: \textbf{e(\textbackslash w\textbar n\textbackslash w+)}
+
+\noindent The text matches the pattern 'e(\textbackslash w\textbar n\textbackslash w+)'.
+
+\noindent \$1 is 'n'
+
+\noindent $>$
+
+\noindent 
+
+\noindent The engine took the first branch of the alternation and matched a single character, even though the second branch would actually satisfy greed. This leads us onto the fourth rule:
+
+\noindent 
+
+\noindent ? Rule  four: Again like me, the regular expression engine \textbf{hates decisions}. If there are two branches, it will always choose the first one, even though the second one might allow it to gain
+
+\noindent a longer match.
+
+\noindent 
+
+\noindent 
+
+\noindent To summarize:
+
+\noindent 
+
+\noindent 
+
+\noindent \textbf{The regular expression engine starts as soon as it can, grabs as much as it can, then}
+
+\noindent \textbf{tries to finish as soon as it can, while taking the first decision available to it.}
+
+\noindent 
+
+\noindent Working with RegExps
+
+\noindent 
+
+\noindent Now that we've matched a string, what do we do with it? Well, sometimes it's just useful to know whether a string contains a given pattern or not. However, a lot of the time we're going to be doing search-and-replace operations on text. We'll explain how to do that here. We'll also cover some of the more advanced areas of dealing with regular expressions.
+
+\noindent 
+
+\noindent Substitution
+
+\noindent 
+
+\noindent Now we know all about matching text, substitution is very easy. Why? Because all of the clever things are in the 'search' part, rather than the 'replace': all the character classes, quantifiers and so on only
+
+\noindent make sense when matching. You can't substitute, say, a word with any number of digits. So, all we need
+
+\noindent to do is take the 'old' text, Our match, and tell perl what we want to replace it with. This we do with the
+
+\noindent s/// operator.
+
+\noindent 
+
+\noindent The s is for 'substitute' -- between the first two slashes, we put our regular expression as before. Before the final slash, we put our text replacement. Just as with matching, we can use the =\~{} operator to apply
+
+\noindent it to a certain string. If this is not given, it applies to the default variable \$\_:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subst1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\_  = "Awake! Awake! Fear, Fire, Foes! Awake! Fire, Foes! Awake!";
+
+\noindent \# Tolkien, Lord of the Rings
+
+\noindent 
+
+\noindent s/Foes/Flee/;
+
+\noindent print \$\_,"\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl subst1.plx}
+
+\noindent Awake! Awake! Fear, Fire, Flee! Awake! Fire, Foes! Awake!
+
+\noindent $>$
+
+\noindent 
+
+\noindent Here we have substituted the first occurrence of 'Foes' with the word 'Flee'. Had we wanted to change every occurrence, we would have needed to use another modifier. Just as the /i modifier for matching case-insensitively, the /g modifier on a substitution acts globally:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subst1.plx use warnings; use strict;
+
+\noindent 
+
+\noindent \$\_  = "Awake! Awake! Fear, Fire, Foes! Awake! Fire, Foes! Awake!";
+
+\noindent \# Tolkien, Lord of the Rings
+
+\noindent 
+
+\noindent s/Foes/Flee/g;
+
+\noindent print \$\_,"\textbackslash n";
+
+\noindent 
+
+\noindent $>$ \textbf{perl subst1.plx}
+
+\noindent Awake! Awake! Fear, Fire, Flee! Awake! Fire, Flee! Awake!
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Like the left-hand side of the substitution, the right-hand side also works like a double-quoted string and
+
+\noindent is thus subject to variable interpolation. One useful thing, though, is that we can use the backreference variables we collected during the match on the right hand side. So, for instance, to swap the first two words in a string, we would say something like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subst2.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\_  = "there are two major products that come out of Berkeley: LSD and UNIX";
+
+\noindent \# Jeremy Anderson
+
+\noindent 
+
+\noindent s/(\textbackslash w+)\textbackslash s+(\textbackslash w+)/\$2 \$1/;
+
+\noindent print \$\_, "?\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl subst2.plx}
+
+\noindent are there two major products that come out of Berkeley: LSD and UNIX?
+
+\noindent $>$
+
+\noindent 
+
+\noindent What would happen if we tried doing that globally? Well, let's do it and see:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# subst2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent \$\_  = "there are two major products that come out of Berkeley: LSD and UNIX";
+
+\noindent \# Jeremy Anderson
+
+\noindent 
+
+\noindent s/(\textbackslash w+)\textbackslash s+(\textbackslash w+)/\$2 \$1/g;
+
+\noindent print \$\_, "?\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl subst2.plx}
+
+\noindent are there major two that products out come Berkeley of: and LSD UNIX?
+
+\noindent $>$
+
+\noindent 
+
+\noindent Here, every word in a pair is swapped with its neighbor. When processing a global match, perl always starts where the previous match left off.
+
+\noindent 
+
+\noindent Changing Delimiters
+
+\noindent 
+
+\noindent You may have noticed that // and s/// looks like q// and qq//. Well, just like q// and qq//, we can change the delimiters when matching and substituting to increase the readability of our regular
+
+\noindent expressions. The same rules apply: Any non-word character can be the delimiter, and paired delimiters such as $<$$>$, (), \{\}, and [] may be used -- with two provisos.
+
+\noindent 
+
+\noindent First, if you change the delimiters on //, you must put an m in front of it. (m for 'match'). This is so that perl can still recognize it as a regular expression, rather than a block or comment or anything else.
+
+\noindent 
+
+\noindent 
+
+\noindent Second, if you use paired delimiters with substitution, you must use two pairs:
+
+\noindent 
+
+\noindent 
+
+\noindent s/old text/new text/g;
+
+\noindent 
+
+\noindent becomes:
+
+\noindent 
+
+\noindent 
+
+\noindent s\{old text\}\{new text\}g;
+
+\noindent 
+
+\noindent You may, however, leave spaces or new lines between the pairs for the sake of clarity:
+
+\noindent 
+
+\noindent 
+
+\noindent s\{old text\}
+
+\noindent \{new text\}g;
+
+\noindent 
+
+\noindent The prime example of when you would want to do this is when you are dealing with file paths, which contain a lot of slashes. If you are, for instance, moving files on your Unix system from
+
+\noindent /usr/local/share/ to /usr/share/, you may want to munge the file names like this:
+
+\noindent 
+
+\noindent 
+
+\noindent s/\textbackslash /usr\textbackslash /local\textbackslash /share\textbackslash //\textbackslash /usr\textbackslash /share\textbackslash //g;
+
+\noindent 
+
+\noindent However, it's far easier and far less ugly to change the delimiters in this case:
+
+\noindent 
+
+\noindent 
+
+\noindent s\#/usr/local/share/\#/usr/share/\#g;
+
+\noindent 
+
+\noindent 
+
+\noindent Modifiers
+
+\noindent 
+
+\noindent We've already seen the /i modifier used to indicate that a match should be case insensitive. We've also seen the /g modifier to apply a substitution. What other modifiers are there?
+
+\noindent 
+
+\noindent ? /m -- treat the string as multiple lines. Normally, \^{} and \$ match the very start and very end of the string. If the /m modifier is in play, then they will match the starts and ends of individual lines  (separated  by  \textbackslash n).  For  example,  given  the  string:  "one\textbackslash ntwo",  the  pattern  /\^{}two\$/ will not match, but /\^{}two\$/m will.
+
+\noindent 
+
+\noindent ? /s -- treat the string as a single line. Normally, . does not match a new line character; when
+
+\noindent /s is given, then it will.
+
+\noindent 
+
+\noindent ? /g -- as well as globally replacing in a substitution, allows us to match multiple times. When using this modifier, placing the \textbackslash G anchor at the beginning of the regexp will anchor it to the end point of the last match.
+
+\noindent 
+
+\noindent ? /x -- allow the use of whitespace and comments inside a match.
+
+\noindent 
+
+\noindent Regular expressions can get quite fiendish to read at times. The /x modifier is one way to stop them becoming so. For instance, if you're matching a string in a log file that contains a time, followed by a computer name in square brackets, then a message, the expression you'll create to extract the information may easily end up looking like this:
+
+\noindent 
+
+\noindent 
+
+\noindent \# Time in \$1, machine name in \$2, text in \$3
+
+\noindent /\^{}([0-2]\textbackslash d:[0-5]\textbackslash d:[0-5]\textbackslash d)\textbackslash s+\textbackslash [([\^{}\textbackslash ]]+)\textbackslash ]\textbackslash s+(.*)\$/
+
+\noindent 
+
+\noindent 
+
+\noindent However, if you use the /x modifier, you can stretch it out as follows:
+
+\noindent 
+
+\noindent 
+
+\noindent /\^{}
+
+\noindent ( \# First group: time
+
+\noindent [0-2]\textbackslash d
+
+\noindent :
+
+\noindent [0-5]\textbackslash d
+
+\noindent :
+
+\noindent [0-5]\textbackslash d
+
+\noindent )
+
+\noindent \textbackslash s+
+
+\noindent \textbackslash [ \# Square bracket
+
+\noindent ( \# Second group: machine name
+
+\noindent [\^{}\textbackslash ]]+ \# Anything that isn't a square bracket
+
+\noindent )
+
+\noindent \textbackslash ] \# End square bracket
+
+\noindent 
+
+\noindent 
+
+\noindent \textbackslash s+
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent \$/x
+
+\noindent 
+
+\noindent ( \# Third group: everything else
+
+\noindent .*
+
+\noindent )
+
+\noindent 
+
+\noindent Another way to tidy this up is to put each of the groups into variables and interpolate them:
+
+\noindent 
+
+\noindent my \$time\_re = '([0-2]\textbackslash d:[0-5]\textbackslash d:[0-5]\textbackslash d)';
+
+\noindent my \$host\_re = '\textbackslash [[\^{}\textbackslash ]]+)\textbackslash ]';
+
+\noindent my \$mess\_re = '(.*)';
+
+\noindent 
+
+\noindent /\^{}\$time\_re\textbackslash s+\$host\_re\textbackslash s+\$mess\_re\$/;
+
+\noindent 
+
+\noindent 
+
+\noindent Split
+
+\noindent 
+
+\noindent We briefly saw split earlier on in the chapter, where we used it to break up a string into a list of
+
+\noindent words. In fact, we only saw it in a very simple form. Strictly speaking, it was a bit of a cheat to use it at all. We didn't see it then, but split was actually using a regular expression to do its stuff!
+
+\noindent 
+
+\noindent Using split on its own is equivalent to saying:
+
+\noindent 
+
+\noindent split /\textbackslash s+/, \$\_;
+
+\noindent 
+
+\noindent which breaks the default string \$\_ into a \textbf{list }of substrings, using whitespace as a delimiter. However, we can also specify our own regular expression: perl goes through the string, breaking it whenever the
+
+\noindent regexp matches. The delimiter itself is thrown away.
+
+\noindent 
+
+\noindent For instance, on the UNIX operating system, configuration files are sometimes a list of fields separated by colons. A sample line from the password file looks like this:
+
+\noindent 
+
+\noindent 
+
+\noindent kake:x:10018:10020::/home/kake:/bin/bash
+
+\noindent 
+
+\noindent 
+
+\noindent To get at each field, we can split when we see a colon:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# split.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$passwd = "kake:x:10018:10020::/home/kake:/bin/bash";
+
+\noindent my @fields = split /:/, \$passwd;
+
+\noindent print "Login name : \$fields[0]\textbackslash n";
+
+\noindent print "User ID : \$fields[2]\textbackslash n";
+
+\noindent print "Home directory : \$fields[5]\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl split.plx }Login name : kake User ID : 10018
+
+\noindent Home directory : /home/kake
+
+\noindent $>$
+
+\noindent 
+
+\noindent Note that the fifth field has been left empty. Perl will recognize this as an empty field, and the
+
+\noindent numbering used for the following entries takes account of this. So \$fields[5] returns /home/kake,
+
+\noindent as we'd otherwise expect. Be careful though -- if the line you are splitting contains empty fields at the end, they will get dropped.
+
+\noindent 
+
+\noindent Join
+
+\noindent 
+
+\noindent To do the exact opposite, we can use the join operator. This takes a specified delimiter and interposes
+
+\noindent it between the elements of a specified array. For example:
+
+\noindent 
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# join.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$passwd = "kake:x:10018:10020::/home/kake:/bin/bash";
+
+\noindent my @fields = split /:/, \$passwd; print "Login name : \$fields[0]\textbackslash n"; print "User ID : \$fields[2]\textbackslash n";
+
+\noindent print "Home directory : \$fields[5]\textbackslash n";
+
+\noindent 
+
+\noindent my \$passwd2 = join "\#", @fields;
+
+\noindent print "Original password : \$passwd\textbackslash n";
+
+\noindent print "New password : \$passwd2\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl join.plx }Login name : kake User ID : 10018
+
+\noindent Home directory : /home/kake
+
+\noindent Original password : kake:x:10018:10020::/home/kake:/bin/bash
+
+\noindent New password : kake\#x\#10018\#10020\#\#/home/kake\#/bin/bash
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent Transliteration
+
+\noindent 
+
+\noindent While we're looking at regular expressions, we should briefly consider another operator. While it's not directly associated with regexps, the transliteration operator has a lot in common with them and adds a very useful facility to the matching and substitution techniques we've already seen.
+
+\noindent 
+
+\noindent What this does is to correlate the characters in its two arguments, one by one, and use these pairings to substitute individual characters in the referenced string. It uses the syntax tr/one/two/ and (as with
+
+\noindent the matching and substitution operators) references the special variable \$\_ unless otherwise specified
+
+\noindent with =\~{} or !\~{}. In this case, it replaces all the 'o's in the referenced string with 't's, all the 'n's with 'w's, and all the 'e's with 'o's.
+
+\noindent 
+
+\noindent Let's say you wanted to replace, for some reason, all the numbers in a string with letters. You might say something like this:
+
+\noindent 
+
+\noindent \$string =\~{} tr/0123456789/abcdefghij/;
+
+\noindent 
+
+\noindent This would turn, say, "2011064" into "cabbage". You can use ranges in transliteration but not in any of the character classes. We could write the above as:
+
+\noindent 
+
+\noindent \$string =\~{} tr/0-9/a-j/;
+
+\noindent 
+
+\noindent The return value of this operator is, by default, the number of characters matched with those in the first argument. You can therefore use the transliteration operator to count the number of occurrences of
+
+\noindent certain characters. For example, to count the number of vowels in a string, you can use:
+
+\noindent 
+
+\noindent my \$vowels = \$string =\~{} tr/aeiou//;
+
+\noindent 
+
+\noindent Note that this will not actually substitute any of the vowels in the variable \$string. As the second argument is blank, there is no correlation, so no substitution occurs. However, the transliteration operator can take the /d modifier, which \textit{will }delete occurrences on the left that do not have a
+
+\noindent correlating character on the right. So, to get rid of all spaces in a string quickly, you could use this line:
+
+\noindent 
+
+\noindent \$string =\~{} tr/ //d;
+
+\noindent 
+
+\noindent 
+
+\noindent Common Blunders
+
+\noindent 
+
+\noindent There  are a few  common mistakes  people  tend  to  make  when  writing  regexps.  We've  already  seen that /a*b*c*/ will happily match any string at all, since it matches each letter zero times. What else
+
+\noindent can go wrong?
+
+\noindent 
+
+\noindent ? \textbf{Forgetting To Group}
+
+\noindent /Bam\{2\}/ will match 'Bamm', while /(Bam)\{2\}/ will match 'BamBam', so be careful when choosing which one to use. The same goes for alternation: /Simple\textbar on/ will match 'Simple' and 'on', while /Sim(ple\textbar on)/ will match both 'Simple' and 'Simon' Group each option separately.
+
+\noindent 
+
+\noindent ? \textbf{Getting The Anchors Wrong}
+
+\noindent \^{} goes at the beginning, \$ goes at the end. A dollar anywhere else in the string makes perl try and interpolate a variable.
+
+\noindent 
+
+\noindent 
+
+\noindent ? \textbf{Forgetting To Escape Special Characters}.
+
+\noindent Do you want them to have a special meaning? These are the characters to be careful of: . *
+
+\noindent ? + [ ] ( ) \{ \} \^{} \$ \textbar  and of course \textbackslash  itself.
+
+\noindent ? \textbf{Not Counting from Zero}
+
+\noindent The first entry in an array is given the index zero.
+
+\noindent 
+
+\noindent ? \textbf{Counting from Zero}
+
+\noindent I know, I know! All along I've been telling you that computers start counting from zero. Nevertheless, there's always the odd exception -- the first backreference is \$1. Don't blame Perl though -- it took this behavior from a language called awk which used \$1 as the first reference variable.
+
+\noindent 
+
+\noindent 
+
+\noindent More Advanced Topics
+
+\noindent We've not actually plumbed the depths of the regular expression language syntax -- Perl has a habit of adding wilder and more bizarre features to it on a regular basis. All of the more off-the-wall extensions begin with a question mark in a group -- this is supposed to make you stop and ask yourself: 'Do I really want to do this?'
+
+\noindent 
+
+\noindent Some of these are experimental  and  may  change  from  perl  version  to  version  (and may soon
+
+\noindent disappear altogether),  but there  are  others  that  aren't  so  tricky.  Some of  these  are extremely  useful,  so let's  dive in!
+
+\noindent 
+
+\noindent \textit{Inline Comments}
+
+\noindent We've already seen how we can use the /x modifier to add comments and whitespace to our regular expressions. We can also do this with the (?\#) pattern:
+
+\noindent 
+
+\noindent /\^{}Today's (?\# This is ignored, by the way)date:/
+
+\noindent 
+
+\noindent Unfortunately, there's no way to have parentheses inside these comments, since perl closes the comment
+
+\noindent as soon as it sees a closing bracket. If you want to have longer or more detailed comments, you should consider using the /x modifier instead.
+
+\noindent 
+
+\noindent \textit{Inline Modifiers}
+
+\noindent If you are reading patterns from a file or constructing them from inside your code, you have no way of adding a modifier to the end of the regular expression operator. For example:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# inline.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent my \$string = "There's more than One Way to do it!";
+
+\noindent 
+
+\noindent print "Enter a test expression: ";
+
+\noindent my \$pat = $<$STDIN$>$;
+
+\noindent chomp(\$pat);
+
+\noindent 
+
+\noindent if (\$string =\~{} /\$pat/) \{
+
+\noindent print "Congratulations! '\$pat' matches the sample string.\textbackslash n";
+
+\noindent \} else \{
+
+\noindent print "Sorry. No match found for '\$pat'";
+
+\noindent \}
+
+\noindent 
+
+\noindent 
+
+\noindent If we run this and momentarily forgot how our sample string had been capitalized, we might get this:
+
+\noindent 
+
+\noindent $>$\textbf{perl inline.plx}
+
+\noindent Enter a test expression: \textbf{one way to do it!}
+
+\noindent Sorry. No match found for 'one way to do it!'
+
+\noindent $>$
+
+\noindent 
+
+\noindent So how can we make this case-insensitive? The solution is to use an inline modifier, the syntax for which
+
+\noindent is (?i). This will make the enclosing group match case-insensitively. Therefore we have:
+
+\noindent 
+
+\noindent $>$\textbf{perl inline.plx}
+
+\noindent Enter a test expression: \textbf{(?i)one way to do it!}
+
+\noindent Congratulations! '(?i)one way to do it!' matches the sample string.
+
+\noindent $>$
+
+\noindent 
+
+\noindent If, conversely, you have a modifier in place that you temporarily want to get rid of, you can say, for example, (?-i) to turn it off. If we have this:
+
+\noindent 
+
+\noindent 
+
+\noindent /There's More Than ((?-i)One Way) To Do It!/i;
+
+\noindent 
+
+\noindent the words 'One Way' alone are matched case-sensitively.
+
+\noindent 
+
+\noindent Note that you can also inline the /m, /s, and /x modifiers in the same way.
+
+\noindent 
+
+\noindent \textit{Grouping without Backreferences}
+
+\noindent Parentheses perform the function of grouping and populating the backreference variables. If you have a portion of your match in parentheses, it will, if successful, be placed in one of the numbered variables. However, there may be times when you only want to use brackets for grouping. For example, you're expecting the first backreference to contain something important, but there may be some preceding text
+
+\noindent in the way. You could have something like this:
+
+\noindent 
+
+\noindent 
+
+\noindent /(X-)?Topic: (\textbackslash w+)/;
+
+\noindent 
+
+\noindent You can't be certain whether your first defined backreference is going to end up in \$1 or \$2 -- it
+
+\noindent depends on whether the 'X-' part is present or not. For example, if we tried to match the string "Topic:
+
+\noindent the weather", we'd find that \$1 was left undefined. If we'd tried to do something with its contents, we'd get the warning:
+
+\noindent 
+
+\noindent Use of uninitialized value in concatenation
+
+\noindent 
+
+\noindent Now that's not necessarily a problem here. After all, we'll find our word in \$2 whether or not there's anything preceding "Topic: ". Surely we can just be careful not to use \$1?
+
+\noindent 
+
+\noindent But what if there's more than one optional field? Say we had an expression that left all but the 2nd   and 6th
+
+\noindent groups optional. We then have to look in \$2 for our first word and \$6 for our second, while \$1, \$3, \$4, and \$5 are left undefined. This really isn't good programming style and \textit{is }asking for trouble! We really shouldn't backreference fields if we don't need to.
+
+\noindent 
+
+\noindent 
+
+\noindent We can resolve this problem very simply, by adding the characters ?: like this:
+
+\noindent 
+
+\noindent /(?:X-)?Topic: (\textbackslash w+)/;
+
+\noindent 
+
+\noindent This ensures that the first set of brackets will now group only and not fill a backreference variable. Our word will always be put into \$1.
+
+\noindent 
+
+\noindent \textit{Lookaheads and Lookbehinds}
+
+\noindent Sometimes you may want to say something along the lines of 'substitute the word "fish" with "cream", but only if the next word is "cake".' You can do this very simply by saying:
+
+\noindent 
+
+\noindent s/fish cake/cream cake/
+
+\noindent 
+
+\noindent What does this do? The regular expression engine scans a referenced string, looking for a match on "fish cake" On finding one, it substitutes the text "cream cake". Not too bad -- it does the job. In this case it's
+
+\noindent not too big a deal that it has to substitute five characters from each match with five \textit{identical }characters
+
+\noindent from the substitution string. It's not hard to see how this sort of inefficiency could really start to bog a program down if we used substitutions excessively.
+
+\noindent 
+
+\noindent What we want is a way of  putting  an  assertion  into  the  match  --  a  'match  the text  \textit{only if  }the  next word
+
+\noindent is  "cake"'  clause -- without actually  matching  the  assertion  itself.  Having  matched  "fish",  we  really  just want to  \textit{look ahead},  to  see if it  says  "  cake"  (and  give  the  match  a  thumbs-up  if  it  does),  then  forget
+
+\noindent about "cake" altogether.
+
+\noindent 
+
+\noindent In life, that's not so easy. Fortunately in Perl we have an operator for just this sort of thing:
+
+\noindent 
+
+\noindent /fish(?= cake)/
+
+\noindent 
+
+\noindent will match exactly what we want -- it looks for "fish", does a positive lookahead on " cake", and matches
+
+\noindent "fish" only if that succeeds. For example:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# look1.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\_  = "fish cake and fish pie";
+
+\noindent print "Our original order was ", \$\_, "\textbackslash n";
+
+\noindent 
+
+\noindent s/fish(?= cake)/cream/;
+
+\noindent print "Actually, make that ", \$\_, " instead.\textbackslash n";
+
+\noindent 
+
+\noindent will return
+
+\noindent 
+
+\noindent $>$\textbf{perl look1.plx}
+
+\noindent Our original order was fish cake and fish pie
+
+\noindent Actually, make that cream cake and fish pie instead.
+
+\noindent $>$
+
+\noindent 
+
+\noindent We can also look ahead negatively, by using an exclamation mark instead of the equals sign:
+
+\noindent 
+
+\noindent 
+
+\noindent /fish(?! cake)/
+
+\noindent 
+
+\noindent 
+
+\noindent which will match "fish" only if the following word is \textit{not }" cake". If we adapt look1.plx like so:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# look2.plx use warnings; use strict;
+
+\noindent 
+
+\noindent \$\_  = "fish cake and fish pie";
+
+\noindent print "Our original order was ", \$\_, "\textbackslash n";
+
+\noindent 
+
+\noindent s/fish(?! cake)/cream/;
+
+\noindent print "Actually, make that ", \$\_, " instead.\textbackslash n";
+
+\noindent 
+
+\noindent then sure enough, it's "fish pie" that gets matched this time and not "fish cake".
+
+\noindent 
+
+\noindent $>$\textbf{perl look2.plx}
+
+\noindent Our original order was fish cake and fish pie
+
+\noindent Actually, make that fish cake and cream pie instead.
+
+\noindent $>$
+
+\noindent 
+
+\noindent Lookaheads are very powerful as you'll soon discover if you experiment a little, particularly when you start to use less specific expressions (using metacharacters) with them.
+
+\noindent 
+
+\noindent However, we may also wish to look at the text preceding a matched pattern. We therefore have a similar pair of \textbf{lookbehind }operators. We now use the $<$ sign to point 'behind' the match, matching "cake" only if "fish" \textit{precedes }it. So to find all those boring old fish cakes, we use:
+
+\noindent 
+
+\noindent /(?$<$=fish )cake/
+
+\noindent 
+
+\noindent but to find all the cream cakes and chocolate cakes, do this:
+
+\noindent 
+
+\noindent /(?$<$!fish )cake/
+
+\noindent 
+
+\noindent Let's have fish and chips instead of our fish cakes and cream doughnuts instead of cream cakes:
+
+\noindent 
+
+\noindent \#!/usr/bin/perl
+
+\noindent \# look3.plx
+
+\noindent use warnings;
+
+\noindent use strict;
+
+\noindent 
+
+\noindent \$\_  = "fish cake and cream cake";
+
+\noindent print "Our original order was ", \$\_, "\textbackslash n";
+
+\noindent 
+
+\noindent s/(?$<$=fish )cake/and chips/;
+
+\noindent print "No, wait. I'll have ", \$\_, " instead\textbackslash n";
+
+\noindent 
+
+\noindent s/(?$<$!fish )cake/slices/;
+
+\noindent print "Actually, make that ", \$\_, ", will you?\textbackslash n";
+
+\noindent 
+
+\noindent $>$\textbf{perl look3.plx}
+
+\noindent Our original order was fish cake and cream cake
+
+\noindent No, wait. I'll have fish and chips and cream cake instead
+
+\noindent Actually, make that fish and chips and cream slices, will you?
+
+\noindent $>$
+
+\noindent 
+
+\noindent 
+
+\noindent One very important thing to note about lookbehind assertions is that they can only handle fixed-width
+
+\noindent expressions. So while you \textit{can }use most of the metacharacters, indeterminate quantifiers like ., ?, and *
+
+\noindent aren't allowed.
+
+\noindent 
+
+\noindent \textit{Backreferences (again)}
+
+\noindent Finally, in our tour of regular expressions, let's look again at backreferences. Suppose you want to find any repeated words in a string. How would you do it? You might think about doing this:
+
+\noindent 
+
+\noindent if (/\textbackslash b(\textbackslash w+) \$1\textbackslash b/) \{
+
+\noindent print "Repeated word: \$1\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent Except, this doesn't work, because \$1 is only set when the match is complete. In fact, if you have warnings turned on, you'll be alerted to the fact that \$1 is undefined every time. In order to match while still inside the regular expression, you need to use the following syntax:
+
+\noindent 
+
+\noindent 
+
+\noindent if (/\textbackslash b(\textbackslash w+) \textbackslash 1\textbackslash b/) \{
+
+\noindent print "Repeated word: \$1\textbackslash n";
+
+\noindent \}
+
+\noindent 
+
+\noindent However, when you're replacing, you'll get a warning if you try and use the \textbackslash $<$number$>$ syntax on the wrong side. It'll work, but you'll be told "\textbackslash 1 better written as \$1".
+
+\noindent 
+
+\noindent 
+
+\noindent Summary
+
+\noindent 
+
+\noindent Regular expressions are quite possibly the most powerful means at your disposal of looking for patterns
+
+\noindent in text, extracting sub-patterns and replacing portions of text. They're the basis of any text shuffling you
+
+\noindent do in Perl, and they should be your first port of call when you need to do some string manipulation.
+
+\noindent 
+
+\noindent In this chapter, we've seen how to match simple text, different classes of text, and then different
+
+\noindent amounts of text. We've also seen how to provide alternative matches, how to refer back to portions of the match, and how to substitute and transliterate text.
+
+\noindent 
+
+\noindent The key to learning and understanding regular expressions is to be able to break them down into their component parts and unravel the language, translating it piecewise into English. Once you can fluently read out the intention of a complex regular expression, you're well on your way to creating powerful matches of your own.
+
+\noindent 
+
+\noindent You can find a summary of regular expression syntax in Appendix A. Section 6 of the Perl FAQ (at
+
+\noindent www.perl.com) contains a good selection of regexp hints and tricks.
+
+\noindent 
+
+\noindent 
+
+\noindent Exercises
+
+\noindent 
+
+\noindent 1.   Write out English descriptions of the following regular expressions, and describe what the operations actually do:
+
+\noindent 
+
+\noindent \$var =\~{} /(\textbackslash w+)\$/
+
+\noindent 
+
+\noindent \$code !\~{} /\^{}\#/
+
+\noindent 
+
+\noindent s/\#\{2,\}/\#/g
+
+\noindent 
+
+\noindent 2.   Using the contents of the gettysburg.txt file (provided in the download for Chapter 6), use regular expressions to do the following, and print out the result. (Tip: use a here-document to store the text in your file):
+
+\noindent \textbf{a. }Count the number of occurences of the word 'we'.
+
+\noindent \textbf{b. }Reformat the text, so that each sentences is displayed as a separate paragraph.
+
+\noindent \textbf{c. }Check that there are no multiple spaces in the text, replacing any with single spaces.
+
+\noindent 3.   When we use groups, the // operator returns a list of all the text strings that have been
+
+\noindent matched. Modify our example program matchtest2.plx, so that it produces its output from this list, rather than using special variables.
+
+\noindent 
+
+\noindent 4.   If we want to sort a list of words into alphabetical order, one simple and quite effective way is
+
+\noindent to write a program that performs a 'bubble sort': working through the whole list, it compares each pair of consecutive words; if it finds them in the wrong order, it swaps them over. On reaching the end of the list it repeats the process -- unless the previous scan didn't yield any swaps, in which case the list is already properly ordered. Use regular expressions along with the other techniques you've seen so far, and write this program so that it will work with a list
+
+\noindent of words separated by newline characters. One small hint -- the pos() function may come in useful here. You can use this to adjust the position of the \textbackslash G boundary, for example: pos(\$var)
+
+\noindent = 10 will set it just after the tenth character in \$var. A subsequent global search will therefore start from this point.
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent  
+
+\noindent 
+
+\noindent 
+
+\noindent 
+
+\noindent This work is licensed under the Creative Commons Attribution-NoDerivs-NonCommercial License. To view a copy of this
+
+\noindent license, visit http://creativecommons.org/licenses/by-nd-nc/1.0 or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\noindent 
+
+\noindent The key terms of this license are:
+
+\noindent 
+
+\noindent Attribution: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees must give the original author credit.
+
+\noindent 
+
+\noindent No  Derivative  Works: The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.
+
+\noindent 
+
+\noindent Noncommercial: The licensor permits others to copy, distribute, display, and perform the work. In return, licensees may not use the work for commercial purposes -- unless they get the licensor's permission.
+
+
+\end{document}
+
