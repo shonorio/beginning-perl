@@ -7,9 +7,12 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage[dvips]{graphicx}
-
+\usepackage{url}
 \newenvironment{intro}{\sffamily}{\vspace*{2ex minus 1.5ex}}
-\newenvironment{code}{\begin{quote}}{\end{quote}}
+
+\usepackage{listings}
+\lstset{language=Perl}
+\lstset{numbers=left, numberstyle=\tiny, basicstyle=\ttfamily, numbersep=5pt, showstringspaces=false }
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -198,7 +201,7 @@ c\'odigo Perl tem sido escrito. De facto, uma grande parte do c\'odigo Perl que 
 escrever provavelmente j\'a tenha sido escrito antes. Para evitar perda de tempo reinventando a roda, 
 programadores Perl empacotam seus c\'odigos reutiliz\'aveis e os distribu\'{\i}, principalmente no 
 \textbf{CPAN} - a Comprehensive Perl Archive Network - que voc\^e pode encontrar on-line em 
-http://www.perl.com/CPAN/.\medskip
+\url{http://www.cpan.org/}.\medskip
 
 \noindent A maior parte do CPAN \'e composto por \textbf{m\'odulos} Perl. Um m\'odulo \'e um 
 arquivo ou um conjunto de arquivos que permite realizar uma tarefa. Existe m\'odulo para que 
@@ -363,11 +366,11 @@ será utilizado pelo resto do livro e vamos criar nosso primeiro programa Perl.\
 
 \noindent Ele se parece como:
 
-\begin{code}
-\texttt{\#!/usr/bin/perl -w}\medskip
+\begin{lstlisting}
+  #!/usr/bin/perl -w
 
-\texttt{print "Hello, world.\textbackslash n";}
-\end{code}
+  print "Hello, world.\n";
+\end{lstlisting}
 
 \noindent O 'Hello World' é exemplo do tradicional encantamento dos deuses para a 
 programa\c{c} e garantirá o teu rápido domínio da linguagem, por isso, 
@@ -391,7 +394,7 @@ Você certamente desejará visualizar e editar o seu código em uma fonte com
 largura fixa. Os tradicionais editores do mundo Unix, vi, emacs, entre outros 
 são perfeitamente adequados, e versões ("portados") destes, estão disponíveis 
 para Windows. Quando programo para Windows, pessoalmente utilizo o Open Perl 
-IDE (http://open-perl-ide.sourceforge.net). Certo, então, de volta para o código.\medskip
+IDE (\url{http://open-perl-ide.sourceforge.net}). Certo, então, de volta para o código.\medskip
 
 \noindent Após encolher o editor que será utilizado para codificar os teus programas Perl, 
 grave o primeiro programa no diretório que será utilizado para o desenvolvimento deste 
@@ -443,11 +446,12 @@ alteramos nosso programa para demonstratar isto e cometer dois erros,
 primeiro excluindo o '-w', e escrever \texttt{printx} ao invés de \texttt{print}. 
 Então o hello1.pl ficará assim: 
 
-  \begin{code}
-  \texttt{\#!/usr/bin/perl}
+\begin{lstlisting}
+  #!/usr/bin/perl
 
-  \texttt{print "Hello, world.\textbackslash n";}
-  \end{code}
+  print "Hello, world.\n";
+\end{lstlisting}
+
 
 \noindent Lembre-se de gravar estas alterações no arquivo Hello2.pl antes
 de sair do arquivo. Agora volte ao console e digite:\medskip
@@ -461,28 +465,28 @@ de sair do arquivo. Agora volte ao console e digite:\medskip
 \noindent $>$\medskip
 
 \noindent recebemos como saída uma mensagem de aviso confusa com do tipo:
+{\scriptsize
 \begin{verbatim}
 String found where operator expected at hello2.pl line 2, near "printx "Hello, world.\n""                                                                                                              
        (Do you need to predeclare printx?)
 syntax error at hello2.pl line 2, near "printx "Hello, world.\n""
 Execution of hello2.pl aborted due to compilation errors.
 \end{verbatim}
-
-\noindent $>$\medskip
+}\noindent $>$\medskip
 
 \noindent Se corrigirmos um dos nossos erros incluindo o -w no nosso programa, então o hello2.pl ficará assim:\medskip
+\begin{lstlisting}
+  #!/usr/bin/perl -w
 
-\begin{code}
-  \texttt{\#!/usr/bin/perl -w}\medskip
-  \texttt{printx "Hello, world. \textbackslash n";}\medskip
-\end{code}
-
+  printx "Hello, world. \n";
+ 
+\end{lstlisting}
 \noindent Assim que gravarmos esta alteração, podemos executar o programa novamente. 
 A saída que receberemos agora conterá informações mais precisa sobre o erro, 
 então teremos na tela uma mensagem do tipo:\medskip
 
 \noindent $>$\texttt{perl hello2.pl}\medskip
-
+{\scriptsize
 \begin{verbatim}
 Unquoted string "printx" may clash with future reserved word at hello2.pl line 2.
 String found where operator expected at hello2.pl line 2, near "printx "Hello, world.\n""
@@ -490,7 +494,7 @@ String found where operator expected at hello2.pl line 2, near "printx "Hello, w
 syntax error at hello2.pl line 2, near "printx "Hello, world.\n""
 Execution of hello2.pl aborted due to compilation errors.
 \end{verbatim}
-
+}
 \noindent A primeira vista, pode parecer que apenas aumentamos o grau de confusão 
 da mensagem. Mas tenha em mente que agora a primeira linha contém uma mensagem de
 aviso no qual o perl nos informa alguma coisa que pode (ou não) causar problemas 
@@ -504,63 +508,63 @@ Apesar do -w ainda ser reconhecida pelo perl, ele foi preterido,
 e para continuar vou assumir que você esteja utilizando a versão do Perl 5.6.x ou superior.
 Como resultado, a nova correta versão do nosso programa hello.pl ficará assim:\medskip
 
-\begin{code}
-  \texttt{\#!/usr/bin/perl}\medskip
-  \texttt{use warnings;}\medskip
-  \texttt{print "Hello, world. \textbackslash n";}\medskip
-\end{code}
+\begin{lstlisting}
+  #!/usr/bin/perl
+  use warnings;
 
+  print "Hello, world. \n";
+\end{lstlisting}
 
-\section{Program Structure}
+\section{Estrutura do programa}
 
-\noindent 
+\noindent Uma das coisas que queremos desenvolver em todo este livro é o 
+senso da boa prática de programação. Obviamente, isso não será útil apenas 
+para programar em Perl, mas também para quase todas as outras linguagens 
+de programação. A mais fundamental noção é como estruturar e apresentar 
+o código nos teus arquivos fontes. Ao manter o código organizado e 
+compreensível, você vai deixar a tua vida de programador fácil.\medskip
 
-\noindent One of the things we want to develop throughout this book is a sense of good programming practice. Obviously this will not only benefit you while using Perl, but in almost every other programming language, too. The most fundamental notion is how to structure and lay out the code in your source files. By keeping this tidy and easy to understand, you'll make your own life as a programmer easier.
+\subsection{Documente o seu programa}
 
-\noindent 
+\noindent Como vimos recentemente, uma linha começando com o cerquilha (\#) é 
+tratada como um comentário e ignorada. Isso permite que você faça comentários 
+sobre o que o teu programa está fazendo, algo que será extremamente útil quando 
+estiver trabalhando em programas longo ou quando alguém estiver analisando 
+o teu código. Por exemplo, você poderia deixar o nosso programa mas claro 
+sobre o que ele faz comentando algo assim:
 
-\noindent \textit{Documenting Your Programs}
+\begin{lstlisting}
+  #!/usr/bin/perl
+  use warnings;
 
-\noindent As we saw earlier, a line starting with a sharp (\#) is treated as a comment and ignored. This allows you to provide comments on what your program is doing, something that'll become extremely useful to you when working on long programs or when someone else is looking over your code. For instance, you could make it quite clear what the program above was doing by saying something like this:
+  # Imprime uma mensagem
+  print "Hello, world. \n";
+\end{lstlisting}
 
-\noindent 
+\noindent Na verdade, esta não é toda a história. Uma linha pode conter código 
+Perl, e em seguida comentário. Isto significa que nós podemos documentar o nosso
+programa \textit{'inline'}\footnote{em linha} como no exemplo:
 
-\noindent \texttt{\#!/usr/bin/perl}
-\noindent \texttt{use warnings;}
+\begin{lstlisting}
+  #!/usr/bin/perl
+  use warnings;
 
-\noindent 
+  print "Hello, world. \n"; # Imprime uma mensagem
+\end{lstlisting}
 
-\noindent \texttt{\# Print a short message}
-\noindent \texttt{print "Hello, world.\textbackslash n";}
-
-\noindent 
-
-\noindent 
-
-\noindent Actually, this isn't the whole story. A line may contain some Perl code, and be followed by a comment.
-
-\noindent This means that we can document our program 'inline' like this:
-
-\noindent 
-
-\noindent 
-
-\noindent \texttt{\#!/usr/bin/perl}
-\noindent \texttt{use warnings;}
-
-\noindent 
-
-\noindent \texttt{print "Hello, world.\textbackslash n"; \# Print a short message}
-
-\noindent 
-
-\noindent When we come to write more advanced programs, we'll take a look at some good and bad commenting practice.
-
-\noindent 
+\noindent Quando tivermos escrevendo programas mais avançados, vamos 
+dar uma olhada em algumas boas e más práticas de comentar.\medskip
 
 \noindent \textit{Keywords}
 
-\noindent There are certain instructions that perl recognizes and understands. The word print above was one such example. On seeing print, perl knew it had to print out to the screen whatever followed in quotes. Words that perl is already aware of are called \textbf{keywords}, and they come in several classes. print is one example of the class called functions. These are the verbs of a programming language, and they tell perl what to do. There are also control keywords, such as if and else. These are used in context like this:
+\noindent There are certain instructions that perl recognizes and understands.
+The word print above was one such example. On seeing print, perl knew it had 
+to print out to the screen whatever followed in quotes. Words that perl is 
+already aware of are called \textbf{keywords}, and they come in several 
+classes. print is one example of the class called functions. These are 
+the verbs of a programming language, and they tell perl what to do. 
+There are also control keywords, such as if and else. These are used in 
+context like this:\medskip
 
 \noindent 
 
@@ -576,13 +580,22 @@ Como resultado, a nova correta versão do nosso programa hello.pl ficará assim:
 
 \noindent 
 
-\noindent It's a good idea to respect keywords and not reuse them as names. For example, a little later on we'll learn that you can create and name a variable, and that calling your variable \$print is perfectly allowable. The problem with this is that it leads to confusing and uninformative statements like print \$print. It is always a good idea to give a variable a meaningful name, one that relates to its content in a logical manner. For example \$my\_name, \$telephone\_number, @shopping\_list, and so on, rather than \$a, \$b and \%c.
+\noindent It's a good idea to respect keywords and not reuse them as names. 
+For example, a little later on we'll learn that you can create and name a 
+variable, and that calling your variable \$print is perfectly allowable. 
+The problem with this is that it leads to confusing and uninformative 
+statements like print \$print. It is always a good idea to give a variable 
+a meaningful name, one that relates to its content in a logical manner. 
+For example \$my\_name, \$telephone\_number, @shopping\_list, and so on, 
+rather than \$a, \$b and \%c.\medskip
 
 \noindent 
 
 \noindent \textit{Statements and Statement Blocks}
 
-\noindent If functions are the verbs of Perl, then \textbf{statements }are the sentences. Instead of a full stop, a statement in Perl usually ends with a semicolon, as we saw above:
+\noindent If functions are the verbs of Perl, then \textbf{statements }are 
+the sentences. Instead of a full stop, a statement in Perl usually ends 
+with a semicolon, as we saw above:\medskip
 
 \noindent 
 
@@ -602,7 +615,11 @@ Como resultado, a nova correta versão do nosso programa hello.pl ficará assim:
 
 \noindent 
 
-\noindent There are times when you can get away without adding the semicolon, such as when it's absolutely clear to perl that the statement has finished. However, it is good practice to put a semicolon at the end of each statement. For example, you can miss out the final semicolon in the example above, without causing a problem. Missing out the first would be incorrect.
+\noindent There are times when you can get away without adding the semicolon, 
+such as when it's absolutely clear to perl that the statement has finished. 
+However, it is good practice to put a semicolon at the end of each statement. 
+For example, you can miss out the final semicolon in the example above, 
+without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
