@@ -4,15 +4,50 @@
 \usepackage[utf8]{inputenc}
 \usepackage[portuges]{babel}
 
+% se quiser habilitar Arial
+%\renewcommand{\rmdefault}{phv} % Arial
+%\renewcommand{\sfdefault}{phv} % Arial
+
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage[dvips]{graphicx}
+% Habilita o pacote de url
 \usepackage{url}
+% define o intro
 \newenvironment{intro}{\sffamily}{\vspace*{2ex minus 1.5ex}}
 
+%%============================================================================
+%% configura o ambiente para o bloco de código
+\usepackage{color}
+ \definecolor{Brown}{cmyk}{0,0.81,1,0.60}
+  \definecolor{OliveGreen}{cmyk}{0.64,0,0.95,0.40}
+  \definecolor{CadetBlue}{cmyk}{0.62,0.57,0.23,0}
+  \definecolor{lbcolor}{rgb}{1,0.95,1}
+
 \usepackage{listings}
-\lstset{language=Perl}
-\lstset{numbers=left, numberstyle=\tiny, basicstyle=\ttfamily, numbersep=5pt, showstringspaces=false }
+  \lstset{language=Perl}
+  \lstset{backgroundcolor=\color{lbcolor}}
+  \lstset{keywordstyle=\color{CadetBlue}}
+  \lstset{identifierstyle=\color{red}\bfseries}
+  \lstset{rulesepcolor=\color{green}}
+  \lstset{commentstyle=\color{green}}
+  \lstset{numbers=left}
+  \lstset{numberstyle=\tiny}
+  \lstset{basicstyle=\ttfamily\scriptsize}
+%%  \lstset{stringstyle=\ttfamily}
+  \lstset{emph={printx}}
+  \lstset{emphstyle=\color{black}\bfseries}
+  \lstset{numbersep=5pt}
+  \lstset{captionpos=b}
+  \lstset{columns=fixed}
+  \lstset{breaklines=true}
+  \lstset{prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}}}
+  \lstset{showstringspaces=false}
+%%============================================================================
+%%============================================================================
+%% configuracao das dimensoes da pagina (http://en.wikibooks.org/wiki/LaTeX)
+
+%%============================================================================
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -65,7 +100,7 @@
 \section{Linguagens de programa\c{c}\~ao}
 
   \noindent A primeira pergunta que eu suponho que realmente devemos fazer quando 
-  iniciamos o aprendizado sobre programa\c{c}\~ao \'e: "O que \'e programa\c{c}\~ao?".
+  iniciamos o aprendizado sobre programa\c{c}\~ao \'e: ``O que \'e programa\c{c}\~ao?".
   Isso pode soar particularmente filos\'ofico, mas a resposta \'e f\'acil. 
   Programa\c{c}\~ao \'e dizer a um computador o que voc\^e quer que ele fa\c{c}a. 
   O \'unico truque, ent\~ao, \'e ter certeza de que o programa \'e escrito de uma forma 
@@ -104,43 +139,48 @@
   precisamente? Apagar o arquivo imediatamente, ou examin\'a-lo? Se voc\^e examin\'a-lo, 
   quanto dele vai examinar? E o que voc\^e examinar\'a?\medskip
 
-\noindent O primeiro passo em programa\c{c}\~ao \'e parar de pensar em "quero um programa 
-que remove arquivos in\'uteis", para "eu quero um programa que verifique cada arquivo no 
-computador e remova os criados a mais de seis meses e que n\~ao contenha qualquer uma das 
-palavras 'Simon', 'Perl' ou 'importantes' nas cincos primeiras linhas". Em outras palavras, 
-voc\^e tem de especificar a sua tarefa com precis\~ao.\medskip
+  \noindent O primeiro passo em programa\c{c}\~ao \'e parar de pensar em 
+  ``quero um programa que remove arquivos in\'uteis", para ``eu quero um 
+  programa que verifique cada arquivo no computador e remova os criados 
+  a mais de seis meses e que n\~ao contenha qualquer uma das palavras `Simon', 
+  `Perl' ou `importantes' nas cincos primeiras linhas". Em outras palavras, 
+  voc\^e tem de especificar a sua tarefa com precis\~ao.\medskip
 
-\noindent Quando voc\^e for capaz de restruturar a sua pergunta, \'e necess\'ario traduzi-la 
-para a linguagem de programa\c{c}\~ao que voc\^e est\'a utilizando. Infelizmente, a linguagem 
-de programa\c{c}\~ao n\~ao possui uma rela\c{c}\~ao equivalente direta para o que voc\^e est\'a 
-tentando dizer. Ent\~ao, voc\^e ter\'a que desenvolver as tuas atividades utilizando o que a 
-linguagem tem a lhe oferecer, o qu\^e significar\'a que voc\^e precisar\'a detalhar (especificar) 
-mais ainda a tua tarefa. Por exemplo, n\~ao existe uma maneira de dizer "que n\~ao contenha 
-qualquer uma destas palavras nas cincos primeiras linhas" em Perl. No entanto, existe uma maneira 
-de dizer "se uma linha cont\'em a palavra", uma maneira de dizer "buscar outra linha", e 
-"fa\c{c}a isso cinco vezes". A programa\c{c}\~ao \'e a arte de colocar os elementos juntos para 
-fazer o que voc\^e deseja.\medskip
+  \noindent Quando voc\^e for capaz de restruturar a sua pergunta, \'e 
+  necess\'ario traduzi-la para a linguagem de programa\c{c}\~ao que 
+  voc\^e est\'a utilizando. Infelizmente, a linguagem de programa\c{c}\~ao 
+  n\~ao possui uma rela\c{c}\~ao equivalente direta para o que voc\^e est\'a 
+  tentando dizer. Ent\~ao, voc\^e ter\'a que desenvolver as tuas atividades 
+  utilizando o que a linguagem tem a lhe oferecer, o qu\^e significar\'a que 
+  voc\^e precisar\'a detalhar (especificar) mais ainda a tua tarefa. Por 
+  exemplo, n\~ao existe uma maneira de dizer ``que n\~ao contenha qualquer 
+  uma destas palavras nas cincos primeiras linhas" em Perl. No entanto, 
+  existe uma maneira de dizer ``se uma linha cont\'em a palavra", uma 
+  maneira de dizer ``buscar outra linha", e ``fa\c{c}a isso cinco vezes". 
+  A programa\c{c}\~ao \'e a arte de colocar os elementos juntos para 
+  fazer o que voc\^e deseja.\medskip
 
-\noindent Existe tantas coisas para voc\^e fazer – mas o que computador faz? Depois termos 
-especificado as tarefas em nossa linguagem de programa\c{c}\~ao, o computador pega nossas 
-instru\c{c}\~oes e executa-as. Chamamos isto de \textbf{'rodando'} ou \textbf{'executando'} 
-o programa. Normalmente, vamos escrever as instru\c{c}\~oes em um arquivo, utilizando um editor 
-de texto normal; mas se temos um programa muito pequeno, podemos digit\'a-lo diretamente na 
-linha de comando. De qualquer forma, as instru\c{c}\~oes que damos ao computador - no nosso 
-caso, escrito em Perl - s\~ao coletivamente chamado de \textbf{c\'odigo fonte} (ou, por vezes, 
-apenas \textbf{c\'odigo} ou \textbf{code}) para nosso programa.
+  \noindent Existe tantas coisas para voc\^e fazer – mas o que computador 
+  faz? Depois termos especificado as tarefas em nossa linguagem de programa\c{c}\~ao, 
+  o computador pega nossas instru\c{c}\~oes e executa-as. Chamamos isto de 
+  \textbf{`rodando'} ou \textbf{`executando'} o programa. Normalmente, vamos 
+  escrever as instru\c{c}\~oes em um arquivo, utilizando um editor de texto 
+  normal; mas se temos um programa muito pequeno, podemos digit\'a-lo diretamente na 
+  linha de comando. De qualquer forma, as instru\c{c}\~oes que damos ao computador
+  - no nosso caso, escrito em Perl - s\~ao coletivamente chamado de \textbf{c\'odigo-fonte} 
+  (ou, por vezes, apenas \textbf{c\'odigo} ou \textbf{code}) para nosso programa.
 
 \section{Interpretado vs C\'odigo Compilado}
 
-\noindent O que exatamente o computador faz com o nosso c\'odigo fonte, ent\~ao? Tradicionalmente, 
-havia duas formas de descrever o que a linguagem de computador fazia com o c\'odigo fonte: Pode-se 
+\noindent O que exatamente o computador faz com o nosso c\'odigo-fonte, ent\~ao? Tradicionalmente, 
+havia duas formas de descrever o que a linguagem de computador fazia com o c\'odigo-fonte: Pode-se 
 dizer que foram \textbf{compilados}, ou \textbf{interpretados}.\medskip
 
 \noindent Uma linguagem interpretada, como o Basic, precisa de outro programa chamado \textbf{interpretador} 
-para processar o c\'odigo fonte cada vez que voc\^e deseja executar o programa. A tradu\c{c}\~ao do c\'odigo 
+para processar o c\'odigo-fonte cada vez que voc\^e deseja executar o programa. A tradu\c{c}\~ao do c\'odigo 
 fonte para a linguagem de m\'aquina \'e demorado. N\'os chamamos de linguagem de baixo n\'{\i}vel, 
-ou \textbf{c\'odigo de computador}, porque \'e linguagem para a m\'aquinas ler, j\'a o \textbf{c\'odigo fonte}
-\'e para os seres humanos. Enquanto que o c\'odigo fonte parece com o Ingl\^es, por exemplo, 
+ou \textbf{c\'odigo de computador}, porque \'e linguagem para a m\'aquinas ler, j\'a o \textbf{c\'odigo-fonte}
+\'e para os seres humanos. Enquanto que o c\'odigo-fonte parece com o Ingl\^es, por exemplo, 
 \texttt{("do\_this() if \$that")}, j\'a o c\'odigo de m\'aquina parece muito mais com algo como por exemplo, 
 \texttt{"4576616E67656C6961"}, e esta \'e a vers\~ao leg\'{\i}vel! O c\'odigo de m\'aquina produzida depende 
 do processador do computador e do sistema operacional executado, a tradu\c{c}\~ao seria muito diferente de um 
@@ -148,22 +188,22 @@ computador x86 executando o Windows NT, em compara\c{c}\~ao com um SUN ou Digita
 
 \noindent Por outro lado, uma linguagem compilada, como o C, utiliza um compilador que faz todo esse processamento 
 de uma única vez antes do c\'odigo ser executado. Depois disso, voc\^e pode executar o c\'odigo de m\'aquina diretamente, 
-sem precisar mas do compilador. Porque voc\^e n\~ao precisa processar o c\'odigo fonte cada vez que voc\^e execute-o, 
+sem precisar mas do compilador. Porque voc\^e n\~ao precisa processar o c\'odigo-fonte cada vez que voc\^e execute-o, 
 c\'odigo compilado normalmente ser\'a executado mais r\'apido do que um equivalente interpretado. Voc\^e tamb\'em pode dar 
 o c\'odigo compilado para pessoas que n\~ao t\^em um compilador. Isto tamb\'em prevenir\'a que outras pessoas leem
-o seu c\'odigo fonte - \'util se voc\^e estiver usando um algoritmo propriet\'ario ou se o seu c\'odigo \'e 
+o seu c\'odigo-fonte - \'util se voc\^e estiver usando um algoritmo propriet\'ario ou se o seu c\'odigo \'e 
 particularmente embara\c{c}oso/vergonhoso. No entanto, porque voc\^e est\'a distribuindo c\'odigo m\'aquina que nem 
 todos os tipos de computadores possam compreender, isto n\~ao \'e necessariamente port\'ateis.\medskip
 
 \noindent Recentes linguagens t\^em confundindo a distin\c{c}\~ao compilado/interpretado. Java e Perl, 
-ambas linguagem da classe  de "byte-compilados", s\~ao particularmente respons\'aveis pela confus\~ao. 
-No caso do Perl, onde o interpretador (que sempre chamamos de \textbf{perl} com "p" min\'usculo) l\^e 
-o seu c\'odigo fonte, e o compila inteiro de uma vez. No entanto, em vez de compilar para o c\'odigo 
+ambas linguagem da classe  de ``byte-compilados", s\~ao particularmente respons\'aveis pela confus\~ao. 
+No caso do Perl, onde o interpretador (que sempre chamamos de \textbf{perl} com ``p" min\'usculo) l\^e 
+o seu c\'odigo-fonte, e o compila inteiro de uma vez. No entanto, em vez de compilar para o c\'odigo 
 da m\'aquina que em est\'a executando, ele compila em um c\'odigo especial para uma \textbf{m\'aquina 
-virtual (virtual machine)} de um computador fict\'{\i}cio. A "m\'aquina virtual" do Java \'e muito 
+virtual (virtual machine)} de um computador fict\'{\i}cio. A ``m\'aquina virtual" do Java \'e muito 
 parecido com o processador de um computador normal, em rela\c{c}\~ao ao que pode ser feito, e 
 pessoas t\^em tentado construir processadores que possa conversar c\'odigo da m\'aquina virtual 
-Java "nativamente". Em compara\c{c}\~ao, a m\'aquina virtual do Perl n\~ao \'e muito semelhante 
+Java ``nativamente". Em compara\c{c}\~ao, a m\'aquina virtual do Perl n\~ao \'e muito semelhante 
 a qualquer processador de  computador existente e por isto menos suscept\'{\i}vel de ser constru\'{\i}do.\medskip
 
 \noindent Uma vez que temos esse c\'odigo de m\'aquina, o que chamamos \textbf{bytecode}, voc\^e pode 
@@ -182,17 +222,17 @@ processamento do bytecode, executa as a\c{c}\~oes apropriadas.
 
 \end{itemize}
 
-\noindent N\'os n\~ao fazemos o primeiro item em Perl, embora Java o faz. O "Perl compilador" 
-tenta fazer o segundo, mas \'e uma tarefa muito complicada, e ainda n\~ao est\'a completo. 
+\noindent N\'os n\~ao fazemos o primeiro item em Perl, embora Java o faz. O ``Perl compilador" tenta 
+fazer o segundo, mas \'e uma tarefa muito complicada, e ainda n\~ao est\'a completo. 
 Normalmente, por\'em, fazemos o terceiro, e assim que o perl terminar de compilar o c\'odigo 
 fonte em bytecodes, depois assume o papel de interpretador, traduzindo o c\'odigo da m\'aquina 
 virtual para o c\'odigo verdadeiro. Da\'{\i} Perl n\~ao \'e uma linguagem estritamente 
 compilada ou interpretada.\medskip
 
-\noindent Algumas pessoas v\~ao dizer \'e que Perl \'e uma linguagem de "script", com a 
+\noindent Algumas pessoas v\~ao dizer \'e que Perl \'e uma linguagem de ``script", com a 
 conota\c{c}\~ao de que \'e uma linguagem interpretada. Como vimos, isso n\~ao \'e realmente 
 verdade. No entanto, esteja ciente de que voc\^e pode ouvir a palavra "script" com a inten\c{c}\~ao 
-de "programa".
+de ``programa".
 
 \section{Bibliotecas, M\'odulos e Pacotes}
 
@@ -219,20 +259,20 @@ v\'arios pacotes Inversamente, um pacote pode ser repartido por v\'arios arquivo
 m\'odulo normalmente vive em sua pr\'opria embalagem, isolando o c\'odigo que voc\^e 
 escreve fora de interfer\^encia. Novamente, vamos chegar a isso mais tarde no Cap\'{\i}tulo 10.\medskip
 
-\noindent Cada instalação do Perl vem com uma coleção de 'módulos padrão'. O \textbf{padrão}, 
+\noindent Cada instalação do Perl vem com uma coleção de `módulos padrão'. O \textbf{padrão}, 
 sem surpresa, é o termo para a cole\c{c}ão de arquivos instalados com a distribuição Perl. Às vezes, 
-eles também são referenciados como "módulo biblioteca", embora isso possa causar confusão se você 
-pretende analisar antigos código Perl: "arquivos de biblioteca" foram usadas em Perl nas versões 
+eles também são referenciados como ``módulo biblioteca", embora isso possa causar confusão se você 
+pretende analisar antigos código Perl: ``arquivos de biblioteca" foram usadas em Perl nas versões 
 4 e anteriores até serem substituído pelos módulos do Perl 5. Eles são a mesma coisa - pedaços 
 de código que você pode usar em seu programa para fazer um trabalho que tem sido feito antes. 
-No entanto, eles não têm um "pacote" internamente, e por isso, eles se colocam no mesmo pacote 
+No entanto, eles não têm um ``pacote" internamente, e por isso, eles se colocam no mesmo pacote 
 do resto do seu programa. Também é bastante simples localizar um arquivo que é seja biblioteca 
 e um que seja módulo - a extensão de um arquivo é normalmente .pl, enquanto que a extensão de 
 um módulo é \textbf{.pm}.\medskip
 
 \noindent O resultado disto é que o módulo biblioteca pode conter tanto arquivos de biblioteca, 
 bem como de módulos, e por isso não é claro sobre qual "biblioteca" é referenciada. A partir de 
-agora, quando falarmos de uma "biblioteca", estamos referindo-se à coleção de arquivos distribuídos 
+agora, quando falarmos de uma ``biblioteca", estamos referindo-se à coleção de arquivos distribuídos 
 com o Perl, ao invés de arquivos de biblioteca do Perl 4; não vamos fazer qualquer trabalho com 
 arquivos de biblioteca (apesar dos arquivos de biblioteca estarem sendo substituídos por módulos, 
 eles ainda podem ser úteis), mas iremos utilizar o novo estilo de módulos.
@@ -257,8 +297,8 @@ apenas aos matemáticos e cientistas de computador deste mundo.\medskip
 \noindent Perl não quer que você veja as coisas da maneira que o computador faz - não 
 é para isto que ele existe. Em vez disso, Perl permite-lhe desenvolver a sua 
 abordagem pessoal para programar. Não diria que há certo ou errado para realizar 
-o trabalho. Na verdade, é exactamente o oposto - o lema do Perl é \textbf{"Há mais 
-de uma maneira de fazer"} (\textbf{"There's more than one way to do it"}), e o Perl 
+o trabalho. Na verdade, é exatamente o oposto - o lema do Perl é \textbf{``Há mais 
+de uma maneira de fazer"} (\textit{\textbf{``There's more than one way to do it"}}), e o Perl 
 permite-lhe programar da maneira que faz mais sentido para você.
 
 \subsection{Perl na Web}
@@ -293,8 +333,8 @@ seiscentas pessoas tiveram o nome registrado no arquivo de alteração (\textit{
 contribuirem na evolução do Perl 4.0 para o Perl 5.0 e para o Perl 5.6, e isto não incluem as 
 pessoas que contribuiram com os relatos de problemas para que pudéssemos corrigir.\medskip
 
-\noindent Quando eu digo "qualquer pessoa pode ajudar", não signfica apenas aquelas que 
-conhecem todo o código fonte do Perl. Claro, pessoas que possam contribuir no código 
+\noindent Quando eu digo ``qualquer pessoa pode ajudar", não signfica apenas aquelas que 
+conhecem todo o código-fonte do Perl. Claro, pessoas que possam contribuir no código 
 fonte são bem vindos, mas igualmente útil é o trabalho realizado pelo exército de voluntários 
 que oferecem seus serviços como testadores, documentadores, revisores entre outros. Qualquer 
 pessoa pode contribuir revisando a documenta\c{c}ão, bem como contribuir com uma nova maneira 
@@ -365,14 +405,13 @@ siga as instru\c{c}ões. Agora crie um diretório para todos os exemplos que
 será utilizado pelo resto do livro e vamos criar nosso primeiro programa Perl.\medskip
 
 \noindent Ele se parece como:
-
 \begin{lstlisting}
-  #!/usr/bin/perl -w
+#!/usr/bin/perl -w
 
-  print "Hello, world.\n";
+print "Hello, world.\n";
 \end{lstlisting}
 
-\noindent O 'Hello World' é exemplo do tradicional encantamento dos deuses para a 
+\noindent O `Hello World' é exemplo do tradicional encantamento dos deuses para a 
 programa\c{c} e garantirá o teu rápido domínio da linguagem, por isso, 
 certifique-se de que você realmente completou este exercício, em vez de 
 apenas ler sobre ele.\medskip
@@ -381,7 +420,7 @@ apenas ler sobre ele.\medskip
 fonte de programa Perl é texto simples e deve ser escrito com um simples 
 editor de texto, ao invéz de um processador de textos. Se você estiver usando 
 Windows, você realmente vai querer pesquisar para encontrar um bom editor para 
-programador. O \textit{\textbf{Notepad}} ('\textbf{Bloco de nota}') pode ser 
+programador. O \textit{\textbf{Notepad}} (`\textbf{Bloco de nota}') pode ser 
 um bom exemplo, apesar da sua irritante tendência de querer renomear extensões 
 de arquivo para .pl.txt por você, mas eu não recomendo a sua utilização para 
 além disso. \textit{WordPad} também renomeia extensões do arquivo por você e, 
@@ -392,7 +431,7 @@ além disso, você deve lembrar-se de salvar como texto simples, não no formato
 mesmo usar cores diferentes para assinalar diferentes partes do seu código. 
 Você certamente desejará visualizar e editar o seu código em uma fonte com 
 largura fixa. Os tradicionais editores do mundo Unix, vi, emacs, entre outros 
-são perfeitamente adequados, e versões ("portados") destes, estão disponíveis 
+são perfeitamente adequados, e versões (``portados") destes, estão disponíveis 
 para Windows. Quando programo para Windows, pessoalmente utilizo o Open Perl 
 IDE (\url{http://open-perl-ide.sourceforge.net}). Certo, então, de volta para o código.\medskip
 
@@ -424,7 +463,7 @@ perl que está localizado no /usr/bin/perl.\medskip
 
 \noindent Perl também lê esta linha, independente se você estiver no Unix, 
 Windows, ou outro sistema operacional. Isto ocorre para verificar se existe 
-alguma opção especial que deverá ser ligada. No caso da presença do '-w', 
+alguma opção especial que deverá ser ligada. No caso da presença do `-w', 
 o perl é instruído a ativar informações adicionais de warning\footnote{informação 
 importante que pode indicar erros não críticos no código}. A utilização desta 
 opção é um hábito recomendável, e nós veremos o motivo logo em seguida, mas 
@@ -434,22 +473,22 @@ primeiro vamos avaliar a segunda linha do nosso programa:\medskip
 
 \noindent A função \texttt{print} diz ao perl para imprimir o texto fornecido, sem as
 aspas. O texto dentro das aspas não é interpretado como código (exceto por
-alguns 'carecteres especiais') e é conhecido como \textbf{string}.
+alguns `carecteres especiais') e é conhecido como \textbf{string}.
 Como veremos mais tarde, strings são delimitados por alguns tipos de marcação.
-O \textbackslash n no final da aspas é um tipo de 'caracter especial' -- um 
+O \textbackslash n no final da aspas é um tipo de `caracter especial' -- um 
 tipo de \textit{escape sequence}\footnote{Sequência de caracterer que alteram 
-o comportamento normal dos caracteres}, padrão que significa 'nova linha'. Isto 
+o comportamento normal dos caracteres}, padrão que significa `nova linha'. Isto 
 instrue o perl para finalizar a linha corrente e iniciei o cursor em uma nova linha.\medskip
 
 \noindent Você deve estar curioso porque o -w é tão útil. Bom, supomos que nós 
 alteramos nosso programa para demonstratar isto e cometer dois erros,
-primeiro excluindo o '-w', e escrever \texttt{printx} ao invés de \texttt{print}. 
+primeiro excluindo o `-w', e escrever \texttt{printx} ao invés de \texttt{print}. 
 Então o hello1.pl ficará assim: 
 
 \begin{lstlisting}
-  #!/usr/bin/perl
+#!/usr/bin/perl
 
-  print "Hello, world.\n";
+print "Hello, world.\n";
 \end{lstlisting}
 
 
@@ -476,10 +515,9 @@ Execution of hello2.pl aborted due to compilation errors.
 
 \noindent Se corrigirmos um dos nossos erros incluindo o -w no nosso programa, então o hello2.pl ficará assim:\medskip
 \begin{lstlisting}
-  #!/usr/bin/perl -w
+#!/usr/bin/perl -w
 
-  printx "Hello, world. \n";
- 
+printx "Hello, world. \n";
 \end{lstlisting}
 \noindent Assim que gravarmos esta alteração, podemos executar o programa novamente. 
 A saída que receberemos agora conterá informações mais precisa sobre o erro, 
@@ -509,10 +547,10 @@ e para continuar vou assumir que você esteja utilizando a versão do Perl 5.6.x
 Como resultado, a nova correta versão do nosso programa hello.pl ficará assim:\medskip
 
 \begin{lstlisting}
-  #!/usr/bin/perl
-  use warnings;
+#!/usr/bin/perl
+use warnings;
 
-  print "Hello, world. \n";
+print "Hello, world. \n";
 \end{lstlisting}
 
 \section{Estrutura do programa}
@@ -534,62 +572,61 @@ o teu código. Por exemplo, você poderia deixar o nosso programa mas claro
 sobre o que ele faz comentando algo assim:
 
 \begin{lstlisting}
-  #!/usr/bin/perl
-  use warnings;
+#!/usr/bin/perl
+use warnings;
 
-  # Imprime uma mensagem
-  print "Hello, world. \n";
+# Imprime uma mensagem
+print "Hello, world. \n";
 \end{lstlisting}
 
 \noindent Na verdade, esta não é toda a história. Uma linha pode conter código 
 Perl, e em seguida comentário. Isto significa que nós podemos documentar o nosso
-programa \textit{'inline'}\footnote{em linha} como no exemplo:
+programa \textit{`inline'}\footnote{em linha} como no exemplo:
 
 \begin{lstlisting}
-  #!/usr/bin/perl
-  use warnings;
+#!/usr/bin/perl
+use warnings;
 
-  print "Hello, world. \n"; # Imprime uma mensagem
+print "Hello, world. \n"; # Imprime uma mensagem
 \end{lstlisting}
 
 \noindent Quando tivermos escrevendo programas mais avançados, vamos 
 dar uma olhada em algumas boas e más práticas de comentar.\medskip
 
-\noindent \textit{Keywords}
+\subsection{Palavras reservadas}
 
-\noindent There are certain instructions that perl recognizes and understands.
-The word print above was one such example. On seeing print, perl knew it had 
-to print out to the screen whatever followed in quotes. Words that perl is 
-already aware of are called \textbf{keywords}, and they come in several 
-classes. print is one example of the class called functions. These are 
-the verbs of a programming language, and they tell perl what to do. 
-There are also control keywords, such as if and else. These are used in 
-context like this:\medskip
+\noindent Existem algumas instruções que o perl reconhece e compreende.
+A palavra \texttt{print} é um exemplo. Ao ler a palavra \texttt{print}, 
+o perl sabe que precisa imprimir na tela o conteúdo que está demitidado 
+entre as aspas. Palavras de conhecimento do perl são chamas de 
+\textbf{`palavras reservadas'}\footnote{em inglês o termo é \textbf{keywords}}, 
+e existem de diversos tipos. \texttt{print} é um exemplo do tipo chamado 
+função\footnote{em inglês o termo é \textbf{function}}. Estas palavras 
+são verbos da linguagem de programação, e elas dizem para o perl o quê 
+deve ser feito. Existem também palavras de controles, como \texttt{if} 
+e \texttt{else}, como são utilizadas em contexto como:\medskip
 
-\noindent 
+{\scriptsize
+\begin{verbatim}
+  if condição;
 
-\noindent \texttt{if} Condition;
+    se condição verdadeiro, faça isto;
 
-\noindent do this;
+  else
 
-\noindent 
+    senão faça aquilo;
+\end{verbatim}
+}
 
-\noindent \texttt{else}
-
-\noindent do this;
-
-\noindent 
-
-\noindent It's a good idea to respect keywords and not reuse them as names. 
-For example, a little later on we'll learn that you can create and name a 
-variable, and that calling your variable \$print is perfectly allowable. 
-The problem with this is that it leads to confusing and uninformative 
-statements like print \$print. It is always a good idea to give a variable 
-a meaningful name, one that relates to its content in a logical manner. 
-For example \$my\_name, \$telephone\_number, @shopping\_list, and so on, 
-rather than \$a, \$b and \%c.\medskip
-
-\noindent 
+\noindent É altamente recomendável respeitar as palavras reservadas 
+e não as utilizarem para outros fins. Por exemplo, logo em seguida vamos 
+aprender a criar e nomear variável, e que nomear a tua variável como 
+\texttt{\$print} é perfeitamente permitido. O problema é que isto leva 
+a confusão em declarações como \texttt{print \$print}. É sempre uma boa 
+idéia dar a variável um nome significativo, um que se relaciona com o 
+conteúdo de uma forma lógica.Por exemplo \texttt{\$meu\_nome}, \texttt{\$telefone\_numero}, 
+\texttt{@list\_compras}, e assim por diante, ao vez de \texttt{\$a}, \texttt{\$b} 
+e \texttt{\%c}.\medskip
 
 \noindent \textit{Statements and Statement Blocks}
 
