@@ -80,7 +80,7 @@
 
 \noindent 
 
-\noindent \textbf{As expressões reguulares }permitem-nos olhar para padrões em nossos dados. Até agora temos nos limitado a verificar único valor contra o de uma variável escalar ou o conteúdo de um array ou hash. Usando as regras descritas neste capítulo, nós poderemos utilizar um simples valor (ou padrão) para descrever o que estamos procuando em termos mais gerais: nós poderemos checar se cada frase em um arquivo começa com uma letra maiúscula e termina com um ponto final, encontrar quantas vezes o nome James Bond é mencionado em 'Goldfinger', ou saber se existem sequências repetidas de números em representação decimal com mais de cinco dígitos.
+\noindent \textbf{As expressões regulares} permitem-nos olhar para padrões em nossos dados. Até agora temos nos limitado a verificar único valor contra o de uma variável escalar ou o conteúdo de um array ou hash. Usando as regras descritas neste capítulo, nós poderemos utilizar um simples valor (ou padrão) para descrever o que estamos procuando em termos mais gerais: nós poderemos checar se cada frase em um arquivo começa com uma letra maiúscula e termina com um ponto final, encontrar quantas vezes o nome James Bond é mencionado em 'Goldfinger', ou saber se existem sequências repetidas de números em representação decimal com mais de cinco dígitos.
 
 \noindent 
 
@@ -129,25 +129,25 @@ vão ser o seu primeiro porto de escala -- no entanto, há provavelmente uma per
 
 \noindent 
 
-\noindent What Are They?
+\noindent O que são elas?
+
+\noindent
+
+\noindent O termo "Expressões Regulares" (frequentemente abreviado (do inglês "Regular Expressions") para "RegExp" ou ainda "RE") refere-se simplesmente a um padrão que que segue as regras de syntaxe que serão discutidas ao longo no restante deste capítulo. Espressões regulares não são  limitadas ao Perl -- Vários programas para unix como o sed e o egrep usam a mesma notação para encontrar padrões em textos. Então por que nós não as chamamos simplemsnte de 'padrões de pesquisa' ou algo menos obscuro?
+
+\noindent
+
+\noindent Bem, o termo atual se originou em meados dos anos cinquenta quando um matemático chamado Stephen Kleene desenvolveu uma notação para manipular 'conjuntos regulares'. As espressões regulares em Perl tem crescido mais e mais para além da notação original e extendido significantemente o sistema orignal, mas algumas das notações de Kleene permanecem, e o nome pegou.
 
 \noindent 
 
-\noindent The term "Regular Expression" (now commonly abbreviated to "RegExp" or even "RE") simply refers to a pattern that follows the rules of syntax outlined in the rest of this chapter. Regular expressions are not limited to perl -- Unix utilities such as sed and egrep use the same notation for finding patterns in text. So why aren't they just called 'search patterns' or something less obscure?
+\noindent Padrões
+
+\noindent Lições de História à parte, é tudo sobre a identificação de padrões no texto. Então, o que constitui um padrão? E como você compará-la com alguma coisa?
 
 \noindent 
 
-\noindent Well, the actual phrase itself originates from the mid-fifties when a mathematician called Stephen Kleene developed a notation for manipulating 'regular sets'. Perl's regular expressions have grown and grown beyond the original notation and have significantly extended the original system, but some of Kleene's notation remains, and the name has stuck.
-
-\noindent 
-
-\noindent Patterns
-
-\noindent History lessons aside, it's all about identifying patterns in text. So what constitutes a pattern? And how do you compare it against something?
-
-\noindent 
-
-\noindent The simplest pattern is a word -- a simple sequence of characters -- and we may, for example, want to ask perl whether a certain string contains that word. Now, we can do this with the techniques we have already seen: We want to split the string into separate words, and then test to see if each word is the one we're looking for. Here's how we might do that:
+\noindent O padrão mais simples é uma palavra - uma seqüência de caracteres simples - e podemos, por exemplo, peruntar ao perl se uma certa string contém determinadas palavras. Agora, nós podemos fazer isso com as técnicas já vimos: Nós queremos dividir a string em palavras separadas, e em seguida, testar para ver se cada palavra é o que estamos procurando. Veja como podemos fazer isso:
 
 \noindent 
 
@@ -187,29 +187,25 @@ vão ser o seu primeiro porto de escala -- no entanto, há provavelmente uma per
 
 \noindent if (\$found) \{
 
-\noindent print "Hooray! Found the word 'people'\textbackslash n";
+\noindent print "Oba! Encontrei a palavra 'people'\textbackslash n";
 
 \noindent \}
 
 \noindent 
 
-\noindent Sure enough the program returns success:
+\noindent Certamente o prgrama obtém sucesso:
 
 \noindent 
 
 \noindent $>$\textbf{perl match1.plx}
 
-\noindent Hooray! Found the word 'people'
+\noindent Oba! Encontrei a palavra 'people'
 
 \noindent $>$
 
 \noindent 
 
-\noindent But that's messy! It's complicated, and it's slow to boot! Worse still, the split function (which breaks
-
-\noindent each of our lines up into a list of 'words' -- we'll see more of this, later on in the chapter) actually \textbf{keeps }all
-
-\noindent the punctuation -- the string 'you' wouldn't be found in the above, whereas 'you...' would. This looks like a hard problem, but it should be easy. Perl was designed to make easy tasks easy and hard things possible, so there should be a better way to do this. This is how it looks using a regular expression:
+\noindent Mas isso é confuso! É complicado, e é lento para carregar! Pior ainda, a função split (que divide cada uma das nossas linhas acima em uma lista de 'palavras' -- nós vamos ver mais disto, mais tarde neste capítulo) mantém toda a pontuação -- a string 'You' não pode ser encontrada no exemplo, enquanto 'You...' pode. Isto parece ser um problema difícil, mas deve ser fácil. Perl foi concebido para tornar as tarefas fáceis, fáceis e as difíceis, possíveis, então deve haver uma maneira melhor de fazer isso. Isto é como a solução se parece utilizando expressões regulares:
 
 \noindent 
 
@@ -227,23 +223,17 @@ vão ser o seu primeiro porto de escala -- no entanto, há provavelmente uma per
 
 \noindent if (\$\_  =\~{} /people/) \{
 
-\noindent print "Hooray! Found the word 'people'\textbackslash n";
+\noindent print "Oba! Encontrei a palavra 'people'\textbackslash n";
 
 \noindent \}
 
 \noindent 
 
-\noindent This is much, much easier and yeilds the same result. We place the text we want to find between
-
-\noindent forward slashes -- that's the regular expression part -- that's our pattern, what we're trying to match. We also need to tell perl which particular string we're looking for in that pattern. We do this with the =\~{} operator. This returns 1 if the pattern match was successful (in our case, whether the character sequence
-
-\noindent 'people' was found in the string) and the undefined value if it wasn't.
+\noindent Isto é muito, muito mais fácil e rende o mesmo resultado. Nós colocamos entre barras, as quais são parte da expressão regular, o texto que pretendemos localizar, o qual é o nosso padrão, o que estamos tentando combinar. Precisamos também de dizer ao Perl em qual string particular estamos procurando esse padrão. Fazemos isso com o operador =\~{}. Ele retorna 1 se o padrão combinou (no nosso caso, se a seqüência de caracteres 'people' foi encontrado na string) ou o valor undef, se não combinou.
 
 \noindent 
 
-\noindent Before we go on to more complicated patterns, let's just have a quick look at that syntax. As we noted previously, a lot of Perl's operations take \$\_ as a default argument, and regular expressions are one such operation. Since we have the text we want to test in \$\_, we don't need to use the =\~{} operator to 'bind'
-
-\noindent the pattern to another string. We could write the above even more simply:
+\noindent Antes de irmos para padrões mais complicados, vamos dar uma olhada rápida nesta sintaxe. Como notamos previamente um monte de operações em Perl tomam \$\_ como argumento default, e expressões regulares são algumas dessas operaçõe. Desde que tenhamos o texto que queremos testar em \$\_, não precisamos usar o operador =\~{} para ligar o padrão à outra string. Podemos escrever de forma ainda mais simples:
 
 \noindent 
 
@@ -251,15 +241,15 @@ vão ser o seu primeiro porto de escala -- no entanto, há provavelmente uma per
 
 \noindent if (/people/) \{
 
-\noindent print "Hooray! Found the word 'people'\textbackslash n";
+\noindent print "Oba! Encontrei a palavra 'people'\textbackslash n";
 
 \noindent \}
 
 \noindent 
 
-\noindent Alternatively, we might want to test for the pattern not matching -- the word not being found.
+\noindent Alternativamente, podemos querer testar quando o padrão não combina -- A palavra não ser encontrada.
 
-\noindent Obviously, we could say unless (/people/), but if the text we're looking at isn't in \$\_, we may also use the negative form of that =\~{} operator, which is !\~{}. For example:
+\noindent Obviamente, podemos dizer unless (/people/), mas se o texto que estivermos procurando não estiver em \$\_, podemos utilizar a forma negativa do operador =\~{}, o qual é !\~{}. Por exemplo:
 
 \noindent 
 
@@ -279,21 +269,23 @@ vão ser o seu primeiro porto de escala -- no entanto, há provavelmente uma per
 
 \noindent 
 
-\noindent if (\$gibson !\~{} /fish/) \{
+\noindent if (\$gibson !\~{} /peixe/) \{
 
-\noindent print "There are no fish in William Gibson.\textbackslash n";
+\noindent print "Não há peixe em William Gibson.\textbackslash n";
 
 \noindent \}
 
 \noindent 
 
-\noindent True to form, for cyberpunk books that don't regularly involve fish, we get the result.
+\noindent Verdadeiro, para livros cyberpunks que não envolvem peixe regularmente, obtemos o resultado.
 
 \noindent 
 
 \noindent $>$\textbf{perl nomatch.plx}
 
-\noindent There are no fish in William Gibson.
+\noindent Não há peixe em William Gibson.
+
+__PAREI AQUI__
 
 \noindent $>$
 
