@@ -628,11 +628,11 @@ conteúdo de uma forma lógica.Por exemplo \texttt{\$meu\_nome}, \texttt{\$telef
 \texttt{@list\_compras}, e assim por diante, ao vez de \texttt{\$a}, \texttt{\$b} 
 e \texttt{\%c}.\medskip
 
-\noindent \textit{Statements and Statement Blocks}
+\noindent \textit{Instruções e Blocos de Instrução}
 
-\noindent If functions are the verbs of Perl, then \textbf{statements }are 
-the sentences. Instead of a full stop, a statement in Perl usually ends 
-with a semicolon, as we saw above:\medskip
+\noindent Se as funções são os verbos de Perl, então \textbf{instruções (statements) } são as 
+as sentenças. Em vez de um ponto, uma instrução em Perl normalmente termina
+com um ponto e vírgula, como vimos abaixo:\medskip
 
 \noindent 
 
@@ -640,7 +640,7 @@ with a semicolon, as we saw above:\medskip
 
 \noindent 
 
-\noindent To print something again, we can add another statement:
+\noindent Para imprimir alguma coisa novamente, então nós escrevemos outra instrução:
 
 \noindent 
 
@@ -652,15 +652,19 @@ with a semicolon, as we saw above:\medskip
 
 \noindent 
 
-\noindent There are times when you can get away without adding the semicolon, 
-such as when it's absolutely clear to perl that the statement has finished. 
-However, it is good practice to put a semicolon at the end of each statement. 
-For example, you can miss out the final semicolon in the example above, 
-without causing a problem. Missing out the first would be incorrect.\medskip
+\noindent Há momentos em que você pode ir longe sem adicionar o ponto e vírgula, 
+como quando é absolutamente claro para o perl quando a instrução foi concluída. 
+No entanto, é boa prática colocar o ponto e vírgula no final de cada instrução. 
+Por exemplo, você pode perder o ponto e vírgula final do exemplo acima, sem causar problema. 
+Perdendo a primeira seria incorreto.\medskip
 
 \noindent 
 
-\noindent We can also group together a bunch of statements into a \textbf{block }-- which is a bit like a paragraph -- by surrounding them with braces: \{\dots \}. We'll see later how blocks are used to specify a set of statements that must happen at a given time and also how they are used to limit the effects of a statement. Here's an example of a block:
+\noindent Podemos agrupar um conjunto de instruções num  
+\textbf{bloco }-- tal como um parágrafo -- delimitando com chaves: \{\dots \}. 
+Veremos mais tarde como os blocos são usados para especificar um conjunto de 
+instruções que deve acontecer em um determinado momento e também como eles são 
+usados para limitar os efeitos de uma declaração. Aqui está um exemplo de um bloco:
 
 \noindent 
 
@@ -676,7 +680,9 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent Do you notice how I've used indentation to separate the block from its surroundings? This is because, unlike paragraphs, you can put blocks inside of blocks, which makes it easier to see on what level things are happening. This:
+\noindent Você observou como utilizamos os recuos (ou identação) para separar os blocos? 
+Isto porque, ao contrário dos paragrafos, você pode colocar blocos dentro de blocos,
+o que torna mais fácil ver em que nível as coisas estão acontecendo. Este:
 
 \noindent 
 
@@ -698,7 +704,7 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent is easier to follow than this:
+\noindent é mais fácil do quê:
 
 \noindent 
 
@@ -720,7 +726,13 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent As well as braces to mark out the territory of a block of statements, you can use parentheses to mark out what you're giving a function. We call the set of things you give to a function the \textbf{arguments}, and we say that we \textbf{pass }the arguments to the function. For instance, you can pass a number of arguments to the print function by separating them with commas:
+\noindent Bem como as chaves são utilizadas para demarcar o território de um bloco de instruções, 
+você pode usar parênteses para marcar o que você está fornecendo a uma função. 
+Chamamos o conjunto de coisas que você dá para uma função de \textbf{argumentos}, 
+e dizemos que \textbf{passamos} os argumentos para a função. Por exemplo, você pode 
+passar uma série de argumentos para a função \textit{print}, separando-os 
+com vírgulas:
+
 
 \noindent 
 
@@ -728,7 +740,7 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent The print function happily takes as many arguments as it can, and it gives us the expected answer:
+\noindent A função \textit{print} recebe todos os argumentos fornecido, e retorna a resposta desejada:
 
 \noindent 
 
@@ -736,7 +748,7 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent Surrounding the arguments with brackets clears things up a bit:
+\noindent Delimitar os argumentos com parênteses torna as coisas mais claras :
 
 \noindent 
 
@@ -744,7 +756,7 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent We can also limit the amount of arguments we pass by moving the brackets:
+\noindent Também podemos limitar a quantidade de argumentos que passamos movendo parênteses:
 
 \noindent 
 
@@ -752,7 +764,7 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent We only pass three arguments, so they're the ones that get printed:
+\noindent Nos passamos apenas três argumentos, então o resultado que teremos:
 
 \noindent 
 
@@ -760,11 +772,17 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent What happens to the others? Well, we didn't give perl instructions, so nothing happens.
+\noindent O que ocorreu com os outros? Bem, nós não passamos as instruções, então nada ocorreu.
 
 \noindent 
 
-\noindent In the cases where semicolons or brackets are optional, the important thing to do is to use your judgment. Sometimes code will look perfectly clear without the brackets, but when you've got a complicated statement and you need to be sure of which arguments belong to which function, putting in the brackets can clarify your work. Always aim to help the readers of your code, and remember that these reader will more than likely include you.
+\noindent Nos casos em que ponto e a vírgula ou parênteses são opcionais, a 
+coisa  mais importante a fazer é usar o seu julgamento. Às vezes, o código ficará 
+perfeitamente claro, sem os parênteses, mas quando você tem uma instrução 
+complexa e você precisa ter certeza de quais argumentos pertencem a qual 
+função, utilizar os parênteses pode esclarecer o seu trabalho. Sempre 
+com objectivo de facilitar a leitura do seu código, e lembre-se 
+que estes leitor mais do que provavelmente inclui você.
 
 \noindent 
 
@@ -772,27 +790,60 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent Computers are, effectively, lumps of sand and metal. They don't know much about the world. They don't understand words or symbols or letters. They do, however, know how to count. As far as a computer is concerned, everything is a number, and every character, albeit a letter or a symbol, is represented by a number in a sequence. This is called a 'character set', and the character set that computers predominantly use these days is called the 'ASCII' sequence. If you're interested, you can find the complete ASCII character set in Appendix F for reference.
+\noindent Computers are, effectively, lumps of sand and metal. 
+They don't know much about the world. They don't understand words 
+or symbols or letters. They do, however, know how to count. As far 
+as a computer is concerned, everything is a number, and every character, 
+albeit a letter or a symbol, is represented by a number in a sequence. 
+This is called a 'character set', and the character set that computers 
+predominantly use these days is called the 'ASCII' sequence. If you're 
+interested, you can find the complete ASCII character set in 
+Appendix F for reference.
 
 \noindent 
 
-\noindent The ASCII sequence consists of 256 characters, running from character number 0 (all computers, and plenty of computer users, start counting from zero) to character number 255. The letter 'E', for instance, is number 69 in the sequence, and a plus sign (+) is number 43. 255 is a key number for computers and computer programmers alike, because it's the largest number you can store in one 'byte'.
+\noindent The ASCII sequence consists of 256 characters, running from 
+character number 0 (all computers, and plenty of computer users, start 
+counting from zero) to character number 255. The letter 'E', for instance, 
+is number 69 in the sequence, and a plus sign (+) is number 43. 255 is a 
+key number for computers and computer programmers alike, because it's the 
+largest number you can store in one 'byte'.
 
 \noindent 
 
-\noindent The big problem with ASCII is that it's American. Well, that's not entirely the problem; the real reason is that it's not particularly useful for people who don't use the Roman alphabet. What used to happen was that particular languages would stick their own alphabet in the upper range of the sequence, between 128 and 255. Of course, we then ended up with plenty of variants that weren't quite ASCII, and the whole point of standardization was lost.
+\noindent The big problem with ASCII is that it's American. Well, that's 
+not entirely the problem; the real reason is that it's not particularly 
+useful for people who don't use the Roman alphabet. What used to happen 
+was that particular languages would stick their own alphabet in the upper 
+range of the sequence, between 128 and 255. Of course, we then ended up 
+with plenty of variants that weren't quite ASCII, and the whole point of 
+standardization was lost.
 
 \noindent 
 
-\noindent Worse still, if you've got a language like Chinese or Japanese that has hundreds or thousands of characters, then you really can't fit them into a mere 256. This meant that programmers had to forget about ASCII altogether and build their own systems using pairs of numbers to refer to one character.
+\noindent Worse still, if you've got a language like Chinese or Japanese 
+that has hundreds or thousands of characters, then you really can't fit 
+them into a mere 256. This meant that programmers had to forget about 
+ASCII altogether and build their own systems using pairs of numbers to 
+refer to one character.
 
 \noindent 
 
-\noindent To fix this, \textbf{Unicode }was developed by a number of computer companies, standards organizations, and bibliographic interests. It is currently maintained and developed by the Unicode Consortium, an organization in California. They have also produced a couple of new character sets, UTF8 and UTF16. UTF8 uses two bytes instead of one, so it can contain 65536 characters, which is enough for most people. You can learn more about Unicode at http://www.unicode.org/
+\noindent To fix this, \textbf{Unicode }was developed by a number of computer 
+companies, standards organizations, and bibliographic interests. It is currently 
+maintained and developed by the Unicode Consortium, an organization in California. 
+They have also produced a couple of new character sets, UTF8 and UTF16. UTF8 uses 
+two bytes instead of one, so it can contain 65536 characters, which is enough for 
+most people. You can learn more about Unicode at http://www.unicode.org/
 
 \noindent 
 
-\noindent Perl 5.6 introduces Unicode support. Previously, you could print any data that you were capable of producing in your editor or from external sources. However, the functions to translate between lower and upper case wouldn't necessarily work with Greek letters without a lot of support from your operating system. Now, if you have Unicode data, you can consider a single Japanese \textit{kana }to be one character instead of two. So, if you use a Unicode editor for your programming:
+\noindent Perl 5.6 introduces Unicode support. Previously, you could print any 
+data that you were capable of producing in your editor or from external sources. 
+However, the functions to translate between lower and upper case wouldn't necessarily 
+work with Greek letters without a lot of support from your operating system. Now, 
+if you have Unicode data, you can consider a single Japanese \textit{kana }to be 
+one character instead of two. So, if you use a Unicode editor for your programming:
 
 \noindent 
 
@@ -808,7 +859,14 @@ without causing a problem. Missing out the first would be incorrect.\medskip
 
 \noindent 
 
-\noindent So, UTF8 gives us 65536 characters, and ASCII gives us 256 characters, but on the average keyboard, there only a hundred or so keys. Even using the shift keys, there will still be some characters that you aren't going to be able to type. There'll also be some things that you don't want to stick in the middle of your program, because they would make it messy or confusing. However, you'll want to refer to some of these characters in strings that you output. Perl provides us with mechanisms called 'escape sequences' as an alternative way of getting to them. We've already seen the use of \textbackslash n to start a new line. Here are the more common escape sequences:
+\noindent So, UTF8 gives us 65536 characters, and ASCII gives us 256 characters, but 
+on the average keyboard, there only a hundred or so keys. Even using the shift keys, 
+there will still be some characters that you aren't going to be able to type. There'll 
+also be some things that you don't want to stick in the middle of your program, because 
+they would make it messy or confusing. However, you'll want to refer to some of these 
+characters in strings that you output. Perl provides us with mechanisms called 'escape 
+sequences' as an alternative way of getting to them. We've already seen the use of 
+\textbackslash n to start a new line. Here are the more common escape sequences:
 
 \noindent 
 
